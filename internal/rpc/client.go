@@ -28,7 +28,7 @@ func rpcDebugLog(format string, args ...interface{}) {
 
 // ClientVersion is the version of this RPC client
 // This should match the bd CLI version for proper compatibility checks
-// It's set dynamically by main.go from cmd/bd/version.go before making RPC calls
+// It's set dynamically by main.go from cmd/binds/version.go before making RPC calls
 var ClientVersion = "0.0.0" // Placeholder; overridden at startup
 
 // Client represents an RPC client that connects to the daemon

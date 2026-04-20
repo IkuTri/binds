@@ -10,6 +10,7 @@ import (
 	"strings"
 	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/steveyegge/beads/internal/config"
 	"github.com/steveyegge/beads/internal/git"
@@ -202,4 +203,8 @@ func runCommandInDirWithOutput(dir string, name string, args ...string) (string,
 		return "", err
 	}
 	return strings.TrimSpace(string(output)), nil
+}
+
+func ptrTime(t time.Time) *time.Time {
+	return &t
 }

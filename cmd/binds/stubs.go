@@ -63,33 +63,11 @@ func getSocketPath() string {
 	return ""
 }
 
-// shouldAutoStartDaemon returns whether the daemon should be auto-started.
-// Stub: daemon removed — always false.
-func shouldAutoStartDaemon() bool {
-	return false
-}
-
 // singleProcessOnlyBackend returns true if the backend is single-process-only.
 // Stub: always false since Dolt is removed.
 func singleProcessOnlyBackend() bool {
 	return false
 }
-
-// restartDaemonForVersionMismatch kills and restarts the daemon on version mismatch.
-// Stub: daemon removed — always fails.
-func restartDaemonForVersionMismatch() bool {
-	return false
-}
-
-// tryAutoStartDaemon attempts to auto-start the daemon.
-// Stub: daemon removed — always fails.
-func tryAutoStartDaemon(_ string) bool {
-	return false
-}
-
-// emitVerboseWarning emits a warning when falling back to direct mode.
-// Stub: no-op.
-func emitVerboseWarning() {}
 
 // getDebounceDuration returns the debounce duration for the flush manager.
 // Stub: returns a sensible default.

@@ -1117,7 +1117,7 @@ const (
 
 // ID prefix constants for molecule/wisp instantiation.
 // These prefixes are inserted into issue IDs: <project>-<prefix>-<id>
-// Used by: cmd/bd/pour.go, cmd/bd/wisp.go (ID generation)
+// Used by: cmd/binds/pour.go, cmd/binds/wisp.go (ID generation)
 // Exclusion from bd ready is config-driven via ready.exclude_id_patterns (default: -mol-,-wisp-)
 const (
 	IDPrefixMol  = "mol"  // Persistent molecules (bd-mol-xxx)

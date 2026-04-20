@@ -252,7 +252,7 @@ func (s *Server) handleImport(req *Request) Response {
 		}
 	}
 
-	// Note: The actual import logic is complex and lives in cmd/bd/import.go
+	// Note: The actual import logic is complex and lives in cmd/binds/import.go
 	// For now, we'll return an error suggesting to use direct mode
 	// In the future, we can refactor the import logic into a shared package
 	return Response{

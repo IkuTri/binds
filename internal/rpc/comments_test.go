@@ -74,7 +74,7 @@ func TestCommentOperationsViaRPC(t *testing.T) {
 // when the CLI resolves short IDs before sending to the daemon (issue #1070).
 //
 // Note: The RPC server expects full IDs. Short ID resolution happens in the CLI
-// (cmd/bd/comments.go) before calling the daemon, following the pattern used by
+// (cmd/binds/comments.go) before calling the daemon, following the pattern used by
 // update.go, label.go, and other commands. This test simulates that workflow.
 func TestCommentAddWithResolvedID(t *testing.T) {
 	if testing.Short() {

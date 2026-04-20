@@ -2,7 +2,6 @@ package compact
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"sync"
 
@@ -60,27 +59,11 @@ func New(store CompactableStore, apiKey string, config *Config) (*Compactor, err
 		config.APIKey = apiKey
 	}
 
-	var haikuClient summarizer
-	var err error
-	if !config.DryRun {
-		haikuClient, err = NewHaikuClient(config.APIKey)
-		if err != nil {
-			if errors.Is(err, ErrAPIKeyRequired) {
-				config.DryRun = true
-			} else {
-				return nil, fmt.Errorf("failed to create Haiku client: %w", err)
-			}
-		}
-	}
-	if hc, ok := haikuClient.(*HaikuClient); ok {
-		hc.auditEnabled = config.AuditEnabled
-		hc.auditActor = config.Actor
-	}
+	config.DryRun = true
 
 	return &Compactor{
-		store:      store,
-		summarizer: haikuClient,
-		config:     config,
+		store:  store,
+		config: config,
 	}, nil
 }
 

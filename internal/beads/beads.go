@@ -520,6 +520,15 @@ func FindBeadsDir() string {
 		var err error
 		mainRepoRoot, err = git.GetMainRepoRoot()
 		if err == nil && mainRepoRoot != "" {
+			// Check .binds/ first (native binds directory)
+			bindsDir := filepath.Join(mainRepoRoot, ".binds")
+			if info, err := os.Stat(bindsDir); err == nil && info.IsDir() {
+				bindsDir = FollowRedirect(bindsDir)
+				if hasBeadsProjectFiles(bindsDir) {
+					return bindsDir
+				}
+			}
+			// Fall back to .beads/ (read-only compatibility mode)
 			beadsDir := filepath.Join(mainRepoRoot, ".beads")
 			if info, err := os.Stat(beadsDir); err == nil && info.IsDir() {
 				// Follow redirect if present
@@ -527,13 +536,14 @@ func FindBeadsDir() string {
 
 				// Validate directory contains actual project files
 				if hasBeadsProjectFiles(beadsDir) {
+					fmt.Fprintln(os.Stderr, "Using .beads/ (run 'binds migrate' to upgrade)")
 					return beadsDir
 				}
 			}
 		}
 	}
 
-	// 3. Search for .beads/ in current directory and ancestors
+	// 3. Search for .binds/ then .beads/ in current directory and ancestors
 	cwd, err := os.Getwd()
 	if err != nil {
 		return ""
@@ -547,6 +557,16 @@ func FindBeadsDir() string {
 	}
 
 	for dir := cwd; dir != "/" && dir != "."; {
+		// Check .binds/ first (native binds directory)
+		bindsDir := filepath.Join(dir, ".binds")
+		if info, err := os.Stat(bindsDir); err == nil && info.IsDir() {
+			bindsDir = FollowRedirect(bindsDir)
+			if hasBeadsProjectFiles(bindsDir) {
+				return bindsDir
+			}
+		}
+
+		// Fall back to .beads/ (read-only compatibility mode)
 		beadsDir := filepath.Join(dir, ".beads")
 		if info, err := os.Stat(beadsDir); err == nil && info.IsDir() {
 			// Follow redirect if present
@@ -554,6 +574,7 @@ func FindBeadsDir() string {
 
 			// Validate directory contains actual project files
 			if hasBeadsProjectFiles(beadsDir) {
+				fmt.Fprintln(os.Stderr, "Using .beads/ (run 'binds migrate' to upgrade)")
 				return beadsDir
 			}
 		}
@@ -634,6 +655,15 @@ func findDatabaseInTree() string {
 		var err error
 		mainRepoRoot, err = git.GetMainRepoRoot()
 		if err == nil && mainRepoRoot != "" {
+			// Check .binds/ first (native binds directory)
+			bindsDir := filepath.Join(mainRepoRoot, ".binds")
+			if info, err := os.Stat(bindsDir); err == nil && info.IsDir() {
+				bindsDir = FollowRedirect(bindsDir)
+				if dbPath := findDatabaseInBeadsDir(bindsDir, true); dbPath != "" {
+					return dbPath
+				}
+			}
+			// Fall back to .beads/ (read-only compatibility mode)
 			beadsDir := filepath.Join(mainRepoRoot, ".beads")
 			if info, err := os.Stat(beadsDir); err == nil && info.IsDir() {
 				// Follow redirect if present
@@ -657,6 +687,16 @@ func findDatabaseInTree() string {
 
 	// Walk up directory tree (regular repository or worktree fallback)
 	for {
+		// Check .binds/ first (native binds directory)
+		bindsDir := filepath.Join(dir, ".binds")
+		if info, err := os.Stat(bindsDir); err == nil && info.IsDir() {
+			bindsDir = FollowRedirect(bindsDir)
+			if dbPath := findDatabaseInBeadsDir(bindsDir, true); dbPath != "" {
+				return dbPath
+			}
+		}
+
+		// Fall back to .beads/ (read-only compatibility mode)
 		beadsDir := filepath.Join(dir, ".beads")
 		if info, err := os.Stat(beadsDir); err == nil && info.IsDir() {
 			// Follow redirect if present
@@ -707,12 +747,20 @@ func FindAllDatabases() []DatabaseInfo {
 
 	// Walk up directory tree
 	for {
-		beadsDir := filepath.Join(dir, ".beads")
-		if info, err := os.Stat(beadsDir); err == nil && info.IsDir() {
-			// Follow redirect if present
-			beadsDir = FollowRedirect(beadsDir)
-
-			// Found .beads/ directory, look for *.db files
+		// Check .binds/ first (native binds directory), then fall back to .beads/
+		candidateDir := ""
+		bindsDir := filepath.Join(dir, ".binds")
+		if info, err := os.Stat(bindsDir); err == nil && info.IsDir() {
+			candidateDir = FollowRedirect(bindsDir)
+		} else {
+			beadsDir := filepath.Join(dir, ".beads")
+			if info, err := os.Stat(beadsDir); err == nil && info.IsDir() {
+				candidateDir = FollowRedirect(beadsDir)
+			}
+		}
+		beadsDir := candidateDir
+		if beadsDir != "" {
+			// Found a project directory, look for *.db files
 			matches, err := filepath.Glob(filepath.Join(beadsDir, "*.db"))
 			if err == nil && len(matches) > 0 {
 				dbPath := matches[0]

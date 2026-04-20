@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/linear"
 	"github.com/steveyegge/beads/internal/routing"
 	"github.com/steveyegge/beads/internal/storage"
 	"github.com/steveyegge/beads/internal/types"
@@ -87,18 +86,6 @@ func ImportIssues(ctx context.Context, dbPath string, store storage.Storage, iss
 
 	if store == nil {
 		return nil, fmt.Errorf("import requires an initialized storage backend")
-	}
-
-	// Normalize Linear external_refs to canonical form to avoid slug-based duplicates.
-	for _, issue := range issues {
-		if issue.ExternalRef == nil || *issue.ExternalRef == "" {
-			continue
-		}
-		if linear.IsLinearExternalRef(*issue.ExternalRef) {
-			if canonical, ok := linear.CanonicalizeLinearExternalRef(*issue.ExternalRef); ok {
-				issue.ExternalRef = &canonical
-			}
-		}
 	}
 
 	// Compute content hashes for all incoming issues
@@ -584,11 +571,6 @@ func upsertIssues(ctx context.Context, store storage.Storage, issues []*types.Is
 	for _, issue := range dbIssues {
 		if issue.ExternalRef != nil && *issue.ExternalRef != "" {
 			dbByExternalRef[*issue.ExternalRef] = issue
-			if linear.IsLinearExternalRef(*issue.ExternalRef) {
-				if canonical, ok := linear.CanonicalizeLinearExternalRef(*issue.ExternalRef); ok {
-					dbByExternalRef[canonical] = issue
-				}
-			}
 		}
 	}
 
@@ -916,11 +898,6 @@ func upsertIssuesTx(ctx context.Context, tx storage.Transaction, store storage.S
 	for _, issue := range dbIssues {
 		if issue.ExternalRef != nil && *issue.ExternalRef != "" {
 			dbByExternalRef[*issue.ExternalRef] = issue
-			if linear.IsLinearExternalRef(*issue.ExternalRef) {
-				if canonical, ok := linear.CanonicalizeLinearExternalRef(*issue.ExternalRef); ok {
-					dbByExternalRef[canonical] = issue
-				}
-			}
 		}
 	}
 

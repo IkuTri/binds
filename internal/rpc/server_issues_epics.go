@@ -25,7 +25,7 @@ func containsLabel(labels []string, label string) bool {
 }
 
 // parseTimeRPC parses time strings in multiple formats (RFC3339, YYYY-MM-DD, etc.)
-// Matches the parseTimeFlag behavior in cmd/bd/list.go for CLI parity
+// Matches the parseTimeFlag behavior in cmd/binds/list.go for CLI parity
 func parseTimeRPC(s string) (time.Time, error) {
 	// Try RFC3339 first (ISO 8601 with timezone)
 	if t, err := time.Parse(time.RFC3339, s); err == nil {
