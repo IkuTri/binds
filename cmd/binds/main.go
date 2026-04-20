@@ -395,6 +395,7 @@ var rootCmd = &cobra.Command{
 			"rooms",
 			"serve",
 			"setup",
+			"upgrade",
 			"version",
 			"who",
 			"zsh",
