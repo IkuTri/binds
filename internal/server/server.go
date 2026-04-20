@@ -31,6 +31,7 @@ type Server struct {
 	mux       *http.ServeMux
 	server    *http.Server
 	configDir string
+	hub       *Hub
 
 	localToken string
 
@@ -68,6 +69,7 @@ func New(cfg *Config) (*Server, error) {
 		store:      store,
 		mux:        http.NewServeMux(),
 		configDir:  cfg.ConfigDir,
+		hub:        newHub(),
 		reaperDone: make(chan struct{}),
 	}
 
@@ -150,6 +152,15 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("POST /api/reservations/check", s.authed(s.handleReservationCheck))
 	s.mux.HandleFunc("GET /api/reservations", s.authed(s.handleReservationList))
 	s.mux.HandleFunc("DELETE /api/reservations/{id}", s.authed(s.handleReservationRelease))
+
+	// Checkpoints
+	s.mux.HandleFunc("POST /api/checkpoints", s.authed(s.handleCheckpointCreate))
+	s.mux.HandleFunc("GET /api/checkpoints", s.authed(s.handleCheckpointList))
+	s.mux.HandleFunc("GET /api/checkpoints/{ref}", s.authed(s.handleCheckpointGet))
+	s.mux.HandleFunc("PATCH /api/checkpoints/{id}", s.authed(s.handleCheckpointUpdate))
+
+	// WebSocket (auth handled inside handler)
+	s.mux.HandleFunc("GET /ws", s.handleWebSocket)
 }
 
 // --- Auth ---
@@ -369,6 +380,7 @@ func (s *Server) handleHeartbeat(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	jsonResp(w, map[string]string{"status": "ok"})
+	s.hub.Broadcast(&Event{Type: "presence.changed", Payload: map[string]interface{}{"agent": agent, "status": req.Status, "workspace": req.Workspace}})
 }
 
 func (s *Server) handlePresence(w http.ResponseWriter, r *http.Request) {
@@ -439,6 +451,7 @@ func (s *Server) handleMailSend(w http.ResponseWriter, r *http.Request) {
 	}
 
 	jsonResp(w, messageToJSON(msg))
+	s.hub.Broadcast(&Event{Type: "mail.received", Target: req.Recipient, Payload: messageToJSON(msg)})
 }
 
 func (s *Server) handleMailInbox(w http.ResponseWriter, r *http.Request) {
@@ -615,6 +628,7 @@ func (s *Server) handleRoomSend(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	jsonResp(w, messageToJSON(msg))
+	s.hub.Broadcast(&Event{Type: "room.message", Payload: map[string]interface{}{"room": name, "message": messageToJSON(msg)}})
 }
 
 func (s *Server) handleRoomUpdate(w http.ResponseWriter, r *http.Request) {
@@ -706,6 +720,7 @@ func (s *Server) handleReservationCreate(w http.ResponseWriter, r *http.Request)
 	}
 
 	jsonResp(w, map[string]interface{}{"status": "reserved", "reservations": created})
+	s.hub.Broadcast(&Event{Type: "reservation.created", Payload: map[string]interface{}{"agent": agent, "patterns": req.Patterns}})
 }
 
 func (s *Server) handleReservationCheck(w http.ResponseWriter, r *http.Request) {
@@ -772,6 +787,104 @@ func (s *Server) handleReservationRelease(w http.ResponseWriter, r *http.Request
 		return
 	}
 	jsonResp(w, map[string]string{"status": "released"})
+	s.hub.Broadcast(&Event{Type: "reservation.released", Payload: map[string]interface{}{"id": id}})
+}
+
+// --- Handlers: Checkpoints ---
+
+func (s *Server) handleCheckpointCreate(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Title       string `json:"title"`
+		Description string `json:"description"`
+		Priority    string `json:"priority"`
+		WorkspaceID string `json:"workspace_id"`
+		BindsIDs    string `json:"binds_ids"`
+		Slug        string `json:"slug"`
+		ParentID    *int64 `json:"parent_id"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		jsonError(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+	if req.Title == "" {
+		jsonError(w, "title required", http.StatusBadRequest)
+		return
+	}
+
+	cp, err := s.store.CreateCheckpoint(r.Context(), req.Title, req.Description, req.Priority, req.WorkspaceID, req.BindsIDs, req.Slug, req.ParentID)
+	if err != nil {
+		jsonError(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	jsonResp(w, checkpointToJSON(cp))
+}
+
+func (s *Server) handleCheckpointList(w http.ResponseWriter, r *http.Request) {
+	status := r.URL.Query().Get("status")
+	checkpoints, err := s.store.ListCheckpoints(r.Context(), status)
+	if err != nil {
+		jsonError(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	result := make([]map[string]interface{}, 0, len(checkpoints))
+	for _, cp := range checkpoints {
+		result = append(result, checkpointToJSON(cp))
+	}
+	jsonResp(w, map[string]interface{}{"checkpoints": result})
+}
+
+func (s *Server) handleCheckpointGet(w http.ResponseWriter, r *http.Request) {
+	ref := r.PathValue("ref")
+	id, err := strconv.ParseInt(ref, 10, 64)
+
+	var cp *Checkpoint
+	if err == nil {
+		cp, err = s.store.GetCheckpoint(r.Context(), id)
+	} else {
+		cp, err = s.store.GetCheckpointBySlug(r.Context(), ref)
+	}
+
+	if err != nil {
+		jsonError(w, fmt.Sprintf("checkpoint %q not found", ref), http.StatusNotFound)
+		return
+	}
+	jsonResp(w, checkpointToJSON(cp))
+}
+
+func (s *Server) handleCheckpointUpdate(w http.ResponseWriter, r *http.Request) {
+	idStr := r.PathValue("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		jsonError(w, "invalid checkpoint id", http.StatusBadRequest)
+		return
+	}
+
+	status := r.URL.Query().Get("status")
+	if status == "" {
+		var req struct {
+			Status string `json:"status"`
+		}
+		json.NewDecoder(r.Body).Decode(&req)
+		status = req.Status
+	}
+	if status == "" {
+		jsonError(w, "status required", http.StatusBadRequest)
+		return
+	}
+
+	if err := s.store.UpdateCheckpointStatus(r.Context(), id, status); err != nil {
+		jsonError(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	s.hub.Broadcast(&Event{
+		Type:    "checkpoint.updated",
+		Payload: map[string]interface{}{"id": id, "status": status},
+	})
+
+	jsonResp(w, map[string]interface{}{"status": status, "id": id})
 }
 
 // --- JSON helpers ---
@@ -820,6 +933,36 @@ func messagesToJSON(msgs []*Message) []map[string]interface{} {
 	result := make([]map[string]interface{}, 0, len(msgs))
 	for _, m := range msgs {
 		result = append(result, messageToJSON(m))
+	}
+	return result
+}
+
+func checkpointToJSON(c *Checkpoint) map[string]interface{} {
+	result := map[string]interface{}{
+		"id":         c.ID,
+		"title":      c.Title,
+		"priority":   c.Priority,
+		"status":     c.Status,
+		"created_at": c.CreatedAt.Format(time.RFC3339),
+		"updated_at": c.UpdatedAt.Format(time.RFC3339),
+	}
+	if c.ParentID != nil {
+		result["parent_id"] = *c.ParentID
+	}
+	if c.Description != "" {
+		result["description"] = c.Description
+	}
+	if c.WorkspaceID != "" {
+		result["workspace_id"] = c.WorkspaceID
+	}
+	if c.BindsIDs != "" {
+		result["binds_ids"] = c.BindsIDs
+	}
+	if c.Slug != "" {
+		result["slug"] = c.Slug
+	}
+	if c.CompletedAt != nil {
+		result["completed_at"] = c.CompletedAt.Format(time.RFC3339)
 	}
 	return result
 }

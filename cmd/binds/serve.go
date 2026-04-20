@@ -32,18 +32,26 @@ Examples:
   binds serve --port 9000        # Custom port
   binds serve --listen 0.0.0.0   # Listen on all interfaces (team mode)`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		port, _ := cmd.Flags().GetInt("port")
-		listen, _ := cmd.Flags().GetString("listen")
-
 		home, err := os.UserHomeDir()
 		if err != nil {
 			return fmt.Errorf("user home: %w", err)
 		}
 
-		cfg := &server.Config{
-			Port:      port,
-			Listen:    listen,
-			ConfigDir: filepath.Join(home, ".config", "binds"),
+		configDir := filepath.Join(home, ".config", "binds")
+		cfg := server.DefaultConfig()
+		cfg.ConfigDir = configDir
+
+		fileCfg, err := server.LoadConfigFile(configDir)
+		if err != nil {
+			return fmt.Errorf("load config: %w", err)
+		}
+		fileCfg.ApplyToServerConfig(cfg)
+
+		if cmd.Flags().Changed("port") {
+			cfg.Port, _ = cmd.Flags().GetInt("port")
+		}
+		if cmd.Flags().Changed("listen") {
+			cfg.Listen, _ = cmd.Flags().GetString("listen")
 		}
 
 		srv, err := server.New(cfg)

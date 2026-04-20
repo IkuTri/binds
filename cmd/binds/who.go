@@ -6,10 +6,12 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
+	"github.com/steveyegge/beads/internal/server"
 )
 
 var whoCmd = &cobra.Command{
@@ -127,6 +129,12 @@ func shortenPath(p string) string {
 
 func serverClient() (*http.Client, string, error) {
 	port := 8889
+	home, _ := os.UserHomeDir()
+	if home != "" {
+		if cfg, err := server.LoadConfigFile(filepath.Join(home, ".config", "binds")); err == nil && cfg.Server.Port > 0 {
+			port = cfg.Server.Port
+		}
+	}
 	base := fmt.Sprintf("http://127.0.0.1:%d", port)
 	return &http.Client{Timeout: 10 * time.Second}, base, nil
 }

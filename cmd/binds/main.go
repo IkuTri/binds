@@ -373,6 +373,7 @@ var rootCmd = &cobra.Command{
 			"__complete",       // Cobra's internal completion command (shell completions work without db)
 			"__completeNoDesc", // Cobra's completion without descriptions (used by fish)
 			"bash",
+			"checkpoint",
 			"completion",
 			"doctor",
 			"fish",
@@ -386,6 +387,7 @@ var rootCmd = &cobra.Command{
 			"powershell",
 			"prime",
 			"quickstart",
+			"registry",
 			"repair",
 			"reserve",
 			"resolve-conflicts",

@@ -659,3 +659,119 @@ func matchGlob(pattern, name string) bool {
 	matched, _ := filepath.Match(pattern, name)
 	return matched
 }
+
+// --- Checkpoint CRUD ---
+
+type Checkpoint struct {
+	ID          int64
+	ParentID    *int64
+	Title       string
+	Description string
+	Priority    string
+	Status      string
+	WorkspaceID string
+	BindsIDs    string
+	Slug        string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	CompletedAt *time.Time
+}
+
+func (s *Store) CreateCheckpoint(ctx context.Context, title, description, priority, workspaceID, bindsIDs, slug string, parentID *int64) (*Checkpoint, error) {
+	now := time.Now().UTC().Format(time.RFC3339)
+	if priority == "" {
+		priority = "P2"
+	}
+
+	res, err := s.db.ExecContext(ctx,
+		`INSERT INTO checkpoints (parent_id, title, description, priority, status, workspace_id, binds_ids, slug, created_at, updated_at) VALUES (?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?)`,
+		parentID, title, description, priority, workspaceID, bindsIDs, slug, now, now)
+	if err != nil {
+		return nil, err
+	}
+
+	id, _ := res.LastInsertId()
+	createdAt, _ := time.Parse(time.RFC3339, now)
+	return &Checkpoint{
+		ID: id, ParentID: parentID, Title: title, Description: description,
+		Priority: priority, Status: "pending", WorkspaceID: workspaceID,
+		BindsIDs: bindsIDs, Slug: slug, CreatedAt: createdAt, UpdatedAt: createdAt,
+	}, nil
+}
+
+func (s *Store) ListCheckpoints(ctx context.Context, status string) ([]*Checkpoint, error) {
+	query := `SELECT id, parent_id, title, description, priority, status, workspace_id, binds_ids, slug, created_at, updated_at, completed_at FROM checkpoints`
+	var args []interface{}
+	if status != "" {
+		query += ` WHERE status = ?`
+		args = append(args, status)
+	}
+	query += ` ORDER BY created_at DESC`
+
+	rows, err := s.db.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var checkpoints []*Checkpoint
+	for rows.Next() {
+		c, err := s.scanCheckpoint(rows)
+		if err != nil {
+			return nil, err
+		}
+		checkpoints = append(checkpoints, c)
+	}
+	return checkpoints, rows.Err()
+}
+
+func (s *Store) GetCheckpoint(ctx context.Context, id int64) (*Checkpoint, error) {
+	return s.scanCheckpoint(s.db.QueryRowContext(ctx,
+		`SELECT id, parent_id, title, description, priority, status, workspace_id, binds_ids, slug, created_at, updated_at, completed_at FROM checkpoints WHERE id = ?`, id))
+}
+
+func (s *Store) GetCheckpointBySlug(ctx context.Context, slug string) (*Checkpoint, error) {
+	return s.scanCheckpoint(s.db.QueryRowContext(ctx,
+		`SELECT id, parent_id, title, description, priority, status, workspace_id, binds_ids, slug, created_at, updated_at, completed_at FROM checkpoints WHERE slug = ?`, slug))
+}
+
+func (s *Store) UpdateCheckpointStatus(ctx context.Context, id int64, status string) error {
+	now := time.Now().UTC().Format(time.RFC3339)
+	var completedAt interface{}
+	if status == "completed" {
+		completedAt = now
+	}
+	_, err := s.db.ExecContext(ctx,
+		`UPDATE checkpoints SET status = ?, updated_at = ?, completed_at = COALESCE(?, completed_at) WHERE id = ?`,
+		status, now, completedAt, id)
+	return err
+}
+
+func (s *Store) scanCheckpoint(row scanner) (*Checkpoint, error) {
+	var c Checkpoint
+	var parentID sql.NullInt64
+	var description, workspaceID, bindsIDs, slug sql.NullString
+	var createdAt, updatedAt string
+	var completedAt sql.NullString
+
+	err := row.Scan(&c.ID, &parentID, &c.Title, &description, &c.Priority, &c.Status,
+		&workspaceID, &bindsIDs, &slug, &createdAt, &updatedAt, &completedAt)
+	if err != nil {
+		return nil, err
+	}
+
+	if parentID.Valid {
+		c.ParentID = &parentID.Int64
+	}
+	c.Description = description.String
+	c.WorkspaceID = workspaceID.String
+	c.BindsIDs = bindsIDs.String
+	c.Slug = slug.String
+	c.CreatedAt, _ = time.Parse(time.RFC3339, createdAt)
+	c.UpdatedAt, _ = time.Parse(time.RFC3339, updatedAt)
+	if completedAt.Valid {
+		t, _ := time.Parse(time.RFC3339, completedAt.String)
+		c.CompletedAt = &t
+	}
+	return &c, nil
+}
