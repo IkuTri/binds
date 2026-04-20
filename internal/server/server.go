@@ -33,16 +33,19 @@ type Server struct {
 	configDir string
 	hub       *Hub
 
-	localToken string
+	localToken    string
+	localIdentity string
 
 	reaperDone chan struct{}
 	mu         sync.RWMutex
 }
 
 type Config struct {
-	Port      int
-	Listen    string
-	ConfigDir string
+	Port          int
+	Listen        string
+	ConfigDir     string
+	LocalIdentity string
+	LocalAgentType string
 }
 
 func DefaultConfig() *Config {
@@ -66,11 +69,20 @@ func New(cfg *Config) (*Server, error) {
 	}
 
 	s := &Server{
-		store:      store,
-		mux:        http.NewServeMux(),
-		configDir:  cfg.ConfigDir,
-		hub:        newHub(),
-		reaperDone: make(chan struct{}),
+		store:         store,
+		mux:           http.NewServeMux(),
+		configDir:     cfg.ConfigDir,
+		hub:           newHub(),
+		localIdentity: cfg.LocalIdentity,
+		reaperDone:    make(chan struct{}),
+	}
+
+	if s.localIdentity != "" {
+		agentType := cfg.LocalAgentType
+		if agentType == "" {
+			agentType = "cc"
+		}
+		s.ensureLocalAgent(s.localIdentity, agentType)
 	}
 
 	s.registerRoutes()
@@ -192,6 +204,28 @@ func (s *Server) writeLocalToken() error {
 	return os.WriteFile(tokenPath, []byte(token), 0600)
 }
 
+func (s *Server) ensureLocalAgent(name, agentType string) {
+	ctx := context.Background()
+	agents, err := s.store.ListAgents(ctx)
+	if err != nil {
+		return
+	}
+	for _, a := range agents {
+		if a.Name == name {
+			return
+		}
+	}
+	tok, err := GenerateToken()
+	if err != nil {
+		return
+	}
+	hash, err := bcrypt.GenerateFromPassword([]byte(tok), bcrypt.DefaultCost)
+	if err != nil {
+		return
+	}
+	_, _ = s.store.CreateAgent(ctx, name, agentType, string(hash))
+}
+
 func (s *Server) authenticate(r *http.Request) (string, error) {
 	token := ""
 	if auth := r.Header.Get("Authorization"); strings.HasPrefix(auth, "Bearer ") {
@@ -205,6 +239,9 @@ func (s *Server) authenticate(r *http.Request) (string, error) {
 	}
 
 	if token == s.localToken {
+		if s.localIdentity != "" {
+			return s.localIdentity, nil
+		}
 		return "_local", nil
 	}
 
@@ -854,11 +891,15 @@ func (s *Server) handleCheckpointGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleCheckpointUpdate(w http.ResponseWriter, r *http.Request) {
-	idStr := r.PathValue("id")
-	id, err := strconv.ParseInt(idStr, 10, 64)
+	ref := r.PathValue("id")
+	id, err := strconv.ParseInt(ref, 10, 64)
 	if err != nil {
-		jsonError(w, "invalid checkpoint id", http.StatusBadRequest)
-		return
+		cp, slugErr := s.store.GetCheckpointBySlug(r.Context(), ref)
+		if slugErr != nil {
+			jsonError(w, fmt.Sprintf("checkpoint %q not found", ref), http.StatusNotFound)
+			return
+		}
+		id = cp.ID
 	}
 
 	status := r.URL.Query().Get("status")

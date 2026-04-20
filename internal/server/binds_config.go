@@ -40,4 +40,10 @@ func (bc *BindsConfig) ApplyToServerConfig(cfg *Config) {
 	if bc.Server.Listen != "" {
 		cfg.Listen = bc.Server.Listen
 	}
+	if bc.Identity.Name != "" {
+		cfg.LocalIdentity = bc.Identity.Name
+	}
+	if bc.Identity.AgentType != "" {
+		cfg.LocalAgentType = bc.Identity.AgentType
+	}
 }

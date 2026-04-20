@@ -377,6 +377,7 @@ var rootCmd = &cobra.Command{
 			"completion",
 			"doctor",
 			"fish",
+			"heartbeat",
 			"help",
 			"hooks",
 			"human",
