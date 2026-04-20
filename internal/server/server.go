@@ -171,6 +171,11 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("GET /api/checkpoints/{ref}", s.authed(s.handleCheckpointGet))
 	s.mux.HandleFunc("PATCH /api/checkpoints/{id}", s.authed(s.handleCheckpointUpdate))
 
+	// Issues (cross-repo index)
+	s.mux.HandleFunc("POST /api/issues/push", s.authed(s.handleIssuePush))
+	s.mux.HandleFunc("GET /api/issues", s.authed(s.handleIssueList))
+	s.mux.HandleFunc("GET /api/issues/stats", s.authed(s.handleIssueStats))
+
 	// WebSocket (auth handled inside handler)
 	s.mux.HandleFunc("GET /ws", s.handleWebSocket)
 }
@@ -1020,4 +1025,117 @@ func roomToJSON(r *Room) map[string]interface{} {
 		result["archived_at"] = r.ArchivedAt.Format(time.RFC3339)
 	}
 	return result
+}
+
+// --- Issue Index Handlers ---
+
+func (s *Server) handleIssuePush(w http.ResponseWriter, r *http.Request) {
+	agent := agentFromCtx(r.Context())
+	var req struct {
+		Issues []struct {
+			Workspace     string `json:"workspace"`
+			WorkspacePath string `json:"workspace_path"`
+			IssueID       string `json:"issue_id"`
+			Title         string `json:"title"`
+			Status        string `json:"status"`
+			Priority      int    `json:"priority"`
+			IssueType     string `json:"issue_type"`
+			Assignee      string `json:"assignee"`
+			Labels        string `json:"labels"`
+			CreatedAt     string `json:"created_at"`
+			UpdatedAt     string `json:"updated_at"`
+			ClosedAt      string `json:"closed_at"`
+		} `json:"issues"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		jsonError(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	pushed := 0
+	for _, issue := range req.Issues {
+		if issue.IssueID == "" || issue.Workspace == "" {
+			continue
+		}
+		err := s.store.UpsertIssue(r.Context(), &Issue{
+			Workspace:     issue.Workspace,
+			WorkspacePath: issue.WorkspacePath,
+			IssueID:       issue.IssueID,
+			Title:         issue.Title,
+			Status:        issue.Status,
+			Priority:      issue.Priority,
+			IssueType:     issue.IssueType,
+			Assignee:      issue.Assignee,
+			Labels:        issue.Labels,
+			CreatedAt:     issue.CreatedAt,
+			UpdatedAt:     issue.UpdatedAt,
+			ClosedAt:      issue.ClosedAt,
+			PushedBy:      agent,
+		})
+		if err != nil {
+			jsonError(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		pushed++
+	}
+
+	jsonResp(w, map[string]interface{}{"pushed": pushed})
+	if pushed > 0 {
+		s.hub.Broadcast(&Event{Type: "issues.synced", Payload: map[string]interface{}{"count": pushed, "agent": agent}})
+	}
+}
+
+func (s *Server) handleIssueList(w http.ResponseWriter, r *http.Request) {
+	workspace := r.URL.Query().Get("workspace")
+	status := r.URL.Query().Get("status")
+	limit := 100
+	if l := r.URL.Query().Get("limit"); l != "" {
+		if n, err := strconv.Atoi(l); err == nil && n > 0 {
+			limit = n
+		}
+	}
+
+	issues, err := s.store.ListIssues(r.Context(), workspace, status, limit)
+	if err != nil {
+		jsonError(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	result := make([]map[string]interface{}, 0, len(issues))
+	for _, i := range issues {
+		entry := map[string]interface{}{
+			"workspace":      i.Workspace,
+			"workspace_path": i.WorkspacePath,
+			"issue_id":       i.IssueID,
+			"title":          i.Title,
+			"status":         i.Status,
+			"priority":       i.Priority,
+			"issue_type":     i.IssueType,
+			"created_at":     i.CreatedAt,
+			"updated_at":     i.UpdatedAt,
+			"pushed_by":      i.PushedBy,
+			"pushed_at":      i.PushedAt,
+		}
+		if i.Assignee != "" {
+			entry["assignee"] = i.Assignee
+		}
+		if i.Labels != "" {
+			entry["labels"] = i.Labels
+		}
+		if i.ClosedAt != "" {
+			entry["closed_at"] = i.ClosedAt
+		}
+		result = append(result, entry)
+	}
+
+	jsonResp(w, map[string]interface{}{"issues": result, "count": len(result)})
+}
+
+func (s *Server) handleIssueStats(w http.ResponseWriter, r *http.Request) {
+	stats, err := s.store.IssueStats(r.Context())
+	if err != nil {
+		jsonError(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	jsonResp(w, stats)
 }

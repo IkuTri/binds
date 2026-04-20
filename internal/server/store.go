@@ -107,6 +107,27 @@ CREATE TABLE IF NOT EXISTS reservations (
 CREATE INDEX IF NOT EXISTS idx_reservations_holder ON reservations(holder);
 CREATE INDEX IF NOT EXISTS idx_reservations_expires_at ON reservations(expires_at);
 
+CREATE TABLE IF NOT EXISTS issues (
+    workspace      TEXT NOT NULL,
+    workspace_path TEXT NOT NULL,
+    issue_id       TEXT NOT NULL,
+    title          TEXT NOT NULL,
+    status         TEXT NOT NULL DEFAULT 'open',
+    priority       INTEGER DEFAULT 2,
+    issue_type     TEXT DEFAULT 'task',
+    assignee       TEXT,
+    labels         TEXT,
+    created_at     TEXT,
+    updated_at     TEXT,
+    closed_at      TEXT,
+    pushed_by      TEXT,
+    pushed_at      TEXT NOT NULL,
+    PRIMARY KEY (workspace, issue_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_issues_status ON issues(status);
+CREATE INDEX IF NOT EXISTS idx_issues_workspace ON issues(workspace);
+
 CREATE TABLE IF NOT EXISTS checkpoints (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
     parent_id    INTEGER REFERENCES checkpoints(id),
@@ -774,4 +795,139 @@ func (s *Store) scanCheckpoint(row scanner) (*Checkpoint, error) {
 		c.CompletedAt = &t
 	}
 	return &c, nil
+}
+
+// --- Issue Index (cross-repo) ---
+
+type Issue struct {
+	Workspace     string
+	WorkspacePath string
+	IssueID       string
+	Title         string
+	Status        string
+	Priority      int
+	IssueType     string
+	Assignee      string
+	Labels        string
+	CreatedAt     string
+	UpdatedAt     string
+	ClosedAt      string
+	PushedBy      string
+	PushedAt      string
+}
+
+func (s *Store) UpsertIssue(ctx context.Context, issue *Issue) error {
+	now := time.Now().UTC().Format(time.RFC3339)
+	_, err := s.db.ExecContext(ctx,
+		`INSERT INTO issues (workspace, workspace_path, issue_id, title, status, priority, issue_type, assignee, labels, created_at, updated_at, closed_at, pushed_by, pushed_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		ON CONFLICT(workspace, issue_id) DO UPDATE SET
+			title = excluded.title,
+			status = excluded.status,
+			priority = excluded.priority,
+			issue_type = excluded.issue_type,
+			assignee = excluded.assignee,
+			labels = excluded.labels,
+			updated_at = excluded.updated_at,
+			closed_at = excluded.closed_at,
+			pushed_by = excluded.pushed_by,
+			pushed_at = excluded.pushed_at,
+			workspace_path = excluded.workspace_path`,
+		issue.Workspace, issue.WorkspacePath, issue.IssueID, issue.Title, issue.Status, issue.Priority, issue.IssueType, issue.Assignee, issue.Labels, issue.CreatedAt, issue.UpdatedAt, issue.ClosedAt, issue.PushedBy, now)
+	return err
+}
+
+func (s *Store) ListIssues(ctx context.Context, workspace, status string, limit int) ([]*Issue, error) {
+	query := `SELECT workspace, workspace_path, issue_id, title, status, priority, issue_type, assignee, labels, created_at, updated_at, closed_at, pushed_by, pushed_at FROM issues WHERE 1=1`
+	args := []interface{}{}
+
+	if workspace != "" {
+		query += ` AND workspace = ?`
+		args = append(args, workspace)
+	}
+	if status != "" {
+		query += ` AND status = ?`
+		args = append(args, status)
+	}
+
+	query += ` ORDER BY priority ASC, updated_at DESC`
+
+	if limit > 0 {
+		query += fmt.Sprintf(` LIMIT %d`, limit)
+	}
+
+	rows, err := s.db.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var issues []*Issue
+	for rows.Next() {
+		var i Issue
+		var closedAt, assignee, labels sql.NullString
+		if err := rows.Scan(&i.Workspace, &i.WorkspacePath, &i.IssueID, &i.Title, &i.Status, &i.Priority, &i.IssueType, &assignee, &labels, &i.CreatedAt, &i.UpdatedAt, &closedAt, &i.PushedBy, &i.PushedAt); err != nil {
+			return nil, err
+		}
+		if closedAt.Valid {
+			i.ClosedAt = closedAt.String
+		}
+		if assignee.Valid {
+			i.Assignee = assignee.String
+		}
+		if labels.Valid {
+			i.Labels = labels.String
+		}
+		issues = append(issues, &i)
+	}
+	return issues, nil
+}
+
+func (s *Store) GetIssue(ctx context.Context, workspace, issueID string) (*Issue, error) {
+	var i Issue
+	var closedAt, assignee, labels sql.NullString
+	err := s.db.QueryRowContext(ctx,
+		`SELECT workspace, workspace_path, issue_id, title, status, priority, issue_type, assignee, labels, created_at, updated_at, closed_at, pushed_by, pushed_at FROM issues WHERE workspace = ? AND issue_id = ?`,
+		workspace, issueID).Scan(&i.Workspace, &i.WorkspacePath, &i.IssueID, &i.Title, &i.Status, &i.Priority, &i.IssueType, &assignee, &labels, &i.CreatedAt, &i.UpdatedAt, &closedAt, &i.PushedBy, &i.PushedAt)
+	if err != nil {
+		return nil, err
+	}
+	if closedAt.Valid {
+		i.ClosedAt = closedAt.String
+	}
+	if assignee.Valid {
+		i.Assignee = assignee.String
+	}
+	if labels.Valid {
+		i.Labels = labels.String
+	}
+	return &i, nil
+}
+
+func (s *Store) IssueStats(ctx context.Context) (map[string]int, error) {
+	rows, err := s.db.QueryContext(ctx,
+		`SELECT workspace, COUNT(*) as total,
+			SUM(CASE WHEN status = 'open' THEN 1 ELSE 0 END) as open_count,
+			SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as in_progress,
+			SUM(CASE WHEN status = 'closed' THEN 1 ELSE 0 END) as closed
+		FROM issues GROUP BY workspace`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	stats := map[string]int{}
+	total := 0
+	for rows.Next() {
+		var ws string
+		var t, o, ip, c int
+		rows.Scan(&ws, &t, &o, &ip, &c)
+		stats[ws+"_total"] = t
+		stats[ws+"_open"] = o
+		stats[ws+"_in_progress"] = ip
+		stats[ws+"_closed"] = c
+		total += t
+	}
+	stats["total"] = total
+	return stats, nil
 }
