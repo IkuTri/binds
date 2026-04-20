@@ -128,7 +128,7 @@ func shortenPath(p string) string {
 }
 
 func serverClient() (*http.Client, string, error) {
-	port := 8889
+	port := 8890
 	home, _ := os.UserHomeDir()
 	if home != "" {
 		if cfg, err := server.LoadConfigFile(filepath.Join(home, ".config", "binds")); err == nil && cfg.Server.Port > 0 {

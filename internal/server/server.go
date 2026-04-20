@@ -51,7 +51,7 @@ type Config struct {
 func DefaultConfig() *Config {
 	home, _ := os.UserHomeDir()
 	return &Config{
-		Port:      8889,
+		Port:      8890,
 		Listen:    "127.0.0.1",
 		ConfigDir: filepath.Join(home, ".config", "binds"),
 	}
