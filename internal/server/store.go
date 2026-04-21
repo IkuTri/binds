@@ -51,6 +51,8 @@ func (s *Store) migrate() error {
 		{"machine", "TEXT"},
 		{"scope", "TEXT"},
 		{"capabilities", "TEXT"},
+		{"model", "TEXT"},
+		{"cwd", "TEXT"},
 	} {
 		s.db.Exec(fmt.Sprintf(`ALTER TABLE agents ADD COLUMN %s %s`, col.name, col.def))
 	}
@@ -179,18 +181,20 @@ type Agent struct {
 	Machine      string
 	Scope        string
 	Capabilities string // JSON array
+	Model        string
+	Cwd          string
 }
 
-func (s *Store) CreateAgent(ctx context.Context, name, agentType, tokenHash, machine, scope, capabilities string) (*Agent, error) {
+func (s *Store) CreateAgent(ctx context.Context, name, agentType, tokenHash, machine, scope, capabilities, model string) (*Agent, error) {
 	now := time.Now().UTC().Format(time.RFC3339)
 	res, err := s.db.ExecContext(ctx,
-		`INSERT INTO agents (name, agent_type, token_hash, status, created_at, machine, scope, capabilities) VALUES (?, ?, ?, 'offline', ?, ?, ?, ?)`,
-		name, agentType, tokenHash, now, nullIfEmpty(machine), nullIfEmpty(scope), nullIfEmpty(capabilities))
+		`INSERT INTO agents (name, agent_type, token_hash, status, created_at, machine, scope, capabilities, model) VALUES (?, ?, ?, 'offline', ?, ?, ?, ?, ?)`,
+		name, agentType, tokenHash, now, nullIfEmpty(machine), nullIfEmpty(scope), nullIfEmpty(capabilities), nullIfEmpty(model))
 	if err != nil {
 		return nil, err
 	}
 	id, _ := res.LastInsertId()
-	return &Agent{ID: id, Name: name, AgentType: agentType, TokenHash: tokenHash, Status: "offline", Machine: machine, Scope: scope, Capabilities: capabilities}, nil
+	return &Agent{ID: id, Name: name, AgentType: agentType, TokenHash: tokenHash, Status: "offline", Machine: machine, Scope: scope, Capabilities: capabilities, Model: model}, nil
 }
 
 func nullIfEmpty(s string) interface{} {
@@ -202,12 +206,12 @@ func nullIfEmpty(s string) interface{} {
 
 func (s *Store) GetAgentByName(ctx context.Context, name string) (*Agent, error) {
 	return s.scanAgent(s.db.QueryRowContext(ctx,
-		`SELECT id, name, agent_type, token_hash, workspace, last_seen, status, metadata, created_at, revoked_at, machine, scope, capabilities FROM agents WHERE name = ?`, name))
+		`SELECT id, name, agent_type, token_hash, workspace, last_seen, status, metadata, created_at, revoked_at, machine, scope, capabilities, model, cwd FROM agents WHERE name = ?`, name))
 }
 
 func (s *Store) ListAgents(ctx context.Context) ([]*Agent, error) {
 	rows, err := s.db.QueryContext(ctx,
-		`SELECT id, name, agent_type, token_hash, workspace, last_seen, status, metadata, created_at, revoked_at, machine, scope, capabilities FROM agents WHERE revoked_at IS NULL ORDER BY name`)
+		`SELECT id, name, agent_type, token_hash, workspace, last_seen, status, metadata, created_at, revoked_at, machine, scope, capabilities, model, cwd FROM agents WHERE revoked_at IS NULL ORDER BY name`)
 	if err != nil {
 		return nil, err
 	}
@@ -238,34 +242,28 @@ func (s *Store) RevokeAgent(ctx context.Context, name string) error {
 	return nil
 }
 
-func (s *Store) ReinstateAgent(ctx context.Context, name, agentType, tokenHash, machine, scope, capabilities string) (*Agent, error) {
+func (s *Store) ReinstateAgent(ctx context.Context, name, agentType, tokenHash, machine, scope, capabilities, model string) (*Agent, error) {
 	now := time.Now().UTC().Format(time.RFC3339)
 	_, err := s.db.ExecContext(ctx,
-		`UPDATE agents SET token_hash = ?, agent_type = ?, revoked_at = NULL, status = 'offline', last_seen = ?, machine = COALESCE(?, machine), scope = COALESCE(?, scope), capabilities = COALESCE(?, capabilities) WHERE name = ?`,
-		tokenHash, agentType, now, nullIfEmpty(machine), nullIfEmpty(scope), nullIfEmpty(capabilities), name)
+		`UPDATE agents SET token_hash = ?, agent_type = ?, revoked_at = NULL, status = 'offline', last_seen = ?, machine = COALESCE(?, machine), scope = COALESCE(?, scope), capabilities = COALESCE(?, capabilities), model = COALESCE(?, model) WHERE name = ?`,
+		tokenHash, agentType, now, nullIfEmpty(machine), nullIfEmpty(scope), nullIfEmpty(capabilities), nullIfEmpty(model), name)
 	if err != nil {
 		return nil, err
 	}
 	return s.GetAgentByName(ctx, name)
 }
 
-func (s *Store) UpdatePresence(ctx context.Context, name, workspace, status, machine string) error {
+func (s *Store) UpdatePresence(ctx context.Context, name, workspace, status, machine, cwd string) error {
 	now := time.Now().UTC().Format(time.RFC3339)
-	if machine != "" {
-		_, err := s.db.ExecContext(ctx,
-			`UPDATE agents SET last_seen = ?, workspace = ?, status = ?, machine = ? WHERE name = ? AND revoked_at IS NULL`,
-			now, workspace, status, machine, name)
-		return err
-	}
 	_, err := s.db.ExecContext(ctx,
-		`UPDATE agents SET last_seen = ?, workspace = ?, status = ? WHERE name = ? AND revoked_at IS NULL`,
-		now, workspace, status, name)
+		`UPDATE agents SET last_seen = ?, workspace = ?, status = ?, machine = COALESCE(?, machine), cwd = COALESCE(?, cwd) WHERE name = ? AND revoked_at IS NULL`,
+		now, workspace, status, nullIfEmpty(machine), nullIfEmpty(cwd), name)
 	return err
 }
 
 func (s *Store) GetOnlineAgents(ctx context.Context) ([]*Agent, error) {
 	rows, err := s.db.QueryContext(ctx,
-		`SELECT id, name, agent_type, token_hash, workspace, last_seen, status, metadata, created_at, revoked_at, machine, scope, capabilities FROM agents WHERE status != 'offline' AND revoked_at IS NULL ORDER BY name`)
+		`SELECT id, name, agent_type, token_hash, workspace, last_seen, status, metadata, created_at, revoked_at, machine, scope, capabilities, model, cwd FROM agents WHERE status != 'offline' AND revoked_at IS NULL ORDER BY name`)
 	if err != nil {
 		return nil, err
 	}
@@ -356,9 +354,9 @@ func (s *Store) scanAgent(row scanner) (*Agent, error) {
 	var a Agent
 	var lastSeen, revokedAt, createdAt sql.NullString
 	var workspace, metadata sql.NullString
-	var machine, scope, capabilities sql.NullString
+	var machine, scope, capabilities, model, cwd sql.NullString
 
-	err := row.Scan(&a.ID, &a.Name, &a.AgentType, &a.TokenHash, &workspace, &lastSeen, &a.Status, &metadata, &createdAt, &revokedAt, &machine, &scope, &capabilities)
+	err := row.Scan(&a.ID, &a.Name, &a.AgentType, &a.TokenHash, &workspace, &lastSeen, &a.Status, &metadata, &createdAt, &revokedAt, &machine, &scope, &capabilities, &model, &cwd)
 	if err != nil {
 		return nil, err
 	}
@@ -368,6 +366,8 @@ func (s *Store) scanAgent(row scanner) (*Agent, error) {
 	a.Machine = machine.String
 	a.Scope = scope.String
 	a.Capabilities = capabilities.String
+	a.Model = model.String
+	a.Cwd = cwd.String
 	if createdAt.Valid {
 		a.CreatedAt, _ = time.Parse(time.RFC3339, createdAt.String)
 	}
