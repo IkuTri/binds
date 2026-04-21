@@ -22,7 +22,8 @@ func OpenStore(path string) (*Store, error) {
 		return nil, fmt.Errorf("create config dir: %w", err)
 	}
 
-	db, err := sql.Open("sqlite3", path+"?_journal=wal&_busy_timeout=5000")
+	dsn := "file:" + filepath.ToSlash(path) + "?_journal=wal&_busy_timeout=5000"
+	db, err := sql.Open("sqlite3", dsn)
 	if err != nil {
 		return nil, fmt.Errorf("open server db: %w", err)
 	}

@@ -12,6 +12,7 @@ type BindsConfig struct {
 	Server struct {
 		Port   int    `toml:"port"`
 		Listen string `toml:"listen"`
+		Host   string `toml:"host"`
 	} `toml:"server"`
 	Identity struct {
 		Name      string `toml:"name"`

@@ -1,6 +1,6 @@
-# Contributing to bd
+# Contributing to binds
 
-Thank you for your interest in contributing to bd! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to binds! This document provides guidelines and instructions for contributing.
 
 ## Development Setup
 
@@ -14,11 +14,11 @@ Thank you for your interest in contributing to bd! This document provides guidel
 
 ```bash
 # Clone the repository
-git clone https://github.com/steveyegge/beads
-cd beads
+git clone https://github.com/IkuTri/binds
+cd binds
 
 # Build the project
-go build -o bd ./cmd/bd
+go build -o binds ./cmd/binds
 
 # Run tests
 go test ./...
@@ -27,18 +27,19 @@ go test ./...
 go test -race ./...
 
 # Build and install locally
-go install ./cmd/bd
+go install ./cmd/binds
 ```
 
 ## Project Structure
 
 ```
-beads/
-├── cmd/bd/              # CLI entry point and commands
+binds/
+├── cmd/binds/           # CLI entry point and commands
 ├── internal/
 │   ├── types/           # Core data types (Issue, Dependency, etc.)
-│   └── storage/         # Storage interface and implementations
-│       └── sqlite/      # SQLite backend
+│   ├── storage/         # Storage interface and implementations
+│   │   └── sqlite/      # SQLite backend
+│   └── server/          # Coordination server (mail, registry, rooms)
 ├── .golangci.yml        # Linter configuration
 └── .github/workflows/   # CI/CD pipelines
 ```
@@ -113,14 +114,14 @@ Add cycle detection for dependency graphs
 - Update documentation with examples
 ```
 
-### Important: Don't Include .beads/issues.jsonl Changes
+### Important: Don't Include .binds/issues.jsonl Changes
 
-The `.beads/issues.jsonl` file is the project's issue database. **Do not include changes to this file in your PR.** CI will fail if this file is modified.
+The `.binds/issues.jsonl` file is the project's issue database. **Do not include changes to this file in your PR.** CI will fail if this file is modified.
 
 If you accidentally committed changes to this file, fix it with:
 
 ```bash
-git checkout origin/main -- .beads/issues.jsonl
+git checkout origin/main -- .binds/issues.jsonl
 git commit --amend
 git push --force
 ```
@@ -132,7 +133,7 @@ git push --force
 - Update documentation as needed
 - Ensure CI passes before requesting review
 - Respond to review feedback promptly
-- **Do not include `.beads/issues.jsonl` changes** (see above)
+- **Do not include `.binds/issues.jsonl` changes** (see above)
 
 ## Testing Guidelines
 
@@ -149,26 +150,14 @@ Slow tests use `testing.Short()` to skip when `-short` flag is present.
 
 ```bash
 # Fast tests (recommended for development - skips slow tests)
-# Use this for rapid iteration during development
 go test -short ./...
 
 # Full test suite (before committing - includes all tests)
-# Run this before pushing to ensure nothing breaks
 go test ./...
 
 # With race detection and coverage
 go test -race -coverprofile=coverage.out ./...
 ```
-
-**When to use `-short`:**
-- During active development for fast feedback loops
-- When making small changes that don't affect integration points
-- When you want to quickly verify unit tests pass
-
-**When to use full test suite:**
-- Before committing and pushing changes
-- After modifying git operations or multi-clone scenarios
-- When preparing a pull request
 
 ### Writing Tests
 
@@ -177,88 +166,6 @@ go test -race -coverprofile=coverage.out ./...
 - Clean up resources (database files, etc.) in test teardown
 - Use `t.Run()` for subtests to organize related test cases
 - Mark slow tests with `if testing.Short() { t.Skip("slow test") }`
-
-### Dual-Mode Testing Pattern
-
-**IMPORTANT**: bd supports two execution modes: *direct mode* (SQLite access) and *daemon mode* (RPC via background process). Commands must work identically in both modes. To prevent bugs like GH#719, GH#751, and bd-fu83, use the dual-mode test framework for testing commands.
-
-```go
-// cmd/bd/dual_mode_test.go provides the framework
-
-func TestMyCommand(t *testing.T) {
-    // This test runs TWICE: once in direct mode, once with a live daemon
-    RunDualModeTest(t, "my_test", func(t *testing.T, env *DualModeTestEnv) {
-        // Create test data using mode-agnostic helpers
-        issue := &types.Issue{
-            Title:     "Test issue",
-            IssueType: types.TypeTask,
-            Status:    types.StatusOpen,
-            Priority:  2,
-        }
-        if err := env.CreateIssue(issue); err != nil {
-            t.Fatalf("[%s] CreateIssue failed: %v", env.Mode(), err)
-        }
-
-        // Verify behavior - works in both modes
-        got, err := env.GetIssue(issue.ID)
-        if err != nil {
-            t.Fatalf("[%s] GetIssue failed: %v", env.Mode(), err)
-        }
-        if got.Title != "Test issue" {
-            t.Errorf("[%s] wrong title: got %q", env.Mode(), got.Title)
-        }
-    })
-}
-```
-
-Available `DualModeTestEnv` helper methods:
-- `CreateIssue(issue)` - Create an issue
-- `GetIssue(id)` - Retrieve an issue by ID
-- `UpdateIssue(id, updates)` - Update issue fields
-- `DeleteIssue(id, force)` - Delete (tombstone) an issue
-- `AddDependency(from, to, type)` - Add a dependency
-- `ListIssues(filter)` - List issues matching filter
-- `GetReadyWork()` - Get issues ready for work
-- `AddLabel(id, label)` - Add a label to an issue
-- `Mode()` - Returns "direct" or "daemon" for error messages
-
-Run dual-mode tests:
-```bash
-# Run dual-mode tests (requires integration tag)
-go test -v -tags integration -run "TestDualMode" ./cmd/bd/
-```
-
-Example:
-
-```go
-func TestIssueValidation(t *testing.T) {
-    tests := []struct {
-        name    string
-        issue   *types.Issue
-        wantErr bool
-    }{
-        {
-            name:    "valid issue",
-            issue:   &types.Issue{Title: "Test", Status: types.StatusOpen, Priority: 2},
-            wantErr: false,
-        },
-        {
-            name:    "missing title",
-            issue:   &types.Issue{Status: types.StatusOpen, Priority: 2},
-            wantErr: true,
-        },
-    }
-
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            err := tt.issue.Validate()
-            if (err != nil) != tt.wantErr {
-                t.Errorf("Validate() error = %v, wantErr %v", err, tt.wantErr)
-            }
-        })
-    }
-}
-```
 
 ## Documentation
 
@@ -275,7 +182,7 @@ Include in your bug report:
 - Steps to reproduce
 - Expected behavior
 - Actual behavior
-- Version of bd (`bd version` if implemented)
+- Version of binds (`binds version`)
 - Operating system and Go version
 
 ### Feature Requests
@@ -301,19 +208,19 @@ All contributions go through code review:
 
 ```bash
 # Build and test your changes quickly
-go build -o bd ./cmd/bd && ./bd init --prefix test
+go build -o binds ./cmd/binds && ./binds init --prefix test
 
 # Test specific functionality
-./bd create "Test issue" -p 1 -t bug
-./bd dep add test-2 test-1
-./bd ready
+./binds create "Test issue" -p 1 -t bug
+./binds dep add test-2 test-1
+./binds ready
 ```
 
 ### Database Inspection
 
 ```bash
 # Inspect the SQLite database directly
-sqlite3 .beads/test.db
+sqlite3 .binds/beads.db
 
 # Useful queries
 SELECT * FROM issues;
@@ -327,10 +234,10 @@ Use Go's built-in debugging tools:
 
 ```bash
 # Run with verbose logging
-go run ./cmd/bd -v create "Test"
+go run ./cmd/binds -v create "Test"
 
 # Use delve for debugging
-dlv debug ./cmd/bd -- create "Test issue"
+dlv debug ./cmd/binds -- create "Test issue"
 ```
 
 ## Release Process
@@ -345,7 +252,7 @@ dlv debug ./cmd/bd -- create "Test issue"
 
 ## Questions?
 
-- Check existing [issues](https://github.com/steveyegge/beads/issues)
+- Check existing [issues](https://github.com/IkuTri/binds/issues)
 - Open a new issue for questions
 - Review [README.md](README.md) and other documentation
 
@@ -356,7 +263,3 @@ By contributing, you agree that your contributions will be licensed under the MI
 ## Code of Conduct
 
 Be respectful and professional in all interactions. We're here to build something great together.
-
----
-
-Thank you for contributing to bd! 🎉
