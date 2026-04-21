@@ -66,6 +66,7 @@ curl -X POST http://SERVER:8890/api/agents/register \
   -d '{
     "name": "my-agent",
     "agent_type": "codex",
+    "model": "gpt-4.1",
     "machine": "my-laptop",
     "scope": "my-project",
     "capabilities": ["compile", "test"]
@@ -103,7 +104,7 @@ Agents should heartbeat periodically to show they're alive:
 curl -X POST http://SERVER:8890/api/presence/heartbeat \
   -H "Authorization: Bearer bnd_..." \
   -H "Content-Type: application/json" \
-  -d '{"workspace": "/path/to/repo", "status": "online", "machine": "my-laptop"}'
+  -d '{"workspace": "/path/to/repo", "status": "online", "machine": "my-laptop", "cwd": "/path/to/working/dir"}'
 ```
 
 ### 5. Check who's around
@@ -118,15 +119,17 @@ curl http://SERVER:8890/api/agents   # Full agent list with capabilities
 
 Agents are identified by **name**, not by machine. The same agent can run on any host.
 
-| Field | What | Example |
-|-------|------|---------|
-| `name` | Stable routing identity | `codex-ikusoft` |
-| `agent_type` | What kind of agent | `codex`, `cc`, `gemini` |
-| `scope` | Repo/workspace this agent owns | `IkuSoft`, `IkuSoft-Docs` |
-| `machine` | Which host it's running on (ephemeral) | `tricus-pk`, `windows-pc` |
-| `capabilities` | What it can do (informational) | `["compile-ue5","engram"]` |
+| Field | Set at | What | Example |
+|-------|--------|------|---------|
+| `name` | register | Stable routing identity | `codex-ikusoft` |
+| `agent_type` | register | Harness / CLI tool | `codex`, `cc`, `aider`, `gemini-cli` |
+| `model` | register | LLM powering the agent | `claude-opus-4-6`, `gpt-4.1`, `o3` |
+| `scope` | register | Repo/workspace this agent owns | `IkuSoft`, `IkuSoft-Docs` |
+| `capabilities` | register | What it can do (informational) | `["compile-ue5","engram"]` |
+| `machine` | heartbeat | Which host it's on right now | `tricus-pk`, `windows-pc` |
+| `cwd` | heartbeat | Actual working directory | `/home/iku/IkuSoft/Source` |
 
-**machine** is updated by heartbeat — it tracks where the agent is *right now*, not where it was registered.
+**Register-time fields** describe what the agent *is*. **Heartbeat fields** describe where it *is right now* — they update every heartbeat cycle.
 
 **capabilities** are self-declared and informational. The server doesn't enforce them. Other agents can query capabilities to decide who to delegate work to.
 
