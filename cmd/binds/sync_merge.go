@@ -190,9 +190,9 @@ func displayManualConflicts(conflicts []ManualConflict) {
 	}
 
 	fmt.Fprintf(os.Stderr, "\n  To resolve, use one of:\n")
-	fmt.Fprintf(os.Stderr, "    bd sync --ours      # Keep all local values\n")
-	fmt.Fprintf(os.Stderr, "    bd sync --theirs    # Keep all remote values\n")
-	fmt.Fprintf(os.Stderr, "    bd resolve <issue-id> <field> <value>  # Set specific value\n\n")
+	fmt.Fprintf(os.Stderr, "    binds sync --ours      # Keep all local values\n")
+	fmt.Fprintf(os.Stderr, "    binds sync --theirs    # Keep all remote values\n")
+	fmt.Fprintf(os.Stderr, "    binds resolve <issue-id> <field> <value>  # Set specific value\n\n")
 }
 
 // formatConflictValue formats a conflict value for display

@@ -185,7 +185,7 @@ create, update, show, or close operation).`,
 				}
 				// Warn if defer date is in the past (user probably meant future)
 				if t.Before(time.Now()) && !jsonOutput {
-					fmt.Fprintf(os.Stderr, "%s Defer date %q is in the past. Issue will appear in bd ready immediately.\n",
+					fmt.Fprintf(os.Stderr, "%s Defer date %q is in the past. Issue will appear in binds ready immediately.\n",
 						ui.RenderWarn("!"), t.Format("2006-01-02 15:04"))
 					fmt.Fprintf(os.Stderr, "  Did you mean a future date? Use --defer=+1h or --defer=tomorrow\n")
 				}

@@ -137,7 +137,7 @@ func runContributorWizard(ctx context.Context, store storage.Storage) error {
 		// Initialize beads in planning repo
 		beadsDir := filepath.Join(planningPath, ".beads")
 		if err := os.MkdirAll(beadsDir, 0750); err != nil {
-			return fmt.Errorf("failed to create .beads in planning repo: %w", err)
+			return fmt.Errorf("failed to create .binds in planning repo: %w", err)
 		}
 
 		// Create issues.jsonl (canonical name, bd-6xd)
@@ -231,8 +231,8 @@ Created by: bd init --contributor
 	fmt.Printf("\n%s %s\n\n", ui.RenderPass("✓"), ui.RenderBold("Contributor setup complete!"))
 
 	fmt.Println("Configuration:")
-	fmt.Printf("  Current repo issues: %s\n", ui.RenderAccent(".beads/issues.jsonl"))
-	fmt.Printf("  Planning repo issues: %s\n", ui.RenderAccent(filepath.Join(planningPath, ".beads/issues.jsonl")))
+	fmt.Printf("  Current repo issues: %s\n", ui.RenderAccent(".binds/issues.jsonl"))
+	fmt.Printf("  Planning repo issues: %s\n", ui.RenderAccent(filepath.Join(planningPath, ".binds/issues.jsonl")))
 	fmt.Println()
 	fmt.Println("How it works:")
 	fmt.Println("  • Issues you create will route to the planning repo")

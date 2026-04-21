@@ -152,7 +152,7 @@ NOTE: This is a rare operation. Most users never need this command.`,
 
 			if !repair {
 				fmt.Fprintf(os.Stderr, "Error: cannot rename with multiple prefixes. Use --repair to consolidate.\n")
-				fmt.Fprintf(os.Stderr, "Example: bd rename-prefix %s --repair\n", newPrefix)
+				fmt.Fprintf(os.Stderr, "Example: binds rename-prefix %s --repair\n", newPrefix)
 				os.Exit(1)
 			}
 

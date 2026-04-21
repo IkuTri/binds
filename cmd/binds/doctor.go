@@ -75,7 +75,7 @@ var doctorCmd = &cobra.Command{
 	Long: `Sanity check the binds installation for the current directory or specified path.
 
 This command checks:
-  - If .beads/ directory exists
+  - If .binds/ directory exists
   - Database version and migration status
   - Schema compatibility (all required tables and columns present)
   - Whether using hash-based vs sequential IDs
@@ -88,7 +88,7 @@ This command checks:
   - File permissions
   - Circular dependencies
   - Git hooks (pre-commit, post-merge, pre-push)
-  - .beads/.gitignore up to date
+  - .binds/.gitignore up to date
   - Metadata.json version tracking (LastBdVersion field)
 
 Performance Mode (--perf):
@@ -166,7 +166,7 @@ Examples:
 		if len(args) > 0 {
 			checkPath = args[0]
 		} else if beadsDir := os.Getenv("BEADS_DIR"); beadsDir != "" {
-			// BEADS_DIR points to .beads directory, doctor needs parent
+			// BEADS_DIR points to .binds directory, doctor needs parent
 			checkPath = filepath.Dir(beadsDir)
 		} else {
 			checkPath = "."
@@ -286,14 +286,14 @@ func runDiagnostics(path string) doctorResult {
 		OverallOK:  true,
 	}
 
-	// Check 1: Installation (.beads/ directory)
+	// Check 1: Installation (.binds/ directory)
 	installCheck := convertWithCategory(doctor.CheckInstallation(path), doctor.CategoryCore)
 	result.Checks = append(result.Checks, installCheck)
 	if installCheck.Status != statusOK {
 		result.OverallOK = false
 	}
 
-	// Check Git Hooks early (even if .beads/ doesn't exist yet)
+	// Check Git Hooks early (even if .binds/ doesn't exist yet)
 	hooksCheck := convertWithCategory(doctor.CheckGitHooks(), doctor.CategoryGit)
 	result.Checks = append(result.Checks, hooksCheck)
 	// Don't fail overall check for missing hooks, just warn
@@ -312,7 +312,7 @@ func runDiagnostics(path string) doctorResult {
 		result.OverallOK = false
 	}
 
-	// If no .beads/, skip remaining checks
+	// If no .binds/, skip remaining checks
 	if installCheck.Status != statusOK {
 		return result
 	}
@@ -631,7 +631,7 @@ func runDiagnostics(path string) doctorResult {
 	result.Checks = append(result.Checks, tombstonesCheck)
 	// Don't fail overall check for tombstone issues, just warn
 
-	// Check 20: Untracked .beads/*.jsonl files
+	// Check 20: Untracked .binds/*.jsonl files
 	untrackedCheck := convertWithCategory(doctor.CheckUntrackedBeadsFiles(path), doctor.CategoryData)
 	result.Checks = append(result.Checks, untrackedCheck)
 	// Don't fail overall check for untracked files, just warn

@@ -277,9 +277,9 @@ func performReset(items []resetItem, _, beadsDir string) {
 
 		case "directory":
 			if err := os.RemoveAll(item.Path); err != nil {
-				errors = append(errors, fmt.Sprintf("failed to remove .beads: %v", err))
+				errors = append(errors, fmt.Sprintf("failed to remove .binds: %v", err))
 			} else if !jsonOutput {
-				fmt.Printf("%s Removed .beads directory\n", ui.RenderPass("✓"))
+				fmt.Printf("%s Removed .binds directory\n", ui.RenderPass("✓"))
 			}
 		}
 	}
@@ -305,7 +305,7 @@ func performReset(items []resetItem, _, beadsDir string) {
 	} else {
 		fmt.Printf("%s Reset complete\n", ui.RenderPass("✓"))
 		fmt.Println()
-		fmt.Println("To reinitialize beads, run: bd init")
+		fmt.Println("To reinitialize beads, run: binds init")
 	}
 }
 

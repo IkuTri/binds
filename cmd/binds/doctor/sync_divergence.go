@@ -288,7 +288,7 @@ func checkUncommittedBeadsChanges(path, beadsDir string) *SyncDivergenceIssue {
 
 	return &SyncDivergenceIssue{
 		Type:        "uncommitted_beads",
-		Description: fmt.Sprintf("Uncommitted .beads/ changes (%d file(s))", fileCount),
+		Description: fmt.Sprintf("Uncommitted .binds/ changes (%d file(s))", fileCount),
 		FixCommand:  fixCmd,
 	}
 }

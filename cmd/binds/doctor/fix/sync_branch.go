@@ -165,7 +165,7 @@ func SyncBranchGitignore(path string) error {
 	// Find the .beads directory
 	beadsDir := filepath.Join(path, ".beads")
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
-		return fmt.Errorf(".beads directory not found at %s", beadsDir)
+		return fmt.Errorf(".binds directory not found at %s", beadsDir)
 	}
 
 	// Process both JSONL files that need hiding
@@ -188,7 +188,7 @@ func SyncBranchGitignore(path string) error {
 	}
 
 	if anyChanged {
-		fmt.Println("  ✓ Set git index flags to hide .beads/*.jsonl from git status")
+		fmt.Println("  ✓ Set git index flags to hide .binds/*.jsonl from git status")
 	}
 	return nil
 }

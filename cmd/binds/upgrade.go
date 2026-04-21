@@ -12,8 +12,8 @@ import (
 var upgradeCmd = &cobra.Command{
 	Use:     "upgrade",
 	GroupID: "maint",
-	Short:   "Check and manage bd version upgrades",
-	Long: `Commands for checking bd version upgrades and reviewing changes.
+	Short:   "Check and manage binds version upgrades",
+	Long: `Commands for checking binds version upgrades and reviewing changes.
 
 The upgrade command helps you stay aware of bd version changes:
   - bd upgrade status: Check if bd version changed since last use
@@ -25,8 +25,8 @@ Version tracking is automatic - bd updates metadata.json on every run.`,
 
 var upgradeStatusCmd = &cobra.Command{
 	Use:   "status",
-	Short: "Check if bd version has changed",
-	Long: `Check if bd has been upgraded since you last used it.
+	Short: "Check if binds version has changed",
+	Long: `Check if binds has been upgraded since you last used it.
 
 This command uses the version tracking that happens automatically
 at startup to detect if bd was upgraded.
@@ -51,7 +51,7 @@ Examples:
 
 		// Human-readable output
 		if versionUpgradeDetected {
-			fmt.Printf("✨ bd upgraded from v%s to v%s\n", previousVersion, Version)
+			fmt.Printf("✨ binds upgraded from v%s to v%s\n", previousVersion, Version)
 			newVersions := getVersionsSince(previousVersion)
 			if len(newVersions) > 0 {
 				fmt.Printf("   %d version%s with changes available\n",
@@ -70,8 +70,8 @@ Examples:
 
 var upgradeReviewCmd = &cobra.Command{
 	Use:   "review",
-	Short: "Review changes since last bd version",
-	Long: `Show what's new in bd since the last version you used.
+	Short: "Review changes since last binds version",
+	Long: `Show what's new in binds since the last version you used.
 
 Unlike 'binds info --whats-new' which shows the last 3 versions,
 this command shows ALL changes since your specific last version.
@@ -141,8 +141,8 @@ Examples:
 
 var upgradeAckCmd = &cobra.Command{
 	Use:   "ack",
-	Short: "Acknowledge the current bd version",
-	Long: `Mark the current bd version as acknowledged.
+	Short: "Acknowledge the current binds version",
+	Long: `Mark the current binds version as acknowledged.
 
 This updates metadata.json to record that you've seen the current
 version. Mainly useful after reviewing upgrade changes to suppress
@@ -157,7 +157,7 @@ Examples:
 	Run: func(cmd *cobra.Command, args []string) {
 		beadsDir := beads.FindBeadsDir()
 		if beadsDir == "" {
-			fmt.Println("Error: No .beads directory found")
+			fmt.Println("Error: No .binds directory found")
 			return
 		}
 
@@ -194,7 +194,7 @@ Examples:
 		if lastSeenVersion == Version {
 			fmt.Printf("✓ Already on v%s\n", Version)
 		} else if lastSeenVersion == "" {
-			fmt.Printf("✓ Acknowledged bd v%s\n", Version)
+			fmt.Printf("✓ Acknowledged binds v%s\n", Version)
 		} else {
 			fmt.Printf("✓ Acknowledged upgrade from v%s to v%s\n", lastSeenVersion, Version)
 		}

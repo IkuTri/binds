@@ -62,7 +62,7 @@ func ensureForkProtection() {
 		return
 	}
 
-	debug.Printf("Fork detected: .beads/issues.jsonl excluded from git staging")
+	debug.Printf("Fork detected: .binds/issues.jsonl excluded from git staging")
 }
 
 // isUpstreamRepo checks if origin remote points to the upstream beads repo

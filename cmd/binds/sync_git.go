@@ -475,7 +475,7 @@ func showPushPermissionGuidance() {
 	fmt.Fprintln(os.Stderr, "")
 	fmt.Fprintln(os.Stderr, "If you're contributing to someone else's repo:")
 	fmt.Fprintln(os.Stderr, "  git config beads.role contributor")
-	fmt.Fprintln(os.Stderr, "  bd init --contributor")
+	fmt.Fprintln(os.Stderr, "  binds init --contributor")
 	fmt.Fprintln(os.Stderr, "")
 	fmt.Fprintln(os.Stderr, "See: docs/ROUTING.md for contributor setup")
 }
@@ -557,7 +557,7 @@ func checkMergeDriverConfig() {
 		fmt.Fprintf(os.Stderr, "   Problem: Git only supports %%O (base), %%A (current), %%B (other)\n")
 		fmt.Fprintf(os.Stderr, "            Using %%L/%%R will cause merge failures!\n")
 		fmt.Fprintf(os.Stderr, "\n   Fix now: binds doctor --fix\n")
-		fmt.Fprintf(os.Stderr, "   Or manually: git config merge.beads.driver \"binds merge %%A %%O %%A %%B\"\n\n")
+		fmt.Fprintf(os.Stderr, "   Or manually: git config merge.binds.driver \"binds merge %%A %%O %%A %%B\"\n\n")
 	}
 }
 

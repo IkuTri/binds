@@ -91,7 +91,7 @@ func CheckGitHooks() DoctorCheck {
 				return DoctorCheck{
 					Name:    "Git Hooks",
 					Status:  StatusOK,
-					Message: fmt.Sprintf("%s detected (cannot verify bd integration)", integration.Manager),
+					Message: fmt.Sprintf("%s detected (cannot verify binds integration)", integration.Manager),
 					Detail:  "Ensure your hook config calls 'binds hooks run <hook>'",
 				}
 			}
@@ -412,7 +412,7 @@ func CheckSyncBranchHookCompatibility(path string) DoctorCheck {
 					return DoctorCheck{
 						Name:    "Sync Branch Hook Compatibility",
 						Status:  StatusOK,
-						Message: fmt.Sprintf("Managed by %s (cannot verify bd integration)", names),
+						Message: fmt.Sprintf("Managed by %s (cannot verify binds integration)", names),
 						Detail:  "Ensure pre-push hook calls 'binds hooks run pre-push' for sync-branch",
 					}
 				}
@@ -436,7 +436,7 @@ func CheckSyncBranchHookCompatibility(path string) DoctorCheck {
 						return DoctorCheck{
 							Name:    "Sync Branch Hook Compatibility",
 							Status:  StatusOK,
-							Message: fmt.Sprintf("Managed by %s with bd integration", integration.Manager),
+							Message: fmt.Sprintf("Managed by %s with binds integration", integration.Manager),
 							Detail:  detail,
 						}
 					}
@@ -445,7 +445,7 @@ func CheckSyncBranchHookCompatibility(path string) DoctorCheck {
 					return DoctorCheck{
 						Name:    "Sync Branch Hook Compatibility",
 						Status:  StatusWarning,
-						Message: fmt.Sprintf("Managed by %s (missing pre-push bd integration)", integration.Manager),
+						Message: fmt.Sprintf("Managed by %s (missing pre-push binds integration)", integration.Manager),
 						Detail:  "pre-push hook needs 'binds hooks run pre-push' for sync-branch",
 						Fix:     fmt.Sprintf("Add or upgrade to 'binds hooks run pre-push' in %s. See %s", integration.Manager, hooksExamplesURL),
 					}
@@ -456,7 +456,7 @@ func CheckSyncBranchHookCompatibility(path string) DoctorCheck {
 			return DoctorCheck{
 				Name:    "Sync Branch Hook Compatibility",
 				Status:  StatusWarning,
-				Message: fmt.Sprintf("Managed by %s (no bd integration detected)", names),
+				Message: fmt.Sprintf("Managed by %s (no binds integration detected)", names),
 				Detail:  fmt.Sprintf("Pre-push hook managed by %s but no 'binds hooks run' found", names),
 				Fix:     fmt.Sprintf("Add or upgrade to 'binds hooks run <hook>' in %s. See %s", names, hooksExamplesURL),
 			}
@@ -561,7 +561,7 @@ func CheckMergeDriver(path string) DoctorCheck {
 			Status:  StatusWarning,
 			Message: fmt.Sprintf("Non-standard merge driver config: %q", currentConfig),
 			Detail:  fmt.Sprintf("Expected: %q", correctConfig),
-			Fix:     fmt.Sprintf("Run 'binds doctor --fix' to update config, or manually: git config merge.beads.driver \"%s\"", correctConfig),
+			Fix:     fmt.Sprintf("Run 'binds doctor --fix' to update config, or manually: git config merge.binds.driver \"%s\"", correctConfig),
 		}
 	}
 
@@ -617,7 +617,7 @@ func CheckSyncBranchConfig(path string) DoctorCheck {
 			Name:    "Sync Branch Config",
 			Status:  StatusError,
 			Message: fmt.Sprintf("On sync branch '%s'", syncBranch),
-			Detail:  fmt.Sprintf("Currently on branch '%s' which is configured as the sync branch. bd sync cannot create a worktree for a branch that's already checked out.", syncBranch),
+			Detail:  fmt.Sprintf("Currently on branch '%s' which is configured as the sync branch. binds sync cannot create a worktree for a branch that's already checked out.", syncBranch),
 			Fix:     "Switch to your main working branch: git checkout main",
 		}
 	}

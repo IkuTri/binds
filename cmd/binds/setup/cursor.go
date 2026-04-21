@@ -75,7 +75,7 @@ func CheckCursor() {
 
 	if _, err := os.Stat(rulesPath); os.IsNotExist(err) {
 		fmt.Println("✗ Cursor integration not installed")
-		fmt.Println("  Run: bd setup cursor")
+		fmt.Println("  Run: binds setup cursor")
 		os.Exit(1)
 	}
 

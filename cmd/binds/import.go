@@ -67,12 +67,12 @@ NOTE: Import requires direct database access and does not work with daemon mode.
 		// Check for positional arguments (common mistake: bd import file.jsonl instead of bd import -i file.jsonl)
 		if len(args) > 0 {
 			fmt.Fprintf(os.Stderr, "Error: Unexpected argument(s): %v\n\n", args)
-			fmt.Fprintf(os.Stderr, "Did you mean: bd import -i %s\n\n", args[0])
+			fmt.Fprintf(os.Stderr, "Did you mean: binds import -i %s\n\n", args[0])
 			fmt.Fprintf(os.Stderr, "The import command does not accept positional arguments.\n")
 			fmt.Fprintf(os.Stderr, "Use the -i flag to specify an input file:\n")
-			fmt.Fprintf(os.Stderr, "  bd import -i .beads/issues.jsonl\n\n")
+			fmt.Fprintf(os.Stderr, "  binds import -i .binds/issues.jsonl\n\n")
 			fmt.Fprintf(os.Stderr, "Or pipe data via stdin:\n")
-			fmt.Fprintf(os.Stderr, "  cat data.jsonl | bd import\n")
+			fmt.Fprintf(os.Stderr, "  cat data.jsonl | binds import\n")
 			os.Exit(1)
 		}
 
@@ -103,11 +103,11 @@ NOTE: Import requires direct database access and does not work with daemon mode.
 		if input == "" && term.IsTerminal(int(os.Stdin.Fd())) {
 			fmt.Fprintf(os.Stderr, "Error: No input specified.\n\n")
 			fmt.Fprintf(os.Stderr, "Usage:\n")
-			fmt.Fprintf(os.Stderr, "  bd import -i .beads/issues.jsonl          # Import from file\n")
-			fmt.Fprintf(os.Stderr, "  bd import -i .beads/issues.jsonl --dry-run # Preview changes\n")
-			fmt.Fprintf(os.Stderr, "  cat data.jsonl | bd import               # Import from pipe\n")
-			fmt.Fprintf(os.Stderr, "  bd sync --import-only                    # Import latest JSONL\n\n")
-			fmt.Fprintf(os.Stderr, "For more information, run: bd import --help\n")
+			fmt.Fprintf(os.Stderr, "  binds import -i .binds/issues.jsonl          # Import from file\n")
+			fmt.Fprintf(os.Stderr, "  binds import -i .binds/issues.jsonl --dry-run # Preview changes\n")
+			fmt.Fprintf(os.Stderr, "  cat data.jsonl | binds import               # Import from pipe\n")
+			fmt.Fprintf(os.Stderr, "  binds sync --import-only                    # Import latest JSONL\n\n")
+			fmt.Fprintf(os.Stderr, "For more information, run: binds import --help\n")
 			os.Exit(1)
 		}
 
@@ -159,8 +159,8 @@ NOTE: Import requires direct database access and does not work with daemon mode.
 				if err := attemptAutoMerge(input); err != nil {
 					fmt.Fprintf(os.Stderr, "Error: Automatic merge failed: %v\n\n", err)
 					fmt.Fprintf(os.Stderr, "To resolve manually:\n")
-					fmt.Fprintf(os.Stderr, "  git checkout --ours .beads/issues.jsonl && bd import -i .beads/issues.jsonl\n")
-					fmt.Fprintf(os.Stderr, "  git checkout --theirs .beads/issues.jsonl && bd import -i .beads/issues.jsonl\n\n")
+					fmt.Fprintf(os.Stderr, "  git checkout --ours .binds/issues.jsonl && binds import -i .binds/issues.jsonl\n")
+					fmt.Fprintf(os.Stderr, "  git checkout --theirs .binds/issues.jsonl && binds import -i .binds/issues.jsonl\n\n")
 					fmt.Fprintf(os.Stderr, "For advanced field-level merging, see: https://github.com/neongreen/mono/tree/main/beads-merge\n")
 					os.Exit(1)
 				}

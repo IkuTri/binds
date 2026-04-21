@@ -19,8 +19,8 @@ We will respond within 48 hours and work with you to address the issue.
 ### Database Security
 
 bd stores issue data locally in:
-- SQLite databases (`.beads/*.db`) - local only, gitignored
-- JSONL files (`.beads/issues.jsonl`) - committed to git
+- SQLite databases (`.binds/*.db`) - local only, gitignored
+- JSONL files (`.binds/issues.jsonl`) - committed to git
 
 **Important**:
 - Do not store sensitive information (passwords, API keys, secrets) in issue descriptions or metadata
@@ -64,7 +64,7 @@ Once version 1.0 is released, we will support the latest major version and one p
 ## Best Practices
 
 1. **Don't commit secrets** - Never put API keys, passwords, or credentials in issue descriptions
-2. **Review before export** - Check `.beads/issues.jsonl` before committing sensitive project details
+2. **Review before export** - Check `.binds/issues.jsonl` before committing sensitive project details
 3. **Use private repos** - If your issues contain proprietary information, use private git repositories
 4. **Validate git hooks** - If using automated export/import hooks, review them for safety
 5. **Regular updates** - Keep bd updated to the latest version: `go install github.com/steveyegge/beads/cmd/bd@latest`

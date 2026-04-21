@@ -1,15 +1,15 @@
 {
-  "name": "beads-marketplace",
-  "description": "Local marketplace for beads plugin development",
+  "name": "binds-marketplace",
+  "description": "Local marketplace for binds plugin development",
   "owner": {
-    "name": "Steve Yegge"
+    "name": "IkuTri"
   },
   "plugins": [
     {
-      "name": "beads",
+      "name": "binds",
       "source": "./claude-plugin",
-      "description": "AI-supervised issue tracker for coding workflows",
-      "version": "0.49.4"
+      "description": "AI-supervised issue tracker and agent coordination",
+      "version": "0.1.0"
     }
   ]
 }

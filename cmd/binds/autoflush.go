@@ -333,7 +333,7 @@ func autoImportIfNewer() {
 			fmt.Fprintf(os.Stderr, "To resolve:\n")
 			fmt.Fprintf(os.Stderr, "  1. Resolve the merge conflict in your Git client, OR\n")
 			fmt.Fprintf(os.Stderr, "  2. Export from database to regenerate clean JSONL:\n")
-			fmt.Fprintf(os.Stderr, "     bd export -o %s\n\n", jsonlPath)
+			fmt.Fprintf(os.Stderr, "     binds export -o %s\n\n", jsonlPath)
 			fmt.Fprintf(os.Stderr, "After resolving, commit the fixed JSONL file.\n")
 			return
 		}
@@ -662,7 +662,7 @@ func recordFlushFailure(err error) {
 	if failCount >= 3 {
 		fmt.Fprintf(os.Stderr, "\n%s\n", ui.RenderFail("⚠️  CRITICAL: Auto-flush has failed "+fmt.Sprint(failCount)+" times consecutively!"))
 		fmt.Fprintf(os.Stderr, "%s\n", ui.RenderFail("⚠️  Your JSONL file may be out of sync with the database."))
-		fmt.Fprintf(os.Stderr, "%s\n\n", ui.RenderFail("⚠️  Run 'binds export -o .beads/issues.jsonl' manually to fix."))
+		fmt.Fprintf(os.Stderr, "%s\n\n", ui.RenderFail("⚠️  Run 'binds export -o .binds/issues.jsonl' manually to fix."))
 	}
 }
 

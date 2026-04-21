@@ -50,8 +50,8 @@ func RepoFingerprint(path string) error {
 	// Prompt user for action
 	fmt.Println("\n  Repo fingerprint mismatch detected. Choose an action:")
 	fmt.Println()
-	fmt.Println("    [1] Update repo ID (if git remote URL changed or bd was upgraded)")
-	fmt.Println("    [2] Reinitialize database (if wrong .beads was copied here)")
+	fmt.Println("    [1] Update repo ID (if git remote URL changed or binds was upgraded)")
+	fmt.Println("    [2] Reinitialize database (if wrong .binds was copied here)")
 	fmt.Println("    [s] Skip (do nothing)")
 	fmt.Println()
 	fmt.Print("  Choice [1/2/s]: ")

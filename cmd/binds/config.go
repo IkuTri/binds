@@ -24,7 +24,7 @@ var configCmd = &cobra.Command{
 	Short:   "Manage configuration settings",
 	Long: `Manage configuration settings for external integrations and preferences.
 
-Configuration is stored per-project in .beads/*.db and is version-control-friendly.
+Configuration is stored per-project in .binds/*.db and is version-control-friendly.
 
 Common namespaces:
   - jira.*       Jira integration settings
@@ -299,10 +299,10 @@ Examples:
 			os.Exit(1)
 		}
 
-		// Find repo root by walking up to find .beads directory
+		// Find repo root by walking up to find .binds directory
 		repoPath := findBeadsRepoRoot(cwd)
 		if repoPath == "" {
-			fmt.Fprintf(os.Stderr, "Error: not in a beads repository (no .beads directory found)\n")
+			fmt.Fprintf(os.Stderr, "Error: not in a beads repository (no .binds directory found)\n")
 			os.Exit(1)
 		}
 

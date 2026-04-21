@@ -197,7 +197,7 @@ func getRedirectNotice(verbose bool) string {
 	}
 
 	if verbose {
-		return fmt.Sprintf(`> ⚠️ **Redirected**: Local .beads → %s
+		return fmt.Sprintf(`> ⚠️ **Redirected**: Local .binds → %s
 > You share issues with other clones using this redirect.
 
 `, redirectInfo.TargetDir)

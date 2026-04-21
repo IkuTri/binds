@@ -173,9 +173,9 @@ func getGitActivity(hours int) *RecentActivitySummary {
 	since := fmt.Sprintf("%d hours ago", hours)
 	var cmd *exec.Cmd
 	if rc, err := beads.GetRepoContext(); err == nil {
-		cmd = rc.GitCmd(context.Background(), "log", "--since="+since, "--numstat", "--pretty=format:%H", ".beads/issues.jsonl")
+		cmd = rc.GitCmd(context.Background(), "log", "--since="+since, "--numstat", "--pretty=format:%H", ".binds/issues.jsonl")
 	} else {
-		cmd = exec.Command("git", "log", "--since="+since, "--numstat", "--pretty=format:%H", ".beads/issues.jsonl") // #nosec G204 -- bounded arguments for local git history inspection
+		cmd = exec.Command("git", "log", "--since="+since, "--numstat", "--pretty=format:%H", ".binds/issues.jsonl") // #nosec G204 -- bounded arguments for local git history inspection
 	}
 
 	output, err := cmd.Output()
@@ -213,9 +213,9 @@ func getGitActivity(hours int) *RecentActivitySummary {
 
 	// Get detailed diff to analyze changes
 	if rc, err := beads.GetRepoContext(); err == nil {
-		cmd = rc.GitCmd(context.Background(), "log", "--since="+since, "-p", ".beads/issues.jsonl")
+		cmd = rc.GitCmd(context.Background(), "log", "--since="+since, "-p", ".binds/issues.jsonl")
 	} else {
-		cmd = exec.Command("git", "log", "--since="+since, "-p", ".beads/issues.jsonl") // #nosec G204 -- bounded arguments for local git history inspection
+		cmd = exec.Command("git", "log", "--since="+since, "-p", ".binds/issues.jsonl") // #nosec G204 -- bounded arguments for local git history inspection
 	}
 	output, err = cmd.Output()
 	if err != nil {

@@ -109,7 +109,7 @@ Examples:
 					"message": "No .beads directory found. Run 'binds init' first.",
 				})
 			} else {
-				fmt.Fprintf(os.Stderr, "Error: no .beads directory found\n")
+				fmt.Fprintf(os.Stderr, "Error: no .binds directory found\n")
 				fmt.Fprintf(os.Stderr, "Hint: run 'binds init' to initialize bd\n")
 			}
 			os.Exit(1)

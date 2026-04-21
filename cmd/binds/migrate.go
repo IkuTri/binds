@@ -789,7 +789,7 @@ func handleInspect() {
 				"message": "No .beads directory found. Run 'binds init' first.",
 			})
 		} else {
-			fmt.Fprintf(os.Stderr, "Error: no .beads directory found\n")
+			fmt.Fprintf(os.Stderr, "Error: no .binds directory found\n")
 			fmt.Fprintf(os.Stderr, "Hint: run 'binds init' to initialize bd\n")
 		}
 		os.Exit(1)
@@ -987,7 +987,7 @@ func handleToSeparateBranch(branch string, dryRun bool) {
 				"message": "No .beads directory found. Run 'binds init' first.",
 			})
 		} else {
-			fmt.Fprintf(os.Stderr, "Error: no .beads directory found\n")
+			fmt.Fprintf(os.Stderr, "Error: no .binds directory found\n")
 			fmt.Fprintf(os.Stderr, "Hint: run 'binds init' to initialize bd\n")
 		}
 		os.Exit(1)
@@ -1102,8 +1102,8 @@ func handleToSeparateBranch(branch string, dryRun bool) {
 		fmt.Printf("Set sync.branch to '%s'\n\n", b)
 		fmt.Println("Next steps:")
 		fmt.Println("  1. Restart the daemon to create worktree and start committing to the branch:")
-		fmt.Printf("     bd daemon restart\n")
-		fmt.Printf("     bd daemon start --auto-commit\n\n")
+		fmt.Printf("     binds daemon restart\n")
+		fmt.Printf("     binds daemon start --auto-commit\n\n")
 		fmt.Println("  2. Your existing data is preserved - no changes to git history")
 		fmt.Println("  3. Future issue updates will be committed to the separate branch")
 		fmt.Println("\nSee docs/PROTECTED_BRANCHES.md for complete workflow guide")

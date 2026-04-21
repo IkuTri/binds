@@ -184,7 +184,7 @@ var createCmd = &cobra.Command{
 			}
 			// Warn if defer date is in the past (user probably meant future)
 			if t.Before(time.Now()) && !silent && !debug.IsQuiet() {
-				fmt.Fprintf(os.Stderr, "%s Defer date %q is in the past. Issue will appear in bd ready immediately.\n",
+				fmt.Fprintf(os.Stderr, "%s Defer date %q is in the past. Issue will appear in binds ready immediately.\n",
 					ui.RenderWarn("!"), t.Format("2006-01-02 15:04"))
 				fmt.Fprintf(os.Stderr, "  Did you mean a future date? Use --defer=+1h or --defer=tomorrow\n")
 			}
@@ -1019,7 +1019,7 @@ func findTownBeadsDir() (string, error) {
 		dir = parent
 	}
 
-	return "", fmt.Errorf("no routes.jsonl found in any parent .beads directory")
+	return "", fmt.Errorf("no routes.jsonl found in any parent .binds directory")
 }
 
 // formatTimeForRPC converts a *time.Time to RFC3339 string for daemon RPC calls.
@@ -1049,7 +1049,7 @@ func ensureBeadsDirForPath(ctx context.Context, targetPath string, sourceStore s
 
 	// Create .beads directory
 	if err := os.MkdirAll(beadsDir, 0750); err != nil {
-		return fmt.Errorf("cannot create .beads directory: %w", err)
+		return fmt.Errorf("cannot create .binds directory: %w", err)
 	}
 
 	// Create issues.jsonl if it doesn't exist

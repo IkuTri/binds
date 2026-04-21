@@ -140,7 +140,7 @@ func maybeShowUpgradeNotification() {
 	upgradeAcknowledged = true
 
 	// Display notification
-	fmt.Printf("🔄 bd upgraded from v%s to v%s since last use\n", previousVersion, Version)
+	fmt.Printf("🔄 binds upgraded from v%s to v%s since last use\n", previousVersion, Version)
 	fmt.Println("💡 Run 'binds upgrade review' to see what changed")
 	fmt.Println("💊 Run 'binds doctor' to verify upgrade completed cleanly")
 

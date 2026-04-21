@@ -72,7 +72,7 @@ func outputJSONAndExit(result repairResult, exitCode int) {
 func validateRepairPaths() (string, error) {
 	beadsDir := filepath.Join(repairPath, ".beads")
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
-		return "", fmt.Errorf(".beads directory not found at %s", beadsDir)
+		return "", fmt.Errorf(".binds directory not found at %s", beadsDir)
 	}
 	dbPath := filepath.Join(beadsDir, "beads.db")
 	if _, err := os.Stat(dbPath); os.IsNotExist(err) {

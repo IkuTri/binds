@@ -255,7 +255,7 @@ func applyFixList(path string, fixes []doctorCheck) {
 			err = fix.MergeDriver(path)
 		case "Sync Branch Config":
 			// No auto-fix: sync-branch should be added to config.yaml (version controlled)
-			fmt.Printf("  ⚠ Add 'sync-branch: beads-sync' to .beads/config.yaml\n")
+			fmt.Printf("  ⚠ Add 'sync-branch: beads-sync' to .binds/config.yaml\n")
 			continue
 		case "Sync Branch Gitignore":
 			err = doctor.FixSyncBranchGitignore()
@@ -298,7 +298,7 @@ func applyFixList(path string, fixes []doctorCheck) {
 			continue
 		case "Git Conflicts":
 			// No auto-fix: git conflicts require manual resolution
-			fmt.Printf("  ⚠ Resolve conflicts manually: git checkout --ours or --theirs .beads/issues.jsonl\n")
+			fmt.Printf("  ⚠ Resolve conflicts manually: git checkout --ours or --theirs .binds/issues.jsonl\n")
 			continue
 		case "Stale Closed Issues":
 			// consolidate cleanup into doctor --fix

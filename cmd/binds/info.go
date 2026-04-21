@@ -963,7 +963,7 @@ func showWhatsNew() {
 	}
 
 	// Human-readable output
-	fmt.Printf("\n🆕 What's New in bd (Current: v%s)\n", currentVersion)
+	fmt.Printf("\n🆕 What's New in binds (Current: v%s)\n", currentVersion)
 	fmt.Println("=" + strings.Repeat("=", 60))
 	fmt.Println()
 
@@ -982,7 +982,7 @@ func showWhatsNew() {
 		fmt.Println()
 	}
 
-	fmt.Println("💡 Tip: Use `bd info --whats-new --json` for machine-readable output")
+	fmt.Println("💡 Tip: Use `binds info --whats-new --json` for machine-readable output")
 	fmt.Println()
 }
 

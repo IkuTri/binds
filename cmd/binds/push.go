@@ -34,7 +34,7 @@ Examples:
 
 		beadsDir := beads.FindBeadsDir()
 		if beadsDir == "" {
-			return fmt.Errorf("no .binds/ or .beads/ directory found")
+			return fmt.Errorf("no .binds/ or .binds/ directory found")
 		}
 
 		cwd, _ := os.Getwd()

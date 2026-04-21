@@ -150,7 +150,7 @@ NOTE: Review detected issues carefully before using --clean. False positives are
 		}
 
 		// Backup to JSONL before deleting
-		backupPath := ".beads/pollution-backup.jsonl"
+		backupPath := ".binds/pollution-backup.jsonl"
 		if err := backupPollutedIssues(polluted, backupPath); err != nil {
 			fmt.Fprintf(os.Stderr, "Error backing up issues: %v\n", err)
 			os.Exit(1)
@@ -172,7 +172,7 @@ NOTE: Review detected issues carefully before using --clean. False positives are
 		markDirtyAndScheduleFlush()
 
 		fmt.Printf("%s Deleted %d test issues\n", ui.RenderPass("✓"), deleted)
-		fmt.Printf("\nCleanup complete. To restore, run: bd import %s\n", backupPath)
+		fmt.Printf("\nCleanup complete. To restore, run: binds import %s\n", backupPath)
 	},
 }
 

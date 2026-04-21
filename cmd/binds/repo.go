@@ -62,7 +62,7 @@ shared across all clones of this repository.`,
 		// Validate the repo path exists and has .beads
 		beadsDir := filepath.Join(expandedPath, ".beads")
 		if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
-			return fmt.Errorf("no .beads directory found at %s - is this a beads repository?", expandedPath)
+			return fmt.Errorf("no .binds directory found at %s - is this a beads repository?", expandedPath)
 		}
 
 		// Find config.yaml
@@ -159,7 +159,7 @@ that came from the removed repository.`,
 var repoListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all configured repositories",
-	Long: `List all repositories configured in .beads/config.yaml.
+	Long: `List all repositories configured in .binds/config.yaml.
 
 Shows the primary repository (always ".") and any additional
 repositories configured for hydration.`,

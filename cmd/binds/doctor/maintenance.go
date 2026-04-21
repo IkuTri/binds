@@ -478,7 +478,7 @@ func CheckStaleMQFiles(path string) DoctorCheck {
 	return DoctorCheck{
 		Name:     "Legacy MQ Files",
 		Status:   StatusWarning,
-		Message:  fmt.Sprintf("%d stale .beads/mq/*.json file(s)", len(files)),
+		Message:  fmt.Sprintf("%d stale .binds/mq/*.json file(s)", len(files)),
 		Detail:   "Legacy gastown merge queue files (local only, safe to delete)",
 		Fix:      "Run 'binds doctor --fix' to delete, or 'rm -rf .beads/mq/'",
 		Category: CategoryMaintenance,

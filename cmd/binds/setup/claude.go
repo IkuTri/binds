@@ -159,7 +159,7 @@ func checkClaude(env claudeEnv) error {
 		return nil
 	default:
 		_, _ = fmt.Fprintln(env.stdout, "✗ No hooks installed")
-		_, _ = fmt.Fprintln(env.stdout, "  Run: bd setup claude")
+		_, _ = fmt.Fprintln(env.stdout, "  Run: binds setup claude")
 		return errClaudeHooksMissing
 	}
 }

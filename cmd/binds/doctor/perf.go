@@ -24,7 +24,7 @@ func RunPerformanceDiagnostics(path string) {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
 	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
-		fmt.Fprintf(os.Stderr, "Error: No .beads/ directory found at %s\n", path)
+		fmt.Fprintf(os.Stderr, "Error: No .binds/ directory found at %s\n", path)
 		fmt.Fprintf(os.Stderr, "Run 'binds init' to initialize beads\n")
 		os.Exit(1)
 	}
@@ -68,7 +68,7 @@ func RunPerformanceDiagnostics(path string) {
 	readyDuration := measureOperation(func() error {
 		return runReadyWork(dbPath)
 	})
-	fmt.Printf("  bd ready                  %dms\n", readyDuration.Milliseconds())
+	fmt.Printf("  binds ready                  %dms\n", readyDuration.Milliseconds())
 
 	// Measure SearchIssues (list open)
 	listDuration := measureOperation(func() error {
@@ -81,7 +81,7 @@ func RunPerformanceDiagnostics(path string) {
 		return runShowRandom(dbPath)
 	})
 	if showDuration > 0 {
-		fmt.Printf("  bd show <random-issue>    %dms\n", showDuration.Milliseconds())
+		fmt.Printf("  binds show <random-issue>    %dms\n", showDuration.Milliseconds())
 	}
 
 	// Measure SearchIssues with filters

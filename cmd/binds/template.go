@@ -104,12 +104,12 @@ var templateListCmd = &cobra.Command{
 			fmt.Println("No templates available.")
 			fmt.Println("\nTo create a template:")
 			fmt.Println("  1. Create an epic with child issues")
-			fmt.Println("  2. Add the 'template' label: bd label add <epic-id> template")
+			fmt.Println("  2. Add the 'template' label: binds label add <epic-id> template")
 			fmt.Println("  3. Use {{variable}} placeholders in titles/descriptions")
 			return
 		}
 
-		fmt.Printf("%s\n", ui.RenderPass("Templates (for bd template instantiate):"))
+		fmt.Printf("%s\n", ui.RenderPass("Templates (for binds template instantiate):"))
 		for _, tmpl := range beadsTemplates {
 			vars := extractVariables(tmpl.Title + " " + tmpl.Description)
 			varStr := ""

@@ -12,7 +12,7 @@ import (
 
 // ErrTestBinary is returned when getBdBinary detects it's running as a test binary.
 // This prevents fork bombs when tests call functions that execute bd subcommands.
-var ErrTestBinary = fmt.Errorf("running as test binary - cannot execute bd subcommands")
+var ErrTestBinary = fmt.Errorf("running as test binary - cannot execute binds subcommands")
 
 func newBdCmd(bdBinary string, args ...string) *exec.Cmd {
 	fullArgs := append([]string{"--no-daemon"}, args...)
@@ -65,7 +65,7 @@ func validateBeadsWorkspace(path string) error {
 	// Check for .beads directory
 	beadsDir := filepath.Join(absPath, ".beads")
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
-		return fmt.Errorf("not a beads workspace: .beads directory not found at %s", absPath)
+		return fmt.Errorf("not a beads workspace: .binds directory not found at %s", absPath)
 	}
 
 	return nil

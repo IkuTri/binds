@@ -358,7 +358,7 @@ Examples:
 				fmt.Fprintf(os.Stderr, "  Database has 0 issues, JSONL has %d issues\n", existingCount)
 				fmt.Fprintf(os.Stderr, "  This would result in data loss!\n")
 				fmt.Fprintf(os.Stderr, "Hint: Use --force to override this safety check, or delete the JSONL file first:\n")
-				fmt.Fprintf(os.Stderr, "  bd export -o %s --force\n", output)
+				fmt.Fprintf(os.Stderr, "  binds export -o %s --force\n", output)
 				fmt.Fprintf(os.Stderr, "  rm %s\n", output)
 				os.Exit(1)
 			}
@@ -418,14 +418,14 @@ Examples:
 					fmt.Fprintf(os.Stderr, "  2. Or another workspace added issues that weren't synced to this database\n")
 					fmt.Fprintf(os.Stderr, "\n")
 					fmt.Fprintf(os.Stderr, "To force export anyway (will lose these issues):\n")
-					fmt.Fprintf(os.Stderr, "  bd export -o %s --force\n", output)
+					fmt.Fprintf(os.Stderr, "  binds export -o %s --force\n", output)
 					os.Exit(1)
 				}
 			}
 		}
 
 		// Filter out wisps - they should never be exported to JSONL
-		// Wisps exist only in SQLite and are shared via .beads/redirect, not JSONL.
+		// Wisps exist only in SQLite and are shared via .binds/redirect, not JSONL.
 		filtered := make([]*types.Issue, 0, len(issues))
 		for _, issue := range issues {
 			if !issue.Ephemeral {
@@ -648,7 +648,7 @@ func init() {
 	exportCmd.Flags().StringP("status", "s", "", "Filter by status")
 	exportCmd.Flags().Bool("force", false, "Force export even if database is empty")
 	exportCmd.Flags().BoolVar(&jsonOutput, "json", false, "Output export statistics in JSON format")
-	exportCmd.Flags().Bool("events", false, "Export events to .beads/events.jsonl (append-only)")
+	exportCmd.Flags().Bool("events", false, "Export events to .binds/events.jsonl (append-only)")
 	exportCmd.Flags().Bool("events-reset", false, "Reset events export state and truncate events.jsonl")
 
 	// Filter flags

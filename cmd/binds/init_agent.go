@@ -130,7 +130,7 @@ func setupClaudeSettings(verbose bool) error {
 		if err := json.Unmarshal(content, &existingSettings); err != nil {
 			// Don't silently overwrite - the user has a file with invalid JSON
 			// that likely contains important settings they don't want to lose
-			return fmt.Errorf("existing %s contains invalid JSON: %w\nPlease fix the JSON syntax manually before running bd init", settingsPath, err)
+			return fmt.Errorf("existing %s contains invalid JSON: %w\nPlease fix the JSON syntax manually before running binds init", settingsPath, err)
 		}
 	} else if !os.IsNotExist(err) {
 		// File exists but couldn't be read (permissions issue, etc.)
@@ -148,7 +148,7 @@ func setupClaudeSettings(verbose bool) error {
 		if promptStr, ok := promptValue.(string); ok {
 			if strings.Contains(promptStr, "binds onboard") {
 				if verbose {
-					fmt.Printf("Claude settings already configured with bd onboard instruction\n")
+					fmt.Printf("Claude settings already configured with binds onboard instruction\n")
 				}
 				return nil
 			}
@@ -175,7 +175,7 @@ func setupClaudeSettings(verbose bool) error {
 	}
 
 	if verbose {
-		fmt.Printf("Configured Claude settings with bd onboard instruction\n")
+		fmt.Printf("Configured Claude settings with binds onboard instruction\n")
 	}
 
 	return nil

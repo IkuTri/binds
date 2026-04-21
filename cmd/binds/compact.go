@@ -168,7 +168,7 @@ Examples:
 			sqliteStore, ok := store.(*sqlite.SQLiteStorage)
 			if !ok {
 				fmt.Fprintf(os.Stderr, "Error: failed to open database in direct mode\n")
-				fmt.Fprintf(os.Stderr, "Hint: Ensure .beads/beads.db exists and is readable\n")
+				fmt.Fprintf(os.Stderr, "Hint: Ensure .binds/beads.db exists and is readable\n")
 				os.Exit(1)
 			}
 			runCompactAnalyze(ctx, sqliteStore)
@@ -193,7 +193,7 @@ Examples:
 			sqliteStore, ok := store.(*sqlite.SQLiteStorage)
 			if !ok {
 				fmt.Fprintf(os.Stderr, "Error: failed to open database in direct mode\n")
-				fmt.Fprintf(os.Stderr, "Hint: Ensure .beads/beads.db exists and is readable\n")
+				fmt.Fprintf(os.Stderr, "Hint: Ensure .binds/beads.db exists and is readable\n")
 				os.Exit(1)
 			}
 			runCompactApply(ctx, sqliteStore)
@@ -786,7 +786,7 @@ func runCompactDolt() {
 	// Find beads directory
 	beadsDir := beads.FindBeadsDir()
 	if beadsDir == "" {
-		fmt.Fprintf(os.Stderr, "Error: could not find .beads directory\n")
+		fmt.Fprintf(os.Stderr, "Error: could not find .binds directory\n")
 		os.Exit(1)
 	}
 

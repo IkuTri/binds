@@ -152,7 +152,7 @@ func checkGemini(env geminiEnv) error {
 		return nil
 	default:
 		_, _ = fmt.Fprintln(env.stdout, "✗ No hooks installed")
-		_, _ = fmt.Fprintln(env.stdout, "  Run: bd setup gemini")
+		_, _ = fmt.Fprintln(env.stdout, "  Run: binds setup gemini")
 		return errGeminiHooksMissing
 	}
 }

@@ -178,8 +178,8 @@ func FormatHookWarnings(statuses []HookStatus) string {
 var hooksCmd = &cobra.Command{
 	Use:     "hooks",
 	GroupID: "setup",
-	Short:   "Manage git hooks for bd auto-sync",
-	Long: `Install, uninstall, or list git hooks that provide automatic bd sync.
+	Short:   "Manage git hooks for binds auto-sync",
+	Long: `Install, uninstall, or list git hooks that provide automatic binds sync.
 
 The hooks ensure that:
 - pre-commit: Flushes pending changes to JSONL before commit
@@ -191,8 +191,8 @@ The hooks ensure that:
 
 var hooksInstallCmd = &cobra.Command{
 	Use:   "install",
-	Short: "Install bd git hooks",
-	Long: `Install git hooks for automatic bd sync.
+	Short: "Install binds git hooks",
+	Long: `Install git hooks for automatic binds sync.
 
 By default, hooks are installed to .git/hooks/ in the current repository.
 Use --beads to install to .beads/hooks/ (recommended for Dolt backend).
@@ -259,14 +259,14 @@ Installed hooks:
 				fmt.Println()
 			}
 			if beadsHooks {
-				fmt.Println("Hooks installed to: .beads/hooks/")
-				fmt.Println("Git config set: core.hooksPath=.beads/hooks")
+				fmt.Println("Hooks installed to: .binds/hooks/")
+				fmt.Println("Git config set: core.hooksPath=.binds/hooks")
 				fmt.Println()
 			} else if shared {
-				fmt.Println("Hooks installed to: .beads-hooks/")
-				fmt.Println("Git config set: core.hooksPath=.beads-hooks")
+				fmt.Println("Hooks installed to: .binds-hooks/")
+				fmt.Println("Git config set: core.hooksPath=.binds-hooks")
 				fmt.Println()
-				fmt.Println("⚠️  Remember to commit .beads-hooks/ to share with your team!")
+				fmt.Println("⚠️  Remember to commit .binds-hooks/ to share with your team!")
 				fmt.Println()
 			}
 			fmt.Println("Installed hooks:")
@@ -279,8 +279,8 @@ Installed hooks:
 
 var hooksUninstallCmd = &cobra.Command{
 	Use:   "uninstall",
-	Short: "Uninstall bd git hooks",
-	Long:  `Remove bd git hooks from .git/hooks/ directory.`,
+	Short: "Uninstall binds git hooks",
+	Long:  `Remove binds git hooks from .git/hooks/ directory.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := uninstallHooks(); err != nil {
 			if jsonOutput {
@@ -311,7 +311,7 @@ var hooksUninstallCmd = &cobra.Command{
 var hooksListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List installed git hooks status",
-	Long:  `Show the status of bd git hooks (installed, outdated, missing).`,
+	Long:  `Show the status of binds git hooks (installed, outdated, missing).`,
 	Run: func(cmd *cobra.Command, args []string) {
 		statuses := CheckGitHooks()
 
@@ -349,7 +349,7 @@ func installHooksWithOptions(embeddedHooks map[string]string, force bool, shared
 		// Use .beads/hooks/ directory (preferred for Dolt backend)
 		beadsDir := beads.FindBeadsDir()
 		if beadsDir == "" {
-			return fmt.Errorf("not in a beads workspace (no .beads directory found)")
+			return fmt.Errorf("not in a beads workspace (no .binds directory found)")
 		}
 		hooksDir = filepath.Join(beadsDir, "hooks")
 	} else if shared {
@@ -566,7 +566,7 @@ func runPreCommitHook() int {
 	// Use --no-daemon to ensure direct mode (inline import requires local store)
 	cmd := exec.Command("bd", "sync", "--flush-only", "--no-daemon")
 	if err := cmd.Run(); err != nil {
-		fmt.Fprintln(os.Stderr, "Warning: Failed to flush bd changes to JSONL")
+		fmt.Fprintln(os.Stderr, "Warning: Failed to flush binds changes to JSONL")
 		fmt.Fprintln(os.Stderr, "Run 'binds sync --flush-only' manually to diagnose")
 		// Don't block the commit - user may have removed beads or have other issues
 	}
@@ -592,7 +592,7 @@ func runPreCommitHook() int {
 				fmt.Fprintf(os.Stderr, "   %s\n", f)
 			}
 			fmt.Fprintln(os.Stderr, "")
-			fmt.Fprintln(os.Stderr, "Run: git add .beads/")
+			fmt.Fprintln(os.Stderr, "Run: git add .binds/")
 			return 1
 		}
 	} else {
@@ -647,7 +647,7 @@ func runPostMergeHook() int {
 	cmd := exec.Command("bd", "sync", "--import-only", "--no-git-history", "--no-daemon")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Warning: Failed to sync bd changes after merge")
+		fmt.Fprintln(os.Stderr, "Warning: Failed to sync binds changes after merge")
 		fmt.Fprintln(os.Stderr, string(output))
 		fmt.Fprintln(os.Stderr, "")
 		fmt.Fprintln(os.Stderr, "Run 'binds doctor --fix' to diagnose and repair")
@@ -748,12 +748,12 @@ func runPrePushHook(args []string) int {
 		fmt.Fprintln(os.Stderr, "❌ Error: Uncommitted changes detected")
 		fmt.Fprintln(os.Stderr, "")
 		fmt.Fprintln(os.Stderr, "Before pushing, ensure all changes are committed. This includes:")
-		fmt.Fprintln(os.Stderr, "  • bd JSONL updates (run 'binds sync')")
+		fmt.Fprintln(os.Stderr, "  • binds JSONL updates (run 'binds sync')")
 		fmt.Fprintln(os.Stderr, "  • any other modified files (run 'git status' to review)")
 		fmt.Fprintln(os.Stderr, "")
 		fmt.Fprintln(os.Stderr, "Run 'binds sync' to commit these changes:")
 		fmt.Fprintln(os.Stderr, "")
-		fmt.Fprintln(os.Stderr, "  bd sync")
+		fmt.Fprintln(os.Stderr, "  binds sync")
 		fmt.Fprintln(os.Stderr, "")
 		return 1
 	}
@@ -817,7 +817,7 @@ func runPostCheckoutHook(args []string) int {
 	cmd := exec.Command("bd", "sync", "--import-only", "--no-git-history", "--no-daemon")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Warning: Failed to sync bd changes after checkout")
+		fmt.Fprintln(os.Stderr, "Warning: Failed to sync binds changes after checkout")
 		fmt.Fprintln(os.Stderr, string(output))
 		fmt.Fprintln(os.Stderr, "")
 		fmt.Fprintln(os.Stderr, "Run 'binds doctor --fix' to diagnose and repair")

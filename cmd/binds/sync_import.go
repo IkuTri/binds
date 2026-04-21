@@ -205,7 +205,7 @@ func doSyncFromMain(ctx context.Context, jsonlPath string, renameOnImport bool, 
 	if dryRun {
 		fmt.Println("→ [DRY RUN] Would sync beads from main branch")
 		fmt.Printf("  1. Fetch %s main\n", remote)
-		fmt.Printf("  2. Checkout .beads/ from %s/main\n", remote)
+		fmt.Printf("  2. Checkout .binds/ from %s/main\n", remote)
 		fmt.Println("  3. Import JSONL into database")
 		fmt.Println("\n✓ Dry run complete (no changes made)")
 		return nil
@@ -244,9 +244,9 @@ func doSyncFromMain(ctx context.Context, jsonlPath string, renameOnImport bool, 
 
 	// Step 2: Checkout .beads/ directory from main
 	fmt.Printf("→ Checking out beads from %s/%s...\n", remote, defaultBranch)
-	checkoutCmd := rc.GitCmd(ctx, "checkout", fmt.Sprintf("%s/%s", remote, defaultBranch), "--", ".beads/")
+	checkoutCmd := rc.GitCmd(ctx, "checkout", fmt.Sprintf("%s/%s", remote, defaultBranch), "--", ".binds/")
 	if output, err := checkoutCmd.CombinedOutput(); err != nil {
-		return fmt.Errorf("git checkout .beads/ from %s/%s failed: %w\n%s", remote, defaultBranch, err, output)
+		return fmt.Errorf("git checkout .binds/ from %s/%s failed: %w\n%s", remote, defaultBranch, err, output)
 	}
 
 	// Step 3: Import JSONL

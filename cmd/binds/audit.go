@@ -28,7 +28,7 @@ var (
 var auditCmd = &cobra.Command{
 	Use:   "audit",
 	Short: "Record and label agent interactions (append-only JSONL)",
-	Long: `Audit log entries are appended to .beads/interactions.jsonl.
+	Long: `Audit log entries are appended to .binds/interactions.jsonl.
 
 Each line is one event. This file is intended to be versioned in git and used for:
 - auditing ("why did the agent do that?")

@@ -72,7 +72,7 @@ func runSetup(cmd *cobra.Command, args []string) {
 	if setupAdd != "" {
 		if len(args) != 1 {
 			fmt.Fprintln(os.Stderr, "Error: --add requires a path argument")
-			fmt.Fprintln(os.Stderr, "Usage: bd setup --add <name> <path>")
+			fmt.Fprintln(os.Stderr, "Usage: binds setup --add <name> <path>")
 			os.Exit(1)
 		}
 		if err := addRecipe(setupAdd, args[0]); err != nil {
@@ -140,7 +140,7 @@ func writeToPath(path string) error {
 func addRecipe(name, path string) error {
 	beadsDir := findBeadsDir()
 	if beadsDir == "" {
-		beadsDir = ".beads"
+		beadsDir = ".binds"
 	}
 
 	if err := recipes.SaveUserRecipe(beadsDir, name, path); err != nil {
@@ -150,7 +150,7 @@ func addRecipe(name, path string) error {
 	fmt.Printf("✓ Added recipe '%s' → %s\n", name, path)
 	fmt.Printf("  Config: %s/recipes.toml\n", beadsDir)
 	fmt.Println()
-	fmt.Printf("Install with: bd setup %s\n", name)
+	fmt.Printf("Install with: binds setup %s\n", name)
 	return nil
 }
 
@@ -198,7 +198,7 @@ func runRecipe(name string) {
 	if setupCheck {
 		if _, err := os.Stat(recipe.Path); os.IsNotExist(err) {
 			fmt.Printf("✗ %s integration not installed\n", recipe.Name)
-			fmt.Printf("  Run: bd setup %s\n", name)
+			fmt.Printf("  Run: binds setup %s\n", name)
 			os.Exit(1)
 		}
 		fmt.Printf("✓ %s integration installed: %s\n", recipe.Name, recipe.Path)
@@ -329,14 +329,14 @@ func runJunieRecipe() {
 func findBeadsDir() string {
 	// Check for .beads in current directory
 	if info, err := os.Stat(".beads"); err == nil && info.IsDir() {
-		return ".beads"
+		return ".binds"
 	}
 	// Check for redirected beads directory
-	redirectPath := ".beads/.redirect"
+	redirectPath := ".binds/.redirect"
 	if data, err := os.ReadFile(redirectPath); err == nil {
 		return strings.TrimSpace(string(data))
 	}
-	return ".beads"
+	return ".binds"
 }
 
 func init() {

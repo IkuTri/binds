@@ -30,7 +30,7 @@ func setupStealthMode(verbose bool) error {
 	if verbose {
 		fmt.Printf("\n%s Stealth mode configured successfully!\n\n", ui.RenderPass("✓"))
 		fmt.Printf("  Git exclude: %s\n", ui.RenderAccent(".git/info/exclude configured"))
-		fmt.Printf("  Claude settings: %s\n\n", ui.RenderAccent("configured with bd onboard instruction"))
+		fmt.Printf("  Claude settings: %s\n\n", ui.RenderAccent("configured with binds onboard instruction"))
 		fmt.Printf("Your beads setup is now %s - other repo collaborators won't see any beads-related files.\n\n", ui.RenderAccent("invisible"))
 	}
 
@@ -288,7 +288,7 @@ func setupGlobalGitIgnore(homeDir string, projectPath string, verbose bool) erro
 	}
 
 	if !hasBeads || !hasClaude {
-		newContent += fmt.Sprintf("\n# Beads stealth mode: %s (added by bd init --stealth)\n", projectPath)
+		newContent += fmt.Sprintf("\n# Beads stealth mode: %s (added by binds init --stealth)\n", projectPath)
 	}
 
 	if !hasBeads {

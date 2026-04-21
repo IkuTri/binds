@@ -72,8 +72,8 @@ The backend is chosen at initialization time:
 		for _, b := range availableBackends {
 			fmt.Printf("  %-8s %s\n", b.Name, b.Description)
 		}
-		fmt.Println("\nSet backend at init time: bd init --backend <name>")
-		fmt.Println("Migrate to Dolt: bd migrate dolt")
+		fmt.Println("\nSet backend at init time: binds init --backend <name>")
+		fmt.Println("Migrate to Dolt: binds migrate dolt")
 	},
 }
 
@@ -90,7 +90,7 @@ Displays:
 		// Find the beads directory
 		beadsDir := beads.FindBeadsDir()
 		if beadsDir == "" {
-			fmt.Fprintf(os.Stderr, "Error: not in a beads repository (no .beads directory found)\n")
+			fmt.Fprintf(os.Stderr, "Error: not in a beads repository (no .binds directory found)\n")
 			os.Exit(1)
 		}
 

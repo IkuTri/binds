@@ -116,7 +116,7 @@ Flags:
 		// DEFAULT: export → git add → git commit → git push
 		if dryRun {
 			fmt.Println("→ [DRY RUN] Would export to JSONL")
-			fmt.Println("→ [DRY RUN] Would git add .beads/")
+			fmt.Println("→ [DRY RUN] Would git add .binds/")
 			fmt.Println("→ [DRY RUN] Would git commit")
 			if !noPush {
 				fmt.Println("→ [DRY RUN] Would git push")
@@ -212,7 +212,7 @@ func showSimpleSyncStatus(ctx context.Context, jsonlPath string) error {
 
 	statusStr := strings.TrimSpace(string(output))
 	if statusStr == "" {
-		fmt.Println("Git status: clean (no uncommitted changes in .beads/)")
+		fmt.Println("Git status: clean (no uncommitted changes in .binds/)")
 	} else {
 		fmt.Println("Git status:")
 		for _, line := range strings.Split(statusStr, "\n") {

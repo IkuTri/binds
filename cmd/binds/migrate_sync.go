@@ -131,7 +131,7 @@ func runMigrateSync(ctx context.Context, branchName string, dryRun, force, orpha
 	// Find JSONL path
 	jsonlPath := findJSONLPath()
 	if jsonlPath == "" {
-		return fmt.Errorf("not in a bd workspace (no .beads directory found)")
+		return fmt.Errorf("not in a binds workspace (no .binds directory found)")
 	}
 
 	// Check if sync branch exists (locally or remotely)
@@ -338,7 +338,7 @@ func runMigrateSync(ctx context.Context, branchName string, dryRun, force, orpha
 	destPath := filepath.Join(worktreePath, ".beads", "issues.jsonl")
 	if preservedJSONLPath != "" {
 		if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
-			return fmt.Errorf("failed to create .beads directory: %w", err)
+			return fmt.Errorf("failed to create .binds directory: %w", err)
 		}
 		input, err := os.ReadFile(preservedJSONLPath)
 		if err != nil {
@@ -356,9 +356,9 @@ func runMigrateSync(ctx context.Context, branchName string, dryRun, force, orpha
 			// Fallback: try copying from main .beads/ directory
 			mainJSONL := filepath.Join(repoRoot, ".beads", "issues.jsonl")
 			if _, err := os.Stat(mainJSONL); err == nil {
-				fmt.Printf("  Falling back to main .beads/issues.jsonl...\n")
+				fmt.Printf("  Falling back to main .binds/issues.jsonl...\n")
 				if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
-					return fmt.Errorf("failed to create .beads directory: %w", err)
+					return fmt.Errorf("failed to create .binds directory: %w", err)
 				}
 				input, err := os.ReadFile(mainJSONL)
 				if err != nil {
@@ -367,7 +367,7 @@ func runMigrateSync(ctx context.Context, branchName string, dryRun, force, orpha
 				if err := os.WriteFile(destPath, input, 0644); err != nil {
 					return fmt.Errorf("failed to copy JSONL to worktree: %w", err)
 				}
-				fmt.Printf("  Copied JSONL (%d bytes) from main .beads/\n", len(input))
+				fmt.Printf("  Copied JSONL (%d bytes) from main .binds/\n", len(input))
 			} else {
 				return fmt.Errorf("failed to sync JSONL to worktree: %w", syncErr)
 			}

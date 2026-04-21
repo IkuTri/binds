@@ -81,7 +81,7 @@ func checkAndAutoImport(ctx context.Context, store storage.Storage) bool {
 	if err := importFromGit(ctx, dbPath, store, jsonlPath, gitRef); err != nil {
 		if !jsonOutput {
 			fmt.Fprintf(os.Stderr, "Warning: auto-import failed: %v\n", err)
-			fmt.Fprintf(os.Stderr, "Try manually: git show %s:%s | bd import -i /dev/stdin\n", gitRef, jsonlPath)
+			fmt.Fprintf(os.Stderr, "Try manually: git show %s:%s | binds import -i /dev/stdin\n", gitRef, jsonlPath)
 		}
 		return false
 	}

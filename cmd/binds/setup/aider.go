@@ -186,7 +186,7 @@ func InstallAider() {
 	fmt.Printf("  README: %s (for humans)\n", readmePath)
 	fmt.Println("\nUsage:")
 	fmt.Println("  1. Start aider in this directory")
-	fmt.Println("  2. Ask AI for available work (it will suggest: /run bd ready)")
+	fmt.Println("  2. Ask AI for available work (it will suggest: /run binds ready)")
 	fmt.Println("  3. Run suggested commands using /run")
 	fmt.Println("\nNote: Aider requires you to explicitly run commands via /run")
 }
@@ -197,7 +197,7 @@ func CheckAider() {
 
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		fmt.Println("✗ Aider integration not installed")
-		fmt.Println("  Run: bd setup aider")
+		fmt.Println("  Run: binds setup aider")
 		os.Exit(1)
 	}
 

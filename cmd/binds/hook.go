@@ -374,7 +374,7 @@ func hookPreCommit() int {
 	// SQLite backend: Use existing sync --flush-only
 	cmd := exec.Command("bd", "sync", "--flush-only", "--no-daemon")
 	if err := cmd.Run(); err != nil {
-		fmt.Fprintln(os.Stderr, "Warning: Failed to flush bd changes to JSONL")
+		fmt.Fprintln(os.Stderr, "Warning: Failed to flush binds changes to JSONL")
 		fmt.Fprintln(os.Stderr, "Run 'binds sync --flush-only' manually to diagnose")
 	}
 
@@ -602,7 +602,7 @@ func hookPostMerge(args []string) int {
 	cmd := exec.Command("bd", "sync", "--import-only", "--no-git-history", "--no-daemon")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Warning: Failed to sync bd changes after merge")
+		fmt.Fprintln(os.Stderr, "Warning: Failed to sync binds changes after merge")
 		fmt.Fprintln(os.Stderr, string(output))
 		fmt.Fprintln(os.Stderr, "Run 'binds doctor --fix' to diagnose and repair")
 	}
@@ -817,7 +817,7 @@ func hookPostCheckout(args []string) int {
 	cmd := exec.Command("bd", "sync", "--import-only", "--no-git-history", "--no-daemon")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Warning: Failed to sync bd changes after checkout")
+		fmt.Fprintln(os.Stderr, "Warning: Failed to sync binds changes after checkout")
 		fmt.Fprintln(os.Stderr, string(output))
 		fmt.Fprintln(os.Stderr, "Run 'binds doctor --fix' to diagnose and repair")
 	}

@@ -35,7 +35,7 @@ func initializeNoDbMode() error {
 	}
 
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
-		return fmt.Errorf("no .beads directory found (hint: run 'binds init' first or set BINDS_DIR)")
+		return fmt.Errorf("no .binds directory found (hint: run 'binds init' first or set BINDS_DIR)")
 	}
 
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
@@ -152,7 +152,7 @@ func detectPrefix(_ string, memStore *memory.MemoryStorage) (string, error) {
 
 		// If issues have mixed prefixes, we can't auto-detect
 		if !allSame {
-			return "", fmt.Errorf("issues have mixed prefixes, please set issue-prefix in .beads/config.yaml")
+			return "", fmt.Errorf("issues have mixed prefixes, please set issue-prefix in .binds/config.yaml")
 		}
 	}
 

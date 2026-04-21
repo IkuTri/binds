@@ -60,13 +60,13 @@ func handleFreshCloneError(err error, beadsDir string) bool {
 	if jsonlPath != "" && issueCount > 0 {
 		fmt.Fprintf(os.Stderr, "Found: %s (%d issues)\n\n", jsonlPath, issueCount)
 		fmt.Fprintf(os.Stderr, "To initialize from the JSONL file, run:\n")
-		fmt.Fprintf(os.Stderr, "  bd import -i %s\n\n", jsonlPath)
+		fmt.Fprintf(os.Stderr, "  binds import -i %s\n\n", jsonlPath)
 	} else {
 		fmt.Fprintf(os.Stderr, "\nTo initialize a new database, run:\n")
-		fmt.Fprintf(os.Stderr, "  bd init --prefix <your-prefix>\n\n")
+		fmt.Fprintf(os.Stderr, "  binds init --prefix <your-prefix>\n\n")
 	}
 
-	fmt.Fprintf(os.Stderr, "For more information: bd init --help\n")
+	fmt.Fprintf(os.Stderr, "For more information: binds init --help\n")
 	return true
 }
 

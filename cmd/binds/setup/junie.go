@@ -178,7 +178,7 @@ func CheckJunie() {
 		fmt.Println("⚠ Partial Junie integration (guidelines only)")
 		fmt.Printf("  Guidelines: %s\n", guidelinesPath)
 		fmt.Println("  Missing: MCP config")
-		fmt.Println("  Run: bd setup junie (to complete installation)")
+		fmt.Println("  Run: binds setup junie (to complete installation)")
 		os.Exit(1)
 	}
 
@@ -186,12 +186,12 @@ func CheckJunie() {
 		fmt.Println("⚠ Partial Junie integration (MCP only)")
 		fmt.Printf("  MCP Config: %s\n", mcpPath)
 		fmt.Println("  Missing: Guidelines")
-		fmt.Println("  Run: bd setup junie (to complete installation)")
+		fmt.Println("  Run: binds setup junie (to complete installation)")
 		os.Exit(1)
 	}
 
 	fmt.Println("✗ Junie integration not installed")
-	fmt.Println("  Run: bd setup junie")
+	fmt.Println("  Run: binds setup junie")
 	os.Exit(1)
 }
 

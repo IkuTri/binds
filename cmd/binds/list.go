@@ -350,7 +350,7 @@ func watchIssues(ctx context.Context, store storage.Storage, filter types.IssueF
 	// Find .beads directory
 	beadsDir := ".beads"
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
-		fmt.Fprintf(os.Stderr, "Error: .beads directory not found\n")
+		fmt.Fprintf(os.Stderr, "Error: .binds directory not found\n")
 		return
 	}
 

@@ -22,7 +22,7 @@ func Permissions(path string) error {
 	// as this would change the target's permissions (problematic on NixOS).
 	info, err := os.Lstat(beadsDir)
 	if err != nil {
-		return fmt.Errorf("failed to stat .beads directory: %w", err)
+		return fmt.Errorf("failed to stat .binds directory: %w", err)
 	}
 
 	// Skip permission fixes for symlinked .beads directories (common on NixOS with home-manager)
@@ -34,7 +34,7 @@ func Permissions(path string) error {
 	expectedDirMode := os.FileMode(0700)
 	if info.Mode().Perm() != expectedDirMode {
 		if err := os.Chmod(beadsDir, expectedDirMode); err != nil {
-			return fmt.Errorf("failed to fix .beads directory permissions: %w", err)
+			return fmt.Errorf("failed to fix .binds directory permissions: %w", err)
 		}
 	}
 

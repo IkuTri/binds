@@ -74,7 +74,7 @@ Sync modes control how beads synchronizes with git and Dolt remotes.`,
 		for _, m := range syncModeInfo {
 			fmt.Printf("  %-22s %s\n", m.Mode, m.Description)
 		}
-		fmt.Println("\nSet sync mode: bd sync mode set <mode>")
+		fmt.Println("\nSet sync mode: binds sync mode set <mode>")
 	},
 }
 

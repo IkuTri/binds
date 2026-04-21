@@ -121,7 +121,7 @@ func promptHookAction(existingHooks []hookInfo) string {
 		}
 	}
 
-	fmt.Printf("\nHow should bd proceed?\n")
+	fmt.Printf("\nHow should binds proceed?\n")
 	fmt.Printf("  [1] Chain with existing hooks (recommended)\n")
 	fmt.Printf("  [2] Overwrite existing hooks\n")
 	fmt.Printf("  [3] Skip git hooks installation\n")
@@ -258,7 +258,7 @@ fi
 # binds (beads) pre-commit hook
 #
 # This hook ensures that any pending bd issue changes are flushed to
-# .beads/issues.jsonl before the commit is created, preventing the
+# .binds/issues.jsonl before the commit is created, preventing the
 # race condition where daemon auto-flush fires after the commit.
 
 ` + preCommitHookBody()
@@ -272,21 +272,25 @@ if ! command -v bd >/dev/null 2>&1; then
     exit 0
 fi
 
-# Check if we're in a bd workspace
-# For worktrees, .beads is in the main repository root, not the worktree
+# Check if we're in a binds workspace
+# For worktrees, .binds is in the main repository root, not the worktree
 BEADS_DIR=""
 if git rev-parse --git-dir >/dev/null 2>&1; then
     # Check if we're in a worktree
     if [ "$(git rev-parse --git-dir)" != "$(git rev-parse --git-common-dir)" ]; then
-        # Worktree: .beads is in main repo root
+        # Worktree: check .binds then .beads in main repo root
         MAIN_REPO_ROOT="$(git rev-parse --git-common-dir)"
         MAIN_REPO_ROOT="$(dirname "$MAIN_REPO_ROOT")"
-        if [ -d "$MAIN_REPO_ROOT/.beads" ]; then
+        if [ -d "$MAIN_REPO_ROOT/.binds" ]; then
+            BEADS_DIR="$MAIN_REPO_ROOT/.binds"
+        elif [ -d "$MAIN_REPO_ROOT/.beads" ]; then
             BEADS_DIR="$MAIN_REPO_ROOT/.beads"
         fi
     else
         # Regular repo: check current directory
-        if [ -d .beads ]; then
+        if [ -d .binds ]; then
+            BEADS_DIR=".binds"
+        elif [ -d .beads ]; then
             BEADS_DIR=".beads"
         fi
     fi
@@ -318,7 +322,7 @@ if [ -f "$BEADS_DIR/issues.jsonl" ]; then
         # Regular repo: file is in the working tree, safe to add
         git add "$BEADS_DIR/issues.jsonl" 2>/dev/null || true
     fi
-    # For worktrees: .beads is in the main repo's working tree, not this worktree
+    # For worktrees: .binds is in the main repo's working tree, not this worktree
     # Git rejects adding files outside the worktree, so we skip it.
     # The main repo will see the changes on the next pull/sync.
 fi
@@ -361,7 +365,7 @@ fi
 #
 # binds (beads) post-merge hook
 #
-# This hook imports updated issues from .beads/issues.jsonl after a
+# This hook imports updated issues from .binds/issues.jsonl after a
 # git pull or merge, ensuring the database stays in sync with git.
 
 ` + postMergeHookBody()
@@ -375,21 +379,25 @@ if ! command -v bd >/dev/null 2>&1; then
     exit 0
 fi
 
-# Check if we're in a bd workspace
-# For worktrees, .beads is in the main repository root, not the worktree
+# Check if we're in a binds workspace
+# For worktrees, .binds is in the main repository root, not the worktree
 BEADS_DIR=""
 if git rev-parse --git-dir >/dev/null 2>&1; then
     # Check if we're in a worktree
     if [ "$(git rev-parse --git-dir)" != "$(git rev-parse --git-common-dir)" ]; then
-        # Worktree: .beads is in main repo root
+        # Worktree: check .binds then .beads in main repo root
         MAIN_REPO_ROOT="$(git rev-parse --git-common-dir)"
         MAIN_REPO_ROOT="$(dirname "$MAIN_REPO_ROOT")"
-        if [ -d "$MAIN_REPO_ROOT/.beads" ]; then
+        if [ -d "$MAIN_REPO_ROOT/.binds" ]; then
+            BEADS_DIR="$MAIN_REPO_ROOT/.binds"
+        elif [ -d "$MAIN_REPO_ROOT/.beads" ]; then
             BEADS_DIR="$MAIN_REPO_ROOT/.beads"
         fi
     else
         # Regular repo: check current directory
-        if [ -d .beads ]; then
+        if [ -d .binds ]; then
+            BEADS_DIR=".binds"
+        elif [ -d .beads ]; then
             BEADS_DIR=".beads"
         fi
     fi
@@ -581,7 +589,7 @@ fi
 # binds (beads) pre-commit hook (jujutsu mode)
 #
 # This hook ensures that any pending bd issue changes are flushed to
-# .beads/issues.jsonl before the commit.
+# .binds/issues.jsonl before the commit.
 #
 # Simplified for jujutsu: no staging needed, jj auto-commits working copy changes.
 
@@ -598,21 +606,25 @@ if ! command -v bd >/dev/null 2>&1; then
     exit 0
 fi
 
-# Check if we're in a bd workspace
-# For worktrees, .beads is in the main repository root, not the worktree
+# Check if we're in a binds workspace
+# For worktrees, .binds is in the main repository root, not the worktree
 BEADS_DIR=""
 if git rev-parse --git-dir >/dev/null 2>&1; then
     # Check if we're in a worktree
     if [ "$(git rev-parse --git-dir)" != "$(git rev-parse --git-common-dir)" ]; then
-        # Worktree: .beads is in main repo root
+        # Worktree: check .binds then .beads in main repo root
         MAIN_REPO_ROOT="$(git rev-parse --git-common-dir)"
         MAIN_REPO_ROOT="$(dirname "$MAIN_REPO_ROOT")"
-        if [ -d "$MAIN_REPO_ROOT/.beads" ]; then
+        if [ -d "$MAIN_REPO_ROOT/.binds" ]; then
+            BEADS_DIR="$MAIN_REPO_ROOT/.binds"
+        elif [ -d "$MAIN_REPO_ROOT/.beads" ]; then
             BEADS_DIR="$MAIN_REPO_ROOT/.beads"
         fi
     else
         # Regular repo: check current directory
-        if [ -d .beads ]; then
+        if [ -d .binds ]; then
+            BEADS_DIR=".binds"
+        elif [ -d .beads ]; then
             BEADS_DIR=".beads"
         fi
     fi

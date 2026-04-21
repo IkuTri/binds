@@ -561,7 +561,7 @@ var rootCmd = &cobra.Command{
 							fmt.Fprintf(os.Stderr, "Options:\n")
 							fmt.Fprintf(os.Stderr, "  • Run 'binds init' to create database and import issues\n")
 							fmt.Fprintf(os.Stderr, "  • Use 'binds --no-db %s' for JSONL-only mode\n", cmd.Name())
-							fmt.Fprintf(os.Stderr, "  • Add 'no-db: true' to .beads/config.yaml for permanent JSONL-only mode\n")
+							fmt.Fprintf(os.Stderr, "  • Add 'no-db: true' to .binds/config.yaml for permanent JSONL-only mode\n")
 							os.Exit(1)
 						}
 					}
@@ -569,7 +569,7 @@ var rootCmd = &cobra.Command{
 					// Generic error - no beads directory or JSONL found
 					fmt.Fprintf(os.Stderr, "Hint: run 'binds init' to create a database in the current directory\n")
 					fmt.Fprintf(os.Stderr, "      or use 'binds --no-db' to work with JSONL only (no SQLite)\n")
-					fmt.Fprintf(os.Stderr, "      or set BINDS_DIR to point to your .beads directory\n")
+					fmt.Fprintf(os.Stderr, "      or set BINDS_DIR to point to your .binds directory\n")
 					os.Exit(1)
 				}
 				// For import/setup commands, set default database path

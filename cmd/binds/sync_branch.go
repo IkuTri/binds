@@ -118,7 +118,7 @@ func showSyncStatus(ctx context.Context) error {
 	}
 
 	// Show file diff for .beads/issues.jsonl
-	fmt.Println("\nFile differences in .beads/issues.jsonl:")
+	fmt.Println("\nFile differences in .binds/issues.jsonl:")
 	diffCmd := rc.GitCmd(ctx, "diff", currentBranch+"..."+syncBranch, "--", ".beads/issues.jsonl")
 	diffOutput, err := diffCmd.CombinedOutput()
 	if err != nil {

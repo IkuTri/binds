@@ -62,7 +62,7 @@ This is read-only and does not modify the database or git state.`,
 		// Find JSONL path
 		jsonlPath := findJSONLPath()
 		if jsonlPath == "" {
-			fmt.Fprintf(os.Stderr, "Error: not in a bd workspace (no .beads directory found)\n")
+			fmt.Fprintf(os.Stderr, "Error: not in a binds workspace (no .binds directory found)\n")
 			os.Exit(1)
 		}
 

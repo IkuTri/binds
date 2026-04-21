@@ -33,7 +33,7 @@ Designed to work as a git merge driver. Configure with:
 
   git config merge.binds.driver "binds merge %A %O %A %B"
   git config merge.binds.name "binds JSONL merge driver"
-  echo ".beads/issues.jsonl merge=binds" >> .gitattributes
+  echo ".binds/issues.jsonl merge=binds" >> .gitattributes
 
 Or use 'binds init' which automatically configures the merge driver.
 
@@ -97,8 +97,8 @@ Vendored into bd with permission.`,
 }
 
 func cleanupMergeArtifacts(outputPath string, debug bool) {
-	// Determine the .beads directory from the output path
-	// outputPath is typically .beads/issues.jsonl
+	// Determine the .binds directory from the output path
+	// outputPath is typically .binds/issues.jsonl
 	beadsDir := filepath.Dir(outputPath)
 
 	if debug {
@@ -148,11 +148,11 @@ func cleanupMergeArtifacts(outputPath string, debug bool) {
 		}
 	}
 
-	// 2. Run git clean -f in .beads/ directory to remove untracked files
+	// 2. Run git clean -f in .binds/ directory to remove untracked files
 	// (only if RepoContext available)
 	if rcErr == nil {
 		cleanCmd := rc.GitCmd(ctx, "clean", "-f")
-		cleanCmd.Dir = beadsDir // Override to target .beads/ subdirectory specifically
+		cleanCmd.Dir = beadsDir // Override to target .binds/ subdirectory specifically
 		if debug {
 			cleanCmd.Stderr = os.Stderr
 			cleanCmd.Stdout = os.Stderr
