@@ -236,7 +236,8 @@ func (s *Server) ensureLocalAgent(name, agentType string) {
 	if err != nil {
 		return
 	}
-	_, _ = s.store.CreateAgent(ctx, name, agentType, string(hash))
+	hostname, _ := os.Hostname()
+	_, _ = s.store.CreateAgent(ctx, name, agentType, string(hash), hostname, "", "")
 }
 
 func (s *Server) authenticate(r *http.Request) (string, error) {
@@ -348,8 +349,11 @@ func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) handleAgentRegister(w http.ResponseWriter, r *http.Request) {
 	var req struct {
-		Name      string `json:"name"`
-		AgentType string `json:"agent_type"`
+		Name         string   `json:"name"`
+		AgentType    string   `json:"agent_type"`
+		Machine      string   `json:"machine"`
+		Scope        string   `json:"scope"`
+		Capabilities []string `json:"capabilities"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		jsonError(w, "invalid request body", http.StatusBadRequest)
@@ -378,11 +382,17 @@ func (s *Server) handleAgentRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	capsJSON := ""
+	if len(req.Capabilities) > 0 {
+		b, _ := json.Marshal(req.Capabilities)
+		capsJSON = string(b)
+	}
+
 	var agent *Agent
 	if existing != nil && existing.RevokedAt != nil {
-		agent, err = s.store.ReinstateAgent(r.Context(), req.Name, req.AgentType, hash)
+		agent, err = s.store.ReinstateAgent(r.Context(), req.Name, req.AgentType, hash, req.Machine, req.Scope, capsJSON)
 	} else {
-		agent, err = s.store.CreateAgent(r.Context(), req.Name, req.AgentType, hash)
+		agent, err = s.store.CreateAgent(r.Context(), req.Name, req.AgentType, hash, req.Machine, req.Scope, capsJSON)
 	}
 	if err != nil {
 		jsonError(w, err.Error(), http.StatusInternalServerError)
@@ -415,6 +425,17 @@ func (s *Server) handleAgentList(w http.ResponseWriter, r *http.Request) {
 		}
 		if a.LastSeen != nil {
 			entry["last_seen"] = a.LastSeen.Format(time.RFC3339)
+		}
+		if a.Machine != "" {
+			entry["machine"] = a.Machine
+		}
+		if a.Scope != "" {
+			entry["scope"] = a.Scope
+		}
+		if a.Capabilities != "" {
+			var caps []string
+			json.Unmarshal([]byte(a.Capabilities), &caps)
+			entry["capabilities"] = caps
 		}
 		result = append(result, entry)
 	}
@@ -504,6 +525,7 @@ func (s *Server) handleHeartbeat(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		Workspace string `json:"workspace"`
 		Status    string `json:"status"`
+		Machine   string `json:"machine"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		jsonError(w, "invalid request body", http.StatusBadRequest)
@@ -513,12 +535,12 @@ func (s *Server) handleHeartbeat(w http.ResponseWriter, r *http.Request) {
 		req.Status = "online"
 	}
 
-	if err := s.store.UpdatePresence(r.Context(), agent, req.Workspace, req.Status); err != nil {
+	if err := s.store.UpdatePresence(r.Context(), agent, req.Workspace, req.Status, req.Machine); err != nil {
 		jsonError(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	jsonResp(w, map[string]string{"status": "ok"})
-	s.hub.Broadcast(&Event{Type: "presence.changed", Payload: map[string]interface{}{"agent": agent, "status": req.Status, "workspace": req.Workspace}})
+	s.hub.Broadcast(&Event{Type: "presence.changed", Payload: map[string]interface{}{"agent": agent, "status": req.Status, "workspace": req.Workspace, "machine": req.Machine}})
 }
 
 func (s *Server) handlePresence(w http.ResponseWriter, r *http.Request) {
