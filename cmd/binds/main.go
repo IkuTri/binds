@@ -400,6 +400,7 @@ var rootCmd = &cobra.Command{
 			"upgrade",
 			"version",
 			"who",
+			"workspace",
 			"zsh",
 		}
 		// Check both the command name and parent command name for subcommands

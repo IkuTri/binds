@@ -53,14 +53,14 @@ var primeCmd = &cobra.Command{
 	Use:     "prime",
 	GroupID: "setup",
 	Short:   "Output AI-optimized workflow context",
-	Long: `Output essential Beads workflow context in AI-optimized markdown format.
+	Long: `Output essential binds workflow context in AI-optimized markdown format.
 
 Automatically detects if MCP server is active and adapts output:
 - MCP mode: Brief workflow reminders (~50 tokens)
 - CLI mode: Full command reference (~1-2k tokens)
 
 Designed for Claude Code hooks (SessionStart, PreCompact) to prevent
-agents from forgetting bd workflow after context compaction.
+agents from forgetting binds workflow after context compaction.
 
 Config options:
 - no-git-ops: When true, outputs stealth mode (no git commands in session close protocol).
@@ -217,39 +217,34 @@ func outputPrimeContext(w io.Writer, mcpMode bool, stealthMode bool) error {
 func outputMCPContext(w io.Writer, stealthMode bool) error {
 	ephemeral := isEphemeralBranch()
 	noPush := config.GetBool("no-push")
-	autoSync := isDaemonAutoSyncing()
 	localOnly := !primeHasGitRemote()
 
 	var closeProtocol string
 	if stealthMode || localOnly {
-		// Stealth mode or local-only: only flush to JSONL, no git operations
-		closeProtocol = "Before saying \"done\": bd sync --flush-only"
-	} else if autoSync && !ephemeral && !noPush {
-		// Daemon is auto-syncing - no bd sync needed
-		closeProtocol = "Before saying \"done\": git status → git add → git commit → git push (beads auto-synced by daemon)"
+		closeProtocol = "Before saying \"done\": binds sync --flush-only"
 	} else if ephemeral {
-		closeProtocol = "Before saying \"done\": git status → git add → bd sync --from-main → git commit (no push - ephemeral branch)"
+		closeProtocol = "Before saying \"done\": git status → git add → binds sync --from-main → git commit (no push - ephemeral branch)"
 	} else if noPush {
-		closeProtocol = "Before saying \"done\": git status → git add → bd sync → git commit (push disabled - run git push manually)"
+		closeProtocol = "Before saying \"done\": git status → git add → binds sync → git commit (push disabled - run git push manually)"
 	} else {
-		closeProtocol = "Before saying \"done\": git status → git add → bd sync → git commit → bd sync → git push"
+		closeProtocol = "Before saying \"done\": git status → git add → binds sync → git commit → binds sync → git push"
 	}
 
 	redirectNotice := getRedirectNotice(false)
 
-	context := `# Beads Issue Tracker Active
+	context := `# Binds Issue Tracker Active
 
 ` + redirectNotice + `# 🚨 SESSION CLOSE PROTOCOL 🚨
 
 ` + closeProtocol + `
 
 ## Core Rules
-- **Default**: Use beads for ALL task tracking (` + "`binds create`" + `, ` + "`bd ready`" + `, ` + "`binds close`" + `)
+- **Default**: Use binds for ALL task tracking (` + "`binds create`" + `, ` + "`binds ready`" + `, ` + "`binds close`" + `)
 - **Prohibited**: Do NOT use TodoWrite, TaskCreate, or markdown files for task tracking
-- **Workflow**: Create beads issue BEFORE writing code, mark in_progress when starting
+- **Workflow**: Create issue BEFORE writing code, mark in_progress when starting
 - Persistence you don't need beats lost context
 
-Start: Check ` + "`ready`" + ` tool for available work.
+Start: Check ` + "`binds ready`" + ` for available work.
 `
 	_, _ = fmt.Fprint(w, context)
 	return nil
@@ -259,7 +254,6 @@ Start: Check ` + "`ready`" + ` tool for available work.
 func outputCLIContext(w io.Writer, stealthMode bool) error {
 	ephemeral := isEphemeralBranch()
 	noPush := config.GetBool("no-push")
-	autoSync := isDaemonAutoSyncing()
 	localOnly := !primeHasGitRemote()
 
 	var closeProtocol string
@@ -269,96 +263,77 @@ func outputCLIContext(w io.Writer, stealthMode bool) error {
 	var gitWorkflowRule string
 
 	if stealthMode || localOnly {
-		// Stealth mode or local-only: only flush to JSONL, no git operations
-		closeProtocol = `[ ] bd sync --flush-only    (export beads to JSONL only)`
+		closeProtocol = `[ ] binds sync --flush-only    (export to JSONL only)`
 		syncSection = `### Sync & Collaboration
-- ` + "`bd sync --flush-only`" + ` - Export to JSONL`
+- ` + "`binds sync --flush-only`" + ` - Export to JSONL`
 		completingWorkflow = `**Completing work:**
 ` + "```bash" + `
 binds close <id1> <id2> ...    # Close all completed issues at once
-bd sync --flush-only        # Export to JSONL
+binds sync --flush-only        # Export to JSONL
 ` + "```"
-		// Only show local-only note if not in stealth mode (stealth is explicit user choice)
 		if localOnly && !stealthMode {
 			closeNote = "**Note:** No git remote configured. Issues are saved locally only."
 			gitWorkflowRule = "Git workflow: local-only (no git remote)"
 		} else {
 			gitWorkflowRule = "Git workflow: stealth mode (no git ops)"
 		}
-	} else if autoSync && !ephemeral && !noPush {
-		// Daemon is auto-syncing - simplified protocol (no bd sync needed)
-		closeProtocol = `[ ] 1. git status              (check what changed)
-[ ] 2. git add <files>         (stage code changes)
-[ ] 3. git commit -m "..."     (commit code)
-[ ] 4. git push                (push to remote)`
-		closeNote = "**Note:** Daemon is auto-syncing beads changes. No manual `bd sync` needed."
-		syncSection = `### Sync & Collaboration
-- Daemon handles beads sync automatically (auto-commit + auto-push + auto-pull enabled)
-- ` + "`bd sync --status`" + ` - Check sync status`
-		completingWorkflow = `**Completing work:**
-` + "```bash" + `
-binds close <id1> <id2> ...    # Close all completed issues at once
-git push                    # Push to remote (beads auto-synced by daemon)
-` + "```"
-		gitWorkflowRule = "Git workflow: daemon auto-syncs beads changes"
 	} else if ephemeral {
 		closeProtocol = `[ ] 1. git status              (check what changed)
 [ ] 2. git add <files>         (stage code changes)
-[ ] 3. bd sync --from-main     (pull beads updates from main)
+[ ] 3. binds sync --from-main  (pull updates from main)
 [ ] 4. git commit -m "..."     (commit code changes)`
 		closeNote = "**Note:** This is an ephemeral branch (no upstream). Code is merged to main locally, not pushed."
 		syncSection = `### Sync & Collaboration
-- ` + "`bd sync --from-main`" + ` - Pull beads updates from main (for ephemeral branches)
-- ` + "`bd sync --status`" + ` - Check sync status without syncing`
+- ` + "`binds sync --from-main`" + ` - Pull updates from main (for ephemeral branches)
+- ` + "`binds sync --status`" + ` - Check sync status without syncing`
 		completingWorkflow = `**Completing work:**
 ` + "```bash" + `
 binds close <id1> <id2> ...    # Close all completed issues at once
-bd sync --from-main         # Pull latest beads from main
+binds sync --from-main         # Pull latest from main
 git add . && git commit -m "..."  # Commit your changes
-# Merge to main when ready (local merge, not push)
 ` + "```"
-		gitWorkflowRule = "Git workflow: run `bd sync --from-main` at session end"
+		gitWorkflowRule = "Git workflow: run `binds sync --from-main` at session end"
 	} else if noPush {
 		closeProtocol = `[ ] 1. git status              (check what changed)
 [ ] 2. git add <files>         (stage code changes)
-[ ] 3. bd sync                 (commit beads changes)
+[ ] 3. binds sync              (commit changes)
 [ ] 4. git commit -m "..."     (commit code)
-[ ] 5. bd sync                 (commit any new beads changes)`
+[ ] 5. binds sync              (commit any new changes)`
 		closeNote = "**Note:** Push disabled via config. Run `git push` manually when ready."
 		syncSection = `### Sync & Collaboration
-- ` + "`bd sync`" + ` - Sync with git remote (run at session end)
-- ` + "`bd sync --status`" + ` - Check sync status without syncing`
+- ` + "`binds sync`" + ` - Sync with git remote (run at session end)
+- ` + "`binds sync --status`" + ` - Check sync status without syncing`
 		completingWorkflow = `**Completing work:**
 ` + "```bash" + `
 binds close <id1> <id2> ...    # Close all completed issues at once
-bd sync                     # Sync beads (push disabled)
-# git push                  # Run manually when ready
+binds sync                     # Sync (push disabled)
+# git push                    # Run manually when ready
 ` + "```"
-		gitWorkflowRule = "Git workflow: run `bd sync` at session end (push disabled)"
+		gitWorkflowRule = "Git workflow: run `binds sync` at session end (push disabled)"
 	} else {
 		closeProtocol = `[ ] 1. git status              (check what changed)
 [ ] 2. git add <files>         (stage code changes)
-[ ] 3. bd sync                 (commit beads changes)
+[ ] 3. binds sync              (commit changes)
 [ ] 4. git commit -m "..."     (commit code)
-[ ] 5. bd sync                 (commit any new beads changes)
+[ ] 5. binds sync              (commit any new changes)
 [ ] 6. git push                (push to remote)`
 		closeNote = "**NEVER skip this.** Work is not done until pushed."
 		syncSection = `### Sync & Collaboration
-- ` + "`bd sync`" + ` - Sync with git remote (run at session end)
-- ` + "`bd sync --status`" + ` - Check sync status without syncing`
+- ` + "`binds sync`" + ` - Sync with git remote (run at session end)
+- ` + "`binds sync --status`" + ` - Check sync status without syncing`
 		completingWorkflow = `**Completing work:**
 ` + "```bash" + `
 binds close <id1> <id2> ...    # Close all completed issues at once
-bd sync                     # Push to remote
+binds sync                     # Push to remote
 ` + "```"
-		gitWorkflowRule = "Git workflow: hooks auto-sync, run `bd sync` at session end"
+		gitWorkflowRule = "Git workflow: hooks auto-sync, run `binds sync` at session end"
 	}
 
 	redirectNotice := getRedirectNotice(true)
 
-	context := `# Beads Workflow Context
+	context := `# Binds Workflow Context
 
-> **Context Recovery**: Run ` + "`bd prime`" + ` after compaction, clear, or new session
+> **Context Recovery**: Run ` + "`binds prime`" + ` after compaction, clear, or new session
 > Hooks auto-call this in Claude Code when .beads/ detected
 
 ` + redirectNotice + `# 🚨 SESSION CLOSE PROTOCOL 🚨
@@ -372,51 +347,51 @@ bd sync                     # Push to remote
 ` + closeNote + `
 
 ## Core Rules
-- **Default**: Use beads for ALL task tracking (` + "`binds create`" + `, ` + "`bd ready`" + `, ` + "`binds close`" + `)
+- **Default**: Use binds for ALL task tracking (` + "`binds create`" + `, ` + "`binds ready`" + `, ` + "`binds close`" + `)
 - **Prohibited**: Do NOT use TodoWrite, TaskCreate, or markdown files for task tracking
-- **Workflow**: Create beads issue BEFORE writing code, mark in_progress when starting
+- **Workflow**: Create issue BEFORE writing code, mark in_progress when starting
 - Persistence you don't need beats lost context
 - ` + gitWorkflowRule + `
-- Session management: check ` + "`bd ready`" + ` for available work
+- Session management: check ` + "`binds ready`" + ` for available work
 
 ## Essential Commands
 
 ### Finding Work
-- ` + "`bd ready`" + ` - Show issues ready to work (no blockers)
+- ` + "`binds ready`" + ` - Show issues ready to work (no blockers)
 - ` + "`binds list --status=open`" + ` - All open issues
 - ` + "`binds list --status=in_progress`" + ` - Your active work
-- ` + "`bd show <id>`" + ` - Detailed issue view with dependencies
+- ` + "`binds show <id>`" + ` - Detailed issue view with dependencies
 
 ### Creating & Updating
 - ` + "`binds create --title=\"...\" --type=task|bug|feature --priority=2`" + ` - New issue
   - Priority: 0-4 or P0-P4 (0=critical, 2=medium, 4=backlog). NOT "high"/"medium"/"low"
-- ` + "`bd update <id> --status=in_progress`" + ` - Claim work
-- ` + "`bd update <id> --assignee=username`" + ` - Assign to someone
-- ` + "`bd update <id> --title/--description/--notes/--design`" + ` - Update fields inline
+- ` + "`binds update <id> --status=in_progress`" + ` - Claim work
+- ` + "`binds update <id> --assignee=username`" + ` - Assign to someone
+- ` + "`binds update <id> --title/--description/--notes/--design`" + ` - Update fields inline
 - ` + "`binds close <id>`" + ` - Mark complete
 - ` + "`binds close <id1> <id2> ...`" + ` - Close multiple issues at once (more efficient)
 - ` + "`binds close <id> --reason=\"explanation\"`" + ` - Close with reason
 - **Tip**: When creating multiple issues/tasks/epics, use parallel subagents for efficiency
-- **WARNING**: Do NOT use ` + "`bd edit`" + ` - it opens $EDITOR (vim/nano) which blocks agents
+- **WARNING**: Do NOT use ` + "`binds edit`" + ` - it opens $EDITOR (vim/nano) which blocks agents
 
 ### Dependencies & Blocking
 - ` + "`binds dep add <issue> <depends-on>`" + ` - Add dependency (issue depends on depends-on)
-- ` + "`bd blocked`" + ` - Show all blocked issues
-- ` + "`bd show <id>`" + ` - See what's blocking/blocked by this issue
+- ` + "`binds blocked`" + ` - Show all blocked issues
+- ` + "`binds show <id>`" + ` - See what's blocking/blocked by this issue
 
 ` + syncSection + `
 
 ### Project Health
-- ` + "`bd stats`" + ` - Project statistics (open/closed/blocked counts)
+- ` + "`binds stats`" + ` - Project statistics (open/closed/blocked counts)
 - ` + "`binds doctor`" + ` - Check for issues (sync problems, missing hooks)
 
 ## Common Workflows
 
 **Starting work:**
 ` + "```bash" + `
-bd ready           # Find available work
-bd show <id>       # Review issue details
-bd update <id> --status=in_progress  # Claim it
+binds ready           # Find available work
+binds show <id>       # Review issue details
+binds update <id> --status=in_progress  # Claim it
 ` + "```" + `
 
 ` + completingWorkflow + `
@@ -426,7 +401,7 @@ bd update <id> --status=in_progress  # Claim it
 # Run binds create commands in parallel (use subagents for many items)
 binds create --title="Implement feature X" --type=feature
 binds create --title="Write tests for X" --type=task
-binds dep add beads-yyy beads-xxx  # Tests depend on Feature (Feature blocks tests)
+binds dep add binds-yyy binds-xxx  # Tests depend on Feature (Feature blocks tests)
 ` + "```" + `
 `
 	_, _ = fmt.Fprint(w, context)

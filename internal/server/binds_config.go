@@ -17,6 +17,9 @@ type BindsConfig struct {
 		Name      string `toml:"name"`
 		AgentType string `toml:"type"`
 	} `toml:"identity"`
+	Workspaces struct {
+		Paths []string `toml:"paths"`
+	} `toml:"workspaces"`
 }
 
 // LoadConfigFile reads config.toml from configDir. Returns zero-value config if missing.

@@ -536,7 +536,7 @@ func FindBeadsDir() string {
 
 				// Validate directory contains actual project files
 				if hasBeadsProjectFiles(beadsDir) {
-					fmt.Fprintln(os.Stderr, "Using .beads/ (run 'binds migrate' to upgrade)")
+					// .beads/ compat: silent fallback (nag removed)
 					return beadsDir
 				}
 			}
@@ -574,7 +574,7 @@ func FindBeadsDir() string {
 
 			// Validate directory contains actual project files
 			if hasBeadsProjectFiles(beadsDir) {
-				fmt.Fprintln(os.Stderr, "Using .beads/ (run 'binds migrate' to upgrade)")
+				// .beads/ compat: silent fallback (nag removed)
 				return beadsDir
 			}
 		}
