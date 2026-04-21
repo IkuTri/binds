@@ -247,6 +247,9 @@ func (s *Server) authenticate(r *http.Request) (string, error) {
 	}
 
 	if token == s.localToken {
+		if !isLoopback(r) {
+			return "", fmt.Errorf("local token rejected from remote address %s — register an agent token with POST /api/agents/register", r.RemoteAddr)
+		}
 		if s.localIdentity != "" {
 			return s.localIdentity, nil
 		}
@@ -268,6 +271,15 @@ func (s *Server) authenticate(r *http.Request) (string, error) {
 	}
 
 	return "", fmt.Errorf("invalid token")
+}
+
+func isLoopback(r *http.Request) bool {
+	host := r.RemoteAddr
+	if idx := strings.LastIndex(host, ":"); idx != -1 {
+		host = host[:idx]
+	}
+	host = strings.Trim(host, "[]")
+	return host == "127.0.0.1" || host == "::1" || host == "localhost"
 }
 
 func (s *Server) authed(next http.HandlerFunc) http.HandlerFunc {
@@ -315,11 +327,16 @@ func (s *Server) presenceReaper(ctx context.Context) {
 // --- Handlers: Health ---
 
 func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {
-	jsonResp(w, map[string]interface{}{
+	resp := map[string]interface{}{
 		"status":  "ok",
+		"service": "binds",
+		"listen":  s.server.Addr,
 		"version": "0.1.0",
-		"uptime":  time.Since(time.Now()).String(),
-	})
+	}
+	if s.localIdentity != "" {
+		resp["local_identity"] = s.localIdentity
+	}
+	jsonResp(w, resp)
 }
 
 // --- Handlers: Agents ---
