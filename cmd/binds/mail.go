@@ -228,6 +228,31 @@ var mailStatusCmd = &cobra.Command{
 	},
 }
 
+var mailWhoamiCmd = &cobra.Command{
+	Use:   "whoami",
+	Short: "Show authenticated identity, server URL, and token source",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		resp, err := serverGet("/api/whoami")
+		if err != nil {
+			return err
+		}
+		if jsonOutput {
+			fmt.Println(string(resp))
+			return nil
+		}
+		var data struct {
+			Identity    string `json:"identity"`
+			ServerURL   string `json:"server_url"`
+			TokenSource string `json:"token_source"`
+		}
+		json.Unmarshal(resp, &data)
+		fmt.Printf("Identity:     %s\n", data.Identity)
+		fmt.Printf("Server:       %s\n", data.ServerURL)
+		fmt.Printf("Token source: %s\n", data.TokenSource)
+		return nil
+	},
+}
+
 func init() {
 	mailSendCmd.Flags().StringP("subject", "s", "", "Message subject")
 	mailSendCmd.Flags().StringP("priority", "p", "normal", "Priority (urgent|normal|low)")
@@ -244,6 +269,7 @@ func init() {
 	mailCmd.AddCommand(mailHistoryCmd)
 	mailCmd.AddCommand(mailThreadsCmd)
 	mailCmd.AddCommand(mailStatusCmd)
+	mailCmd.AddCommand(mailWhoamiCmd)
 
 	rootCmd.AddCommand(mailCmd)
 }

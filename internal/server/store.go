@@ -210,6 +210,17 @@ func (s *Store) RevokeAgent(ctx context.Context, name string) error {
 	return nil
 }
 
+func (s *Store) ReinstateAgent(ctx context.Context, name, agentType, tokenHash string) (*Agent, error) {
+	now := time.Now().UTC().Format(time.RFC3339)
+	_, err := s.db.ExecContext(ctx,
+		`UPDATE agents SET token_hash = ?, agent_type = ?, revoked_at = NULL, status = 'offline', last_seen = ? WHERE name = ?`,
+		tokenHash, agentType, now, name)
+	if err != nil {
+		return nil, err
+	}
+	return s.GetAgentByName(ctx, name)
+}
+
 func (s *Store) UpdatePresence(ctx context.Context, name, workspace, status string) error {
 	now := time.Now().UTC().Format(time.RFC3339)
 	_, err := s.db.ExecContext(ctx,

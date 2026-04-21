@@ -138,6 +138,9 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("GET /api/agents", s.authed(s.handleAgentList))
 	s.mux.HandleFunc("DELETE /api/agents/{name}", s.authed(s.handleAgentRevoke))
 
+	// Identity
+	s.mux.HandleFunc("GET /api/whoami", s.authed(s.handleWhoami))
+
 	// Presence
 	s.mux.HandleFunc("POST /api/presence/heartbeat", s.authed(s.handleHeartbeat))
 	s.mux.HandleFunc("GET /api/presence", s.authed(s.handlePresence))
@@ -353,7 +356,12 @@ func (s *Server) handleAgentRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	agent, err := s.store.CreateAgent(r.Context(), req.Name, req.AgentType, hash)
+	var agent *Agent
+	if existing != nil && existing.RevokedAt != nil {
+		agent, err = s.store.ReinstateAgent(r.Context(), req.Name, req.AgentType, hash)
+	} else {
+		agent, err = s.store.CreateAgent(r.Context(), req.Name, req.AgentType, hash)
+	}
 	if err != nil {
 		jsonError(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -399,6 +407,22 @@ func (s *Server) handleAgentRevoke(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	jsonResp(w, map[string]string{"status": "revoked", "name": name})
+}
+
+// --- Handlers: Identity ---
+
+func (s *Server) handleWhoami(w http.ResponseWriter, r *http.Request) {
+	agent := agentFromCtx(r.Context())
+	resp := map[string]string{
+		"identity":   agent,
+		"server_url": fmt.Sprintf("http://%s", r.Host),
+	}
+	if agent == s.localIdentity || agent == "_local" {
+		resp["token_source"] = "local (.local-token)"
+	} else {
+		resp["token_source"] = "registered agent token"
+	}
+	jsonResp(w, resp)
 }
 
 // --- Handlers: Presence ---
