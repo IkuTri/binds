@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // issueIDCompletion provides shell completion for issue IDs by querying the storage

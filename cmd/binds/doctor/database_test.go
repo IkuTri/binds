@@ -16,7 +16,7 @@ import (
 // setupTestDatabase creates a minimal valid SQLite database for testing
 func setupTestDatabase(t *testing.T, dir string) string {
 	t.Helper()
-	dbPath := filepath.Join(dir, ".beads", "beads.db")
+	dbPath := filepath.Join(dir, ".binds", "beads.db")
 
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
@@ -64,7 +64,7 @@ func TestCheckDatabaseIntegrity(t *testing.T) {
 		{
 			name: "corrupt database",
 			setup: func(t *testing.T, dir string) {
-				dbPath := filepath.Join(dir, ".beads", "beads.db")
+				dbPath := filepath.Join(dir, ".binds", "beads.db")
 				// Write garbage that isn't a valid SQLite file
 				if err := os.WriteFile(dbPath, []byte("not a sqlite database"), 0600); err != nil {
 					t.Fatalf("failed to create corrupt db: %v", err)
@@ -78,7 +78,7 @@ func TestCheckDatabaseIntegrity(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.MkdirAll(beadsDir, 0755); err != nil {
 				t.Fatal(err)
 			}
@@ -108,7 +108,7 @@ func TestCheckDatabaseJSONLSync(t *testing.T) {
 			name: "no database",
 			setup: func(t *testing.T, dir string) {
 				// No database, but create JSONL
-				jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+				jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 				if err := os.WriteFile(jsonlPath, []byte(`{"id":"test-1","title":"Test"}`+"\n"), 0600); err != nil {
 					t.Fatalf("failed to create JSONL: %v", err)
 				}
@@ -134,7 +134,7 @@ func TestCheckDatabaseJSONLSync(t *testing.T) {
 				_, _ = db.Exec(`INSERT INTO issues (id, title, status) VALUES ('test-1', 'Test Issue', 'open')`)
 
 				// Create JSONL with one issue
-				jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+				jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 				if err := os.WriteFile(jsonlPath, []byte(`{"id":"test-1","title":"Test Issue","status":"open"}`+"\n"), 0600); err != nil {
 					t.Fatalf("failed to create JSONL: %v", err)
 				}
@@ -152,7 +152,7 @@ func TestCheckDatabaseJSONLSync(t *testing.T) {
 				_, _ = db.Exec(`INSERT INTO issues (id, title, status) VALUES ('test-1', 'Test Issue', 'open')`)
 
 				// Create JSONL with two issues
-				jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+				jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 				content := `{"id":"test-1","title":"Test Issue 1","status":"open"}
 {"id":"test-2","title":"Test Issue 2","status":"open"}
 `
@@ -179,7 +179,7 @@ func TestCheckDatabaseJSONLSync(t *testing.T) {
 				_, _ = db.Exec(`INSERT INTO issues (id, title, status, ephemeral) VALUES ('test-wisp-1', 'Wisp Issue', 'open', 1)`)
 
 				// Create JSONL with only 2 issues (wisps are never exported)
-				jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+				jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 				content := `{"id":"test-1","title":"Regular Issue 1","status":"open"}
 {"id":"test-2","title":"Regular Issue 2","status":"open"}
 `
@@ -204,7 +204,7 @@ func TestCheckDatabaseJSONLSync(t *testing.T) {
 				_, _ = db.Exec(`INSERT INTO issues (id, title, status) VALUES ('test-1', 'Test Issue', 'closed')`)
 
 				// Create JSONL with same issue but status "open" (stale JSONL)
-				jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+				jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 				content := `{"id":"test-1","title":"Test Issue","status":"open"}
 `
 				if err := os.WriteFile(jsonlPath, []byte(content), 0600); err != nil {
@@ -219,7 +219,7 @@ func TestCheckDatabaseJSONLSync(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.MkdirAll(beadsDir, 0755); err != nil {
 				t.Fatal(err)
 			}
@@ -248,7 +248,7 @@ func TestCheckDatabaseVersion(t *testing.T) {
 			name: "fresh clone with JSONL",
 			setup: func(t *testing.T, dir string) {
 				// No database but JSONL exists - fresh clone warning
-				jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+				jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 				if err := os.WriteFile(jsonlPath, []byte(`{"id":"test-1","title":"Test"}`+"\n"), 0600); err != nil {
 					t.Fatalf("failed to create JSONL: %v", err)
 				}
@@ -267,7 +267,7 @@ func TestCheckDatabaseVersion(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.MkdirAll(beadsDir, 0755); err != nil {
 				t.Fatal(err)
 			}
@@ -309,7 +309,7 @@ func TestCheckSchemaCompatibility(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.MkdirAll(beadsDir, 0755); err != nil {
 				t.Fatal(err)
 			}
@@ -497,7 +497,7 @@ func TestCheckDatabaseIntegrity_EdgeCases(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.MkdirAll(beadsDir, 0755); err != nil {
 				t.Fatal(err)
 			}
@@ -530,7 +530,7 @@ func TestCheckDatabaseJSONLSync_EdgeCases(t *testing.T) {
 				_, _ = db.Exec(`INSERT INTO issues (id, title, status) VALUES ('test-1', 'Test Issue', 'open')`)
 
 				// Create JSONL with malformed entries
-				jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+				jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 				content := `{"id":"test-1","title":"Valid Entry"}
 {malformed json without quotes
 {"id":"test-2","incomplete
@@ -548,7 +548,7 @@ func TestCheckDatabaseJSONLSync_EdgeCases(t *testing.T) {
 				setupTestDatabase(t, dir)
 
 				// Create JSONL with some invalid JSON lines
-				jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+				jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 				content := `{"id":"test-1","title":"Valid"}
 not json at all
 {"id":"test-2","title":"Also Valid"}
@@ -569,7 +569,7 @@ not json at all
 				_, _ = db.Exec(`INSERT INTO issues (id, title, status) VALUES ('test-1', 'Test', 'open')`)
 
 				// Create JSONL where some entries don't have id field
-				jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+				jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 				content := `{"id":"test-1","title":"Has ID"}
 {"title":"No ID field","status":"open"}
 {"id":"test-2","title":"Has ID"}
@@ -585,7 +585,7 @@ not json at all
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.MkdirAll(beadsDir, 0755); err != nil {
 				t.Fatal(err)
 			}
@@ -612,7 +612,7 @@ func TestCheckDatabaseVersion_EdgeCases(t *testing.T) {
 		{
 			name: "future database version",
 			setup: func(t *testing.T, dir string) {
-				dbPath := filepath.Join(dir, ".beads", "beads.db")
+				dbPath := filepath.Join(dir, ".binds", "beads.db")
 				db, err := sql.Open("sqlite3", dbPath)
 				if err != nil {
 					t.Fatalf("failed to create database: %v", err)
@@ -636,7 +636,7 @@ func TestCheckDatabaseVersion_EdgeCases(t *testing.T) {
 		{
 			name: "database with metadata table but no version",
 			setup: func(t *testing.T, dir string) {
-				dbPath := filepath.Join(dir, ".beads", "beads.db")
+				dbPath := filepath.Join(dir, ".binds", "beads.db")
 				db, err := sql.Open("sqlite3", dbPath)
 				if err != nil {
 					t.Fatalf("failed to create database: %v", err)
@@ -658,7 +658,7 @@ func TestCheckDatabaseVersion_EdgeCases(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.MkdirAll(beadsDir, 0755); err != nil {
 				t.Fatal(err)
 			}
@@ -687,7 +687,7 @@ func TestCheckSchemaCompatibility_EdgeCases(t *testing.T) {
 		{
 			name: "partial schema - missing dependencies table",
 			setup: func(t *testing.T, dir string) {
-				dbPath := filepath.Join(dir, ".beads", "beads.db")
+				dbPath := filepath.Join(dir, ".binds", "beads.db")
 				db, err := sql.Open("sqlite3", dbPath)
 				if err != nil {
 					t.Fatalf("failed to create database: %v", err)
@@ -713,7 +713,7 @@ func TestCheckSchemaCompatibility_EdgeCases(t *testing.T) {
 		{
 			name: "partial schema - missing columns in issues table",
 			setup: func(t *testing.T, dir string) {
-				dbPath := filepath.Join(dir, ".beads", "beads.db")
+				dbPath := filepath.Join(dir, ".binds", "beads.db")
 				db, err := sql.Open("sqlite3", dbPath)
 				if err != nil {
 					t.Fatalf("failed to create database: %v", err)
@@ -761,7 +761,7 @@ func TestCheckSchemaCompatibility_EdgeCases(t *testing.T) {
 		{
 			name: "database with no tables",
 			setup: func(t *testing.T, dir string) {
-				dbPath := filepath.Join(dir, ".beads", "beads.db")
+				dbPath := filepath.Join(dir, ".binds", "beads.db")
 				db, err := sql.Open("sqlite3", dbPath)
 				if err != nil {
 					t.Fatalf("failed to create database: %v", err)
@@ -781,7 +781,7 @@ func TestCheckSchemaCompatibility_EdgeCases(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.MkdirAll(beadsDir, 0755); err != nil {
 				t.Fatal(err)
 			}
@@ -991,7 +991,7 @@ func TestCheckDatabaseJSONLSync_MoleculePrefix(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.MkdirAll(beadsDir, 0755); err != nil {
 				t.Fatal(err)
 			}

@@ -9,9 +9,9 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/debug"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/debug"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // ExportToMultiRepo writes issues to their respective JSONL files based on source_repo.

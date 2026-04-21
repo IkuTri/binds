@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestReadOnlyDoesNotModifyFile verifies that opening a database in read-only mode

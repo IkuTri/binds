@@ -5,7 +5,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // VersionedStorage extends Storage with version control capabilities.

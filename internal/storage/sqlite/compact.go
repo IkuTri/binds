@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // GetTier1Candidates returns issues eligible for Tier 1 compaction.

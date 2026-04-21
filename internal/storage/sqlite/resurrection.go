@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TryResurrectParent attempts to resurrect a deleted parent issue from JSONL history.

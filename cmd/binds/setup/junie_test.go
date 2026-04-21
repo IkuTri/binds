@@ -9,11 +9,11 @@ import (
 
 func TestJunieGuidelinesTemplate(t *testing.T) {
 	requiredContent := []string{
-		"bd ready",
-		"bd create",
-		"bd update",
-		"bd close",
-		"bd sync",
+		"binds ready",
+		"binds create",
+		"binds update",
+		"binds close",
+		"binds sync",
 		"mcp_beads_ready",
 		"mcp_beads_list",
 		"mcp_beads_create",
@@ -487,10 +487,10 @@ func TestJunieGuidelinesWorkflowPattern(t *testing.T) {
 	guidelines := junieGuidelinesTemplate
 
 	// Should mention core workflow commands
-	if !strings.Contains(guidelines, "bd ready") {
+	if !strings.Contains(guidelines, "binds ready") {
 		t.Error("Should mention bd ready")
 	}
-	if !strings.Contains(guidelines, "bd sync") {
+	if !strings.Contains(guidelines, "binds sync") {
 		t.Error("Should mention bd sync")
 	}
 

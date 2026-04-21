@@ -13,9 +13,9 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/rpc"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/rpc"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 //go:embed web

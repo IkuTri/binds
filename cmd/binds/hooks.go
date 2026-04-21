@@ -12,8 +12,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/git"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/git"
 )
 
 //go:embed templates/hooks/*
@@ -574,7 +574,7 @@ func runPreCommitHook() int {
 	// Stage JSONL files for commit
 	// By default, we auto-stage for convenience. Users with conflicting git hooks
 	// (e.g., hooks that read the staging area) can set BEADS_NO_AUTO_STAGE=1 to
-	// disable this and stage manually. See: https://github.com/steveyegge/beads/issues/826
+	// disable this and stage manually. See: https://github.com/IkuTri/binds/issues/826
 	if os.Getenv("BEADS_NO_AUTO_STAGE") != "" {
 		// Safe mode: check for unstaged changes and block if found
 		var unstaged []string

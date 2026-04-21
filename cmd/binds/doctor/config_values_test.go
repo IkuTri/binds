@@ -49,7 +49,7 @@ func TestIsValidBranchName(t *testing.T) {
 func TestCheckConfigValues(t *testing.T) {
 	// Create a temporary directory for testing
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -161,7 +161,7 @@ flush-debounce: "not-a-duration"
 func TestCheckMetadataConfigValues(t *testing.T) {
 	// Create a temporary directory for testing
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -386,7 +386,7 @@ func TestValidCustomStatusRegex(t *testing.T) {
 
 func TestCheckConfigValuesActor(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -423,7 +423,7 @@ func TestCheckConfigValuesActor(t *testing.T) {
 
 func TestCheckConfigValuesDbPath(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}

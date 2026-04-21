@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/types"
 
 	_ "github.com/ncruces/go-sqlite3/driver"
 	_ "github.com/ncruces/go-sqlite3/embed"
@@ -201,7 +201,7 @@ func TestFindOrphanedIssues_WithMockProvider(t *testing.T) {
 //   - A "code" directory with git commits referencing the planning issues
 //
 // The test asserts that FindOrphanedIssues uses the provider's issues/prefix,
-// NOT any local .beads/ directory.
+// NOT any local .binds/ directory.
 func TestFindOrphanedIssues_CrossRepo(t *testing.T) {
 	// Setup: code repo with commits referencing PLAN-xxx issues
 	codeDir := setupTestGitRepo(t, []string{
@@ -220,8 +220,8 @@ func TestFindOrphanedIssues_CrossRepo(t *testing.T) {
 		prefix: "PLAN",
 	}
 
-	// Create a LOCAL .beads/ in the code repo to verify it's NOT used
-	localBeadsDir := filepath.Join(codeDir, ".beads")
+	// Create a LOCAL .binds/ in the code repo to verify it's NOT used
+	localBeadsDir := filepath.Join(codeDir, ".binds")
 	if err := os.MkdirAll(localBeadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -253,10 +253,10 @@ func TestFindOrphanedIssues_CrossRepo(t *testing.T) {
 		t.Errorf("expected 2 orphans, got %d", len(orphans))
 	}
 
-	// Assert: Should NOT find LOCAL-999 (proves local .beads/ was ignored)
+	// Assert: Should NOT find LOCAL-999 (proves local .binds/ was ignored)
 	for _, o := range orphans {
 		if o.IssueID == "LOCAL-999" {
-			t.Error("found LOCAL-999 orphan - local .beads/ was incorrectly used")
+			t.Error("found LOCAL-999 orphan - local .binds/ was incorrectly used")
 		}
 		if o.IssueID != "PLAN-001" && o.IssueID != "PLAN-002" {
 			t.Errorf("unexpected orphan ID: %s", o.IssueID)
@@ -273,7 +273,7 @@ func TestFindOrphanedIssues_CrossRepo(t *testing.T) {
 
 // TestFindOrphanedIssues_LocalProvider tests backward compatibility (RT-01).
 // This tests the FindOrphanedIssuesFromPath function which creates a LocalProvider
-// from the local .beads/ directory.
+// from the local .binds/ directory.
 func TestFindOrphanedIssues_LocalProvider(t *testing.T) {
 	dir := t.TempDir()
 
@@ -293,8 +293,8 @@ func TestFindOrphanedIssues_LocalProvider(t *testing.T) {
 	cmd.Dir = dir
 	_ = cmd.Run()
 
-	// Create .beads directory and database
-	beadsDir := filepath.Join(dir, ".beads")
+	// Create .binds directory and database
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -393,7 +393,7 @@ func TestFindOrphanedIssues_IntegrationCrossRepo(t *testing.T) {
 	codeDir := t.TempDir()
 
 	// Setup planning database
-	planningBeadsDir := filepath.Join(planningDir, ".beads")
+	planningBeadsDir := filepath.Join(planningDir, ".binds")
 	if err := os.MkdirAll(planningBeadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}

@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // readLineUnbuffered reads a line from stdin without buffering.
@@ -81,7 +81,7 @@ func RepoFingerprint(path string) error {
 
 	case "2":
 		// Detect backend to determine what to remove
-		beadsDir := filepath.Join(path, ".beads")
+		beadsDir := filepath.Join(path, ".binds")
 		cfg, cfgErr := configfile.Load(beadsDir)
 		if cfgErr != nil || cfg == nil {
 			cfg = configfile.DefaultConfig()

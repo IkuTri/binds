@@ -5,10 +5,10 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/routing"
-	"github.com/steveyegge/beads/internal/storage/factory"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/ui"
+	"github.com/IkuTri/binds/internal/routing"
+	"github.com/IkuTri/binds/internal/storage/factory"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/ui"
 )
 
 var refileCmd = &cobra.Command{

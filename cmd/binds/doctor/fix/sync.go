@@ -11,9 +11,9 @@ import (
 
 	_ "github.com/ncruces/go-sqlite3/driver"
 	_ "github.com/ncruces/go-sqlite3/embed"
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // DBJSONLSync fixes database-JSONL sync issues by running the appropriate sync command.
@@ -27,7 +27,7 @@ func DBJSONLSync(path string) error {
 		return err
 	}
 
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Dolt backend: DB-JSONL sync uses SQLite-specific issue counting, skip
 	if cfg, err := configfile.Load(beadsDir); err == nil && cfg != nil && cfg.GetBackend() == configfile.BackendDolt {
@@ -217,7 +217,7 @@ func SyncDivergence(path string) error {
 		return err
 	}
 
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 	beadsDir = resolveBeadsDir(beadsDir)
 
 	// In dolt-native mode, restore JSONL from git HEAD since Dolt is source of truth

@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/git"
+	"github.com/IkuTri/binds/internal/git"
 )
 
 func TestGetEmbeddedHooks(t *testing.T) {
@@ -438,13 +438,13 @@ func TestHasBeadsJSONL(t *testing.T) {
 	tmpDir := t.TempDir()
 	t.Chdir(tmpDir)
 
-	// Should be false initially (no .beads directory)
+	// Should be false initially (no .binds directory)
 	if hasBeadsJSONL() {
 		t.Error("hasBeadsJSONL() = true, want false (no .beads)")
 	}
 
-	// Create .beads directory without any JSONL files
-	if err := os.MkdirAll(".beads", 0755); err != nil {
+	// Create .binds directory without any JSONL files
+	if err := os.MkdirAll(".binds", 0755); err != nil {
 		t.Fatalf("Failed to create .beads: %v", err)
 	}
 	if hasBeadsJSONL() {
@@ -452,7 +452,7 @@ func TestHasBeadsJSONL(t *testing.T) {
 	}
 
 	// Create issues.jsonl
-	if err := os.WriteFile(".beads/issues.jsonl", []byte("{}"), 0644); err != nil {
+	if err := os.WriteFile(".binds/issues.jsonl", []byte("{}"), 0644); err != nil {
 		t.Fatalf("Failed to create issues.jsonl: %v", err)
 	}
 	if !hasBeadsJSONL() {
@@ -462,7 +462,7 @@ func TestHasBeadsJSONL(t *testing.T) {
 
 // TestInstallHooksChainingSkipsBdShim verifies that bd hooks install --chain
 // does NOT rename existing bd shims to .old (which would cause infinite recursion).
-// See: https://github.com/steveyegge/beads/issues/843
+// See: https://github.com/IkuTri/binds/issues/843
 func TestInstallHooksChainingSkipsBdShim(t *testing.T) {
 	tmpDir := t.TempDir()
 	runInDir(t, tmpDir, func() {
@@ -499,7 +499,7 @@ func TestInstallHooksChainingSkipsBdShim(t *testing.T) {
 		// Verify the shim was NOT renamed to .old (would cause infinite loop)
 		oldPath := existingHook + ".old"
 		if _, err := os.Stat(oldPath); !os.IsNotExist(err) {
-			t.Errorf("bd shim was renamed to .old - this would cause infinite recursion!")
+			t.Errorf("binds shim was renamed to .old - this would cause infinite recursion!")
 		}
 
 		// Verify new hook was installed (overwrote the shim)
@@ -511,7 +511,7 @@ func TestInstallHooksChainingSkipsBdShim(t *testing.T) {
 
 // TestRunChainedHookSkipsBdShim verifies that runChainedHook() skips
 // .old hooks that are bd shims (to prevent infinite recursion).
-// See: https://github.com/steveyegge/beads/issues/843
+// See: https://github.com/IkuTri/binds/issues/843
 func TestRunChainedHookSkipsBdShim(t *testing.T) {
 	tmpDir := t.TempDir()
 	runInDir(t, tmpDir, func() {
@@ -545,7 +545,7 @@ func TestRunChainedHookSkipsBdShim(t *testing.T) {
 
 // TestGetHookVersionRecognizesInlineHooks verifies that getHookVersion()
 // correctly identifies inline bd hooks created by bd init.
-// See: https://github.com/steveyegge/beads/issues/1120
+// See: https://github.com/IkuTri/binds/issues/1120
 func TestGetHookVersionRecognizesInlineHooks(t *testing.T) {
 	tmpDir := t.TempDir()
 
@@ -618,7 +618,7 @@ bd sync --flush-only
 
 // TestInstallHooksChainingSkipsInlineHook verifies that bd hooks install --chain
 // does NOT rename existing inline bd hooks to .old (which would destroy user's original).
-// See: https://github.com/steveyegge/beads/issues/1120
+// See: https://github.com/IkuTri/binds/issues/1120
 func TestInstallHooksChainingSkipsInlineHook(t *testing.T) {
 	tmpDir := t.TempDir()
 	runInDir(t, tmpDir, func() {
@@ -672,7 +672,7 @@ bd sync --flush-only
 
 // TestInstallHooksChainingPreservesExistingOld verifies that bd hooks install --chain
 // does NOT overwrite an existing .old file (which would destroy user's original hook).
-// See: https://github.com/steveyegge/beads/issues/1120
+// See: https://github.com/IkuTri/binds/issues/1120
 func TestInstallHooksChainingPreservesExistingOld(t *testing.T) {
 	tmpDir := t.TempDir()
 	runInDir(t, tmpDir, func() {
@@ -731,7 +731,7 @@ func TestInstallHooksChainingPreservesExistingOld(t *testing.T) {
 
 // TestRunChainedHookSkipsInlineHook verifies that runChainedHook() skips
 // .old hooks that are inline bd hooks (to prevent recursion).
-// See: https://github.com/steveyegge/beads/issues/1120
+// See: https://github.com/IkuTri/binds/issues/1120
 func TestRunChainedHookSkipsInlineHook(t *testing.T) {
 	tmpDir := t.TempDir()
 	runInDir(t, tmpDir, func() {

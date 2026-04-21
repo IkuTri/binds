@@ -16,14 +16,14 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/debug"
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/syncbranch"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/ui"
-	"github.com/steveyegge/beads/internal/utils"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/debug"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/syncbranch"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/ui"
+	"github.com/IkuTri/binds/internal/utils"
 )
 
 // tempFileCounter provides unique IDs for concurrent temp file creation

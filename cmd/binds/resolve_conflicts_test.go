@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/merge"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/merge"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // Helper to parse time or panic

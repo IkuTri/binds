@@ -4,7 +4,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // GetHierarchyDepth returns the depth of a hierarchical issue ID.

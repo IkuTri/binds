@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // exportImportHelper provides test setup and assertion methods

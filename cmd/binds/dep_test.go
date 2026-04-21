@@ -11,12 +11,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 func TestDependencySuite(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 
@@ -304,7 +304,7 @@ func TestDepBlocksFlag(t *testing.T) {
 
 func TestDepBlocksFlagFunctionality(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 
@@ -1113,7 +1113,7 @@ func TestDepAdd_FKError(t *testing.T) {
 	// Test that adding a dependency with invalid issue IDs produces
 	// a user-friendly error message, not a raw FK constraint error.
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 
@@ -1225,7 +1225,7 @@ func TestDepAdd_FKError_JSON(t *testing.T) {
 	// Test that JSON output mode also produces user-friendly errors.
 	// This verifies the error is handled before reaching JSON output formatting.
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 
@@ -1268,7 +1268,7 @@ func TestDepAdd_FKError_Daemon(t *testing.T) {
 	// The daemon wraps errors with "failed to add dependency: %v",
 	// so we verify the underlying storage error is user-friendly.
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 
@@ -1322,7 +1322,7 @@ func TestDepRemove_FKError(t *testing.T) {
 	// Note: DELETE with non-existent IDs typically succeeds as no-op in SQLite,
 	// but the storage layer should check and return appropriate error.
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 

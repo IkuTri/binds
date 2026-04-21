@@ -6,21 +6,21 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/utils"
+	"github.com/IkuTri/binds/internal/utils"
 )
 
 // TestWorktreeRedirectDepth tests that worktree redirect paths are computed correctly
 // for different worktree directory depths. This is the fix for GH#1098.
 //
-// The redirect file contains a relative path from the worktree's .beads directory
-// to the main repository's .beads directory. The depth of ../ components depends
+// The redirect file contains a relative path from the worktree's .binds directory
+// to the main repository's .binds directory. The depth of ../ components depends
 // on how deeply nested the worktree is.
 func TestWorktreeRedirectDepth(t *testing.T) {
 	// Create a temporary repo structure
 	tmpDir := t.TempDir()
 
-	// Main repo's .beads directory
-	mainBeadsDir := filepath.Join(tmpDir, ".beads")
+	// Main repo's .binds directory
+	mainBeadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(mainBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create main .beads dir: %v", err)
 	}
@@ -54,9 +54,9 @@ func TestWorktreeRedirectDepth(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			// Create worktree .beads directory
+			// Create worktree .binds directory
 			worktreeDir := filepath.Join(tmpDir, tt.worktreePath)
-			worktreeBeadsDir := filepath.Join(worktreeDir, ".beads")
+			worktreeBeadsDir := filepath.Join(worktreeDir, ".binds")
 			if err := os.MkdirAll(worktreeBeadsDir, 0755); err != nil {
 				t.Fatalf("failed to create worktree .beads dir: %v", err)
 			}
@@ -77,7 +77,7 @@ func TestWorktreeRedirectDepth(t *testing.T) {
 			}
 
 			// Verify the relative path ends with .beads
-			if !strings.HasSuffix(relPath, ".beads") {
+			if !strings.HasSuffix(relPath, ".binds") {
 				t.Errorf("expected relPath to end with .beads, got %q", relPath)
 			}
 
@@ -101,15 +101,15 @@ func TestWorktreeRedirectWithRelativeMainBeadsDir(t *testing.T) {
 	// Create a temporary repo structure
 	tmpDir := t.TempDir()
 
-	// Main repo's .beads directory
-	mainBeadsDir := filepath.Join(tmpDir, ".beads")
+	// Main repo's .binds directory
+	mainBeadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(mainBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create main .beads dir: %v", err)
 	}
 
 	// Create worktree
 	worktreeDir := filepath.Join(tmpDir, ".worktrees", "test-wt")
-	worktreeBeadsDir := filepath.Join(worktreeDir, ".beads")
+	worktreeBeadsDir := filepath.Join(worktreeDir, ".binds")
 	if err := os.MkdirAll(worktreeBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create worktree .beads dir: %v", err)
 	}
@@ -125,7 +125,7 @@ func TestWorktreeRedirectWithRelativeMainBeadsDir(t *testing.T) {
 	defer os.Chdir(origDir)
 
 	// Test with RELATIVE mainBeadsDir (as it might be returned by beads.FindBeadsDir())
-	relativeMainBeadsDir := ".beads"
+	relativeMainBeadsDir := ".binds"
 
 	// The fix: CanonicalizeIfRelative ensures the path is absolute
 	absMainBeadsDir := utils.CanonicalizeIfRelative(relativeMainBeadsDir)
@@ -161,15 +161,15 @@ func TestWorktreeRedirectWithRelativeMainBeadsDir(t *testing.T) {
 func TestWorktreeRedirectWithoutFix(t *testing.T) {
 	tmpDir := t.TempDir()
 
-	// Main repo's .beads directory
-	mainBeadsDir := filepath.Join(tmpDir, ".beads")
+	// Main repo's .binds directory
+	mainBeadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(mainBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create main .beads dir: %v", err)
 	}
 
 	// Create worktree
 	worktreeDir := filepath.Join(tmpDir, ".worktrees", "test-wt")
-	worktreeBeadsDir := filepath.Join(worktreeDir, ".beads")
+	worktreeBeadsDir := filepath.Join(worktreeDir, ".binds")
 	if err := os.MkdirAll(worktreeBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create worktree .beads dir: %v", err)
 	}
@@ -185,7 +185,7 @@ func TestWorktreeRedirectWithoutFix(t *testing.T) {
 	defer os.Chdir(origDir)
 
 	// Bug scenario: relative mainBeadsDir WITHOUT CanonicalizeIfRelative
-	relativeMainBeadsDir := ".beads"
+	relativeMainBeadsDir := ".binds"
 
 	// filepath.Rel with relative base path produces INCORRECT results
 	relPathBuggy, err := filepath.Rel(worktreeBeadsDir, relativeMainBeadsDir)
@@ -195,7 +195,7 @@ func TestWorktreeRedirectWithoutFix(t *testing.T) {
 		return
 	}
 
-	// The buggy relPath will be something like "../../../.beads" when it should be "../../.beads"
+	// The buggy relPath will be something like "../../../.binds" when it should be "../../.binds"
 	// or it might be completely wrong depending on the relative path interpretation
 	t.Logf("Buggy relPath (without fix): %q", relPathBuggy)
 

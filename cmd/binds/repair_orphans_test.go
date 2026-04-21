@@ -34,14 +34,14 @@ func TestRepairOrphans_DryRun(t *testing.T) {
 
 	bdExe := buildBDForTest(t)
 	ws := mkTmpDirInTmp(t, "bd-repair-orphans-*")
-	dbPath := filepath.Join(ws, ".beads", "beads.db")
+	dbPath := filepath.Join(ws, ".binds", "beads.db")
 
 	// Initialize with some issues
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "init", "--prefix", "test", "--quiet"); err != nil {
-		t.Fatalf("bd init failed: %v", err)
+		t.Fatalf("binds init failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "create", "Issue 1", "-p", "1"); err != nil {
-		t.Fatalf("bd create failed: %v", err)
+		t.Fatalf("binds create failed: %v", err)
 	}
 
 	// Directly insert orphaned data into the database
@@ -73,7 +73,7 @@ func TestRepairOrphans_DryRun(t *testing.T) {
 	// Run repair with --dry-run (use --path, not --db, so repair bypasses normal init)
 	out, err := runBDRepair(t, bdExe, ws, "--dry-run")
 	if err != nil {
-		t.Fatalf("bd repair --dry-run failed: %v\n%s", err, out)
+		t.Fatalf("binds repair --dry-run failed: %v\n%s", err, out)
 	}
 
 	// Verify it found the orphans
@@ -113,15 +113,15 @@ func TestRepairOrphans_Fix(t *testing.T) {
 
 	bdExe := buildBDForTest(t)
 	ws := mkTmpDirInTmp(t, "bd-repair-fix-*")
-	dbPath := filepath.Join(ws, ".beads", "beads.db")
+	dbPath := filepath.Join(ws, ".binds", "beads.db")
 
 	// Initialize with some issues
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "init", "--prefix", "test", "--quiet"); err != nil {
-		t.Fatalf("bd init failed: %v", err)
+		t.Fatalf("binds init failed: %v", err)
 	}
 	out, err := runBDSideDB(t, bdExe, ws, dbPath, "create", "Issue 1", "-p", "1", "--json")
 	if err != nil {
-		t.Fatalf("bd create failed: %v\n%s", err, out)
+		t.Fatalf("binds create failed: %v\n%s", err, out)
 	}
 
 	// Directly insert orphaned data
@@ -139,7 +139,7 @@ func TestRepairOrphans_Fix(t *testing.T) {
 	// Run repair (no --dry-run) - use --path to bypass normal db init
 	out, err = runBDRepair(t, bdExe, ws)
 	if err != nil {
-		t.Fatalf("bd repair failed: %v\n%s", err, out)
+		t.Fatalf("binds repair failed: %v\n%s", err, out)
 	}
 
 	// Verify it cleaned up
@@ -178,20 +178,20 @@ func TestRepairOrphans_CleanDatabase(t *testing.T) {
 
 	bdExe := buildBDForTest(t)
 	ws := mkTmpDirInTmp(t, "bd-repair-clean-*")
-	dbPath := filepath.Join(ws, ".beads", "beads.db")
+	dbPath := filepath.Join(ws, ".binds", "beads.db")
 
 	// Initialize with a clean database
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "init", "--prefix", "test", "--quiet"); err != nil {
-		t.Fatalf("bd init failed: %v", err)
+		t.Fatalf("binds init failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "create", "Issue 1", "-p", "1"); err != nil {
-		t.Fatalf("bd create failed: %v", err)
+		t.Fatalf("binds create failed: %v", err)
 	}
 
 	// Run repair on clean database - use --path to bypass normal db init
 	out, err := runBDRepair(t, bdExe, ws)
 	if err != nil {
-		t.Fatalf("bd repair failed: %v\n%s", err, out)
+		t.Fatalf("binds repair failed: %v\n%s", err, out)
 	}
 
 	// Should report no orphans found

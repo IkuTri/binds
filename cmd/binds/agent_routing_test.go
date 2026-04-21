@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestAgentStateWithRouting tests that bd agent state respects routes.jsonl
@@ -19,22 +19,22 @@ func TestAgentStateWithRouting(t *testing.T) {
 
 	// Create temp directory structure:
 	// tmpDir/
-	//   .beads/
+	//   .binds/
 	//     beads.db (town database)
 	//     routes.jsonl (routing config)
 	//   rig/
-	//     .beads/
+	//     .binds/
 	//       beads.db (rig database with agent)
 	tmpDir := t.TempDir()
 
-	// Create town .beads directory
-	townBeadsDir := filepath.Join(tmpDir, ".beads")
+	// Create town .binds directory
+	townBeadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(townBeadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create town beads dir: %v", err)
 	}
 
-	// Create rig .beads directory
-	rigBeadsDir := filepath.Join(tmpDir, "rig", ".beads")
+	// Create rig .binds directory
+	rigBeadsDir := filepath.Join(tmpDir, "rig", ".binds")
 	if err := os.MkdirAll(rigBeadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create rig beads dir: %v", err)
 	}
@@ -63,7 +63,7 @@ func TestAgentStateWithRouting(t *testing.T) {
 		t.Fatalf("Failed to add gt:agent label: %v", err)
 	}
 
-	// Create routes.jsonl in town .beads directory
+	// Create routes.jsonl in town .binds directory
 	routesContent := `{"prefix":"gt-","path":"rig"}`
 	routesPath := filepath.Join(townBeadsDir, "routes.jsonl")
 	if err := os.WriteFile(routesPath, []byte(routesContent), 0644); err != nil {
@@ -134,14 +134,14 @@ func TestAgentHeartbeatWithRouting(t *testing.T) {
 
 	tmpDir := t.TempDir()
 
-	// Create town .beads directory
-	townBeadsDir := filepath.Join(tmpDir, ".beads")
+	// Create town .binds directory
+	townBeadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(townBeadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create town beads dir: %v", err)
 	}
 
-	// Create rig .beads directory
-	rigBeadsDir := filepath.Join(tmpDir, "rig", ".beads")
+	// Create rig .binds directory
+	rigBeadsDir := filepath.Join(tmpDir, "rig", ".binds")
 	if err := os.MkdirAll(rigBeadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create rig beads dir: %v", err)
 	}
@@ -220,14 +220,14 @@ func TestAgentShowWithRouting(t *testing.T) {
 
 	tmpDir := t.TempDir()
 
-	// Create town .beads directory
-	townBeadsDir := filepath.Join(tmpDir, ".beads")
+	// Create town .binds directory
+	townBeadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(townBeadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create town beads dir: %v", err)
 	}
 
-	// Create rig .beads directory
-	rigBeadsDir := filepath.Join(tmpDir, "rig", ".beads")
+	// Create rig .binds directory
+	rigBeadsDir := filepath.Join(tmpDir, "rig", ".binds")
 	if err := os.MkdirAll(rigBeadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create rig beads dir: %v", err)
 	}
@@ -309,23 +309,23 @@ func TestBeadsDirOverrideSkipsRouting(t *testing.T) {
 
 	// Create temp directory structure:
 	// tmpDir/
-	//   .beads/
+	//   .binds/
 	//     beads.db (town database with prefix "gt" - has the bead)
 	//     routes.jsonl (routing config that would route gt- to rig/)
 	//   rig/
-	//     .beads/
+	//     .binds/
 	//       beads.db (rig database with prefix "gt" - does NOT have the bead)
 	//
 	// Without BEADS_DIR: routing sends gt-* lookups to rig/.beads → miss
 	// With BEADS_DIR=tmpDir/.beads: routing skipped → found in town store
 	tmpDir := t.TempDir()
 
-	townBeadsDir := filepath.Join(tmpDir, ".beads")
+	townBeadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(townBeadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create town beads dir: %v", err)
 	}
 
-	rigBeadsDir := filepath.Join(tmpDir, "rig", ".beads")
+	rigBeadsDir := filepath.Join(tmpDir, "rig", ".binds")
 	if err := os.MkdirAll(rigBeadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create rig beads dir: %v", err)
 	}

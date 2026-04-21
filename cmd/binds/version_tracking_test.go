@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/git"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/git"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
 )
 
 func TestGetVersionsSince(t *testing.T) {
@@ -120,7 +120,7 @@ func TestTrackBdVersion_NoBeadsDir(t *testing.T) {
 	git.ResetCaches()
 
 	// Set BEADS_DIR to temp directory to prevent FindBeadsDir from walking up
-	// or finding the worktree's main repository .beads directory
+	// or finding the worktree's main repository .binds directory
 	t.Setenv("BEADS_DIR", tmpDir)
 
 	// trackBdVersion should silently succeed
@@ -128,7 +128,7 @@ func TestTrackBdVersion_NoBeadsDir(t *testing.T) {
 
 	// Should not detect upgrade when no .beads dir exists
 	if versionUpgradeDetected {
-		t.Error("Expected no upgrade detection when .beads directory doesn't exist")
+		t.Error("Expected no upgrade detection when .binds directory doesn't exist")
 	}
 }
 
@@ -136,10 +136,10 @@ func TestTrackBdVersion_FirstRun(t *testing.T) {
 	// Reset global state for test isolation
 	ensureCleanGlobalState(t)
 
-	// Create temp .beads directory with a project file (bd-420)
+	// Create temp .binds directory with a project file (bd-420)
 	// FindBeadsDir now requires actual project files, not just directory existence
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads: %v", err)
 	}
@@ -188,9 +188,9 @@ func TestTrackBdVersion_UpgradeDetection(t *testing.T) {
 	// Reset global state for test isolation
 	ensureCleanGlobalState(t)
 
-	// Create temp .beads directory
+	// Create temp .binds directory
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads: %v", err)
 	}
@@ -246,9 +246,9 @@ func TestTrackBdVersion_UpgradeDetection(t *testing.T) {
 }
 
 func TestTrackBdVersion_SameVersion(t *testing.T) {
-	// Create temp .beads directory
+	// Create temp .binds directory
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads: %v", err)
 	}

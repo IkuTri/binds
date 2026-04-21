@@ -8,14 +8,14 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/configfile"
-	"github.com/steveyegge/beads/internal/utils"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/configfile"
+	"github.com/IkuTri/binds/internal/utils"
 )
 
 func CheckJSONLIntegrity(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Resolve JSONL path.
 	jsonlPath := ""

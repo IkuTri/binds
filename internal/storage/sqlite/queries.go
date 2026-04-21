@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // NOTE: createGraphEdgesFromIssueFields and createGraphEdgesFromUpdates removed

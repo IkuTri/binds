@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // Available backends with descriptions

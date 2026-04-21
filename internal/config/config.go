@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/spf13/viper"
-	"github.com/steveyegge/beads/internal/debug"
+	"github.com/IkuTri/binds/internal/debug"
 )
 
 // Sync trigger constants define when sync operations occur.

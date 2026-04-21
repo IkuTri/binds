@@ -11,12 +11,12 @@ import (
 	"slices"
 	"time"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/debug"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/ui"
-	"github.com/steveyegge/beads/internal/validation"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/debug"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/ui"
+	"github.com/IkuTri/binds/internal/validation"
 )
 
 // Incremental export thresholds

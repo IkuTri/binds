@@ -5,11 +5,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/steveyegge/beads/internal/routing"
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/storage/factory"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/utils"
+	"github.com/IkuTri/binds/internal/routing"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/storage/factory"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/utils"
 )
 
 // beadsDirOverride returns true if BEADS_DIR is explicitly set in the environment.

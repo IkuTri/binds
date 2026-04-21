@@ -18,7 +18,7 @@ func TestCheckStaleLockFiles(t *testing.T) {
 
 	t.Run("no lock files", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -31,7 +31,7 @@ func TestCheckStaleLockFiles(t *testing.T) {
 
 	t.Run("fresh bootstrap lock not stale", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -50,7 +50,7 @@ func TestCheckStaleLockFiles(t *testing.T) {
 
 	t.Run("stale bootstrap lock detected", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -74,7 +74,7 @@ func TestCheckStaleLockFiles(t *testing.T) {
 
 	t.Run("stale sync lock detected", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -98,7 +98,7 @@ func TestCheckStaleLockFiles(t *testing.T) {
 
 	t.Run("stale startlock detected", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -122,7 +122,7 @@ func TestCheckStaleLockFiles(t *testing.T) {
 
 	t.Run("multiple stale locks", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}

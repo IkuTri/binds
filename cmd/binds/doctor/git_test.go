@@ -17,10 +17,10 @@ func setupGitRepo(t *testing.T) string {
 	t.Helper()
 	dir := t.TempDir()
 
-	// Create .beads directory
-	beadsDir := filepath.Join(dir, ".beads")
+	// Create .binds directory
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
-		t.Fatalf("failed to create .beads directory: %v", err)
+		t.Fatalf("failed to create .binds directory: %v", err)
 	}
 
 	// Initialize git repo with 'main' as default branch (modern git convention)
@@ -70,9 +70,9 @@ func TestCheckMergeDriver(t *testing.T) {
 		{
 			name: "not a git repo",
 			setup: func(t *testing.T, dir string) {
-				// Just create .beads directory, no git
+				// Just create .binds directory, no git
 				// CheckMergeDriver uses global git detection
-				beadsDir := filepath.Join(dir, ".beads")
+				beadsDir := filepath.Join(dir, ".binds")
 				if err := os.MkdirAll(beadsDir, 0755); err != nil {
 					t.Fatal(err)
 				}
@@ -92,7 +92,7 @@ func TestCheckMergeDriver(t *testing.T) {
 			name: "correct config",
 			setup: func(t *testing.T, dir string) {
 				setupGitRepoInDir(t, dir)
-				cmd := exec.Command("git", "config", "merge.beads.driver", "bd merge %A %O %A %B")
+				cmd := exec.Command("git", "config", "merge.beads.driver", "binds merge %A %O %A %B")
 				cmd.Dir = dir
 				if err := cmd.Run(); err != nil {
 					t.Fatalf("failed to set git config: %v", err)
@@ -105,7 +105,7 @@ func TestCheckMergeDriver(t *testing.T) {
 			name: "incorrect config with old placeholders",
 			setup: func(t *testing.T, dir string) {
 				setupGitRepoInDir(t, dir)
-				cmd := exec.Command("git", "config", "merge.beads.driver", "bd merge %L %O %A %R")
+				cmd := exec.Command("git", "config", "merge.beads.driver", "binds merge %L %O %A %R")
 				cmd.Dir = dir
 				if err := cmd.Run(); err != nil {
 					t.Fatalf("failed to set git config: %v", err)
@@ -139,7 +139,7 @@ func TestCheckSyncBranchConfig(t *testing.T) {
 		expectedStatus string
 	}{
 		{
-			name: "no .beads directory",
+			name: "no .binds directory",
 			setup: func(t *testing.T, dir string) {
 				// Empty directory, no .beads
 			},
@@ -148,7 +148,7 @@ func TestCheckSyncBranchConfig(t *testing.T) {
 		{
 			name: "not a git repo",
 			setup: func(t *testing.T, dir string) {
-				beadsDir := filepath.Join(dir, ".beads")
+				beadsDir := filepath.Join(dir, ".binds")
 				if err := os.MkdirAll(beadsDir, 0755); err != nil {
 					t.Fatal(err)
 				}
@@ -190,7 +190,7 @@ func TestCheckSyncBranchHealth(t *testing.T) {
 			setup: func(t *testing.T, dir string) {
 				// CheckSyncBranchHealth uses global git.GetGitDir() detection
 				// which checks from current working directory, not the path parameter
-				beadsDir := filepath.Join(dir, ".beads")
+				beadsDir := filepath.Join(dir, ".binds")
 				if err := os.MkdirAll(beadsDir, 0755); err != nil {
 					t.Fatal(err)
 				}
@@ -258,10 +258,10 @@ func TestCheckSyncBranchHookCompatibility(t *testing.T) {
 func setupGitRepoInDir(t *testing.T, dir string) {
 	t.Helper()
 
-	// Create .beads directory
-	beadsDir := filepath.Join(dir, ".beads")
+	// Create .binds directory
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
-		t.Fatalf("failed to create .beads directory: %v", err)
+		t.Fatalf("failed to create .binds directory: %v", err)
 	}
 
 	// Initialize git repo with 'main' as default branch (modern git convention)
@@ -441,7 +441,7 @@ func TestCheckMergeDriver_PartiallyConfigured(t *testing.T) {
 			name: "merge driver with only two placeholders",
 			setup: func(t *testing.T, dir string) {
 				setupGitRepoInDir(t, dir)
-				cmd := exec.Command("git", "config", "merge.beads.driver", "bd merge %A %O")
+				cmd := exec.Command("git", "config", "merge.beads.driver", "binds merge %A %O")
 				cmd.Dir = dir
 				if err := cmd.Run(); err != nil {
 					t.Fatalf("failed to set git config: %v", err)
@@ -818,8 +818,8 @@ func TestCheckOrphanedIssues_NoBeadsDir(t *testing.T) {
 	if check.Status != StatusOK {
 		t.Errorf("expected status %q, got %q", StatusOK, check.Status)
 	}
-	if !strings.Contains(check.Message, "no .beads directory") {
-		t.Errorf("expected message about no .beads directory, got %q", check.Message)
+	if !strings.Contains(check.Message, "no .binds directory") {
+		t.Errorf("expected message about no .binds directory, got %q", check.Message)
 	}
 }
 
@@ -827,8 +827,8 @@ func TestCheckOrphanedIssues_NoDatabase(t *testing.T) {
 	tmpDir := t.TempDir()
 	setupGitRepoInDir(t, tmpDir)
 
-	// Create .beads directory but no database
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory but no database
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -847,8 +847,8 @@ func TestCheckOrphanedIssues_NoOpenIssues(t *testing.T) {
 	tmpDir := t.TempDir()
 	setupGitRepoInDir(t, tmpDir)
 
-	// Create .beads directory and database
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory and database
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -885,8 +885,8 @@ func TestCheckOrphanedIssues_OpenIssueNotInCommits(t *testing.T) {
 	tmpDir := t.TempDir()
 	setupGitRepoInDir(t, tmpDir)
 
-	// Create .beads directory and database
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory and database
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -935,8 +935,8 @@ func TestCheckOrphanedIssues_OpenIssueInCommit(t *testing.T) {
 	tmpDir := t.TempDir()
 	setupGitRepoInDir(t, tmpDir)
 
-	// Create .beads directory and database
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory and database
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -988,8 +988,8 @@ func TestCheckOrphanedIssues_ClosedIssueInCommit(t *testing.T) {
 	tmpDir := t.TempDir()
 	setupGitRepoInDir(t, tmpDir)
 
-	// Create .beads directory and database
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory and database
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -1036,8 +1036,8 @@ func TestCheckOrphanedIssues_HierarchicalIssueID(t *testing.T) {
 	tmpDir := t.TempDir()
 	setupGitRepoInDir(t, tmpDir)
 
-	// Create .beads directory and database
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory and database
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}

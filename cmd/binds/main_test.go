@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestAutoFlushOnExit tests that FlushManager.Shutdown() performs final flush before exit
@@ -202,10 +202,10 @@ func TestAutoFlushJSONLContent(t *testing.T) {
 		t.Logf("Contents of %s:", tmpDir)
 		for _, entry := range entries {
 			t.Logf("  - %s (isDir: %v)", entry.Name(), entry.IsDir())
-			if entry.IsDir() && entry.Name() == ".beads" {
-				beadsEntries, _ := os.ReadDir(filepath.Join(tmpDir, ".beads"))
+			if entry.IsDir() && entry.Name() == ".binds" {
+				beadsEntries, _ := os.ReadDir(filepath.Join(tmpDir, ".binds"))
 				for _, be := range beadsEntries {
-					t.Logf("    - .beads/%s", be.Name())
+					t.Logf("    - .binds/%s", be.Name())
 				}
 			}
 		}

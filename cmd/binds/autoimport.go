@@ -11,13 +11,13 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/debug"
-	"github.com/steveyegge/beads/internal/git"
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/syncbranch"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/utils"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/debug"
+	"github.com/IkuTri/binds/internal/git"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/syncbranch"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/utils"
 	"gopkg.in/yaml.v3"
 )
 

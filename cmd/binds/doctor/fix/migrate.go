@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // DatabaseVersion fixes database version mismatches by running bd migrate,
@@ -24,7 +24,7 @@ func DatabaseVersion(path string) error {
 	}
 
 	// Check if database exists - if not, run init instead of migrate
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	dbPath := filepath.Join(beadsDir, beads.CanonicalDatabaseName)
 	if cfg, err := configfile.Load(beadsDir); err == nil && cfg != nil && cfg.Database != "" {
 		dbPath = cfg.DatabasePath(beadsDir)

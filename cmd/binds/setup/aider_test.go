@@ -18,11 +18,11 @@ func TestAiderConfigTemplate(t *testing.T) {
 
 func TestAiderBeadsInstructions(t *testing.T) {
 	requiredContent := []string{
-		"bd ready",
-		"bd create",
-		"bd update",
-		"bd close",
-		"bd sync",
+		"binds ready",
+		"binds create",
+		"binds update",
+		"binds close",
+		"binds sync",
 		"/run",
 		"bug",
 		"feature",
@@ -41,10 +41,10 @@ func TestAiderReadmeTemplate(t *testing.T) {
 	requiredContent := []string{
 		"Aider + Beads Integration",
 		"/run",
-		"bd ready",
-		"bd create",
-		"bd close",
-		"bd sync",
+		"binds ready",
+		"binds create",
+		"binds close",
+		"binds sync",
 	}
 
 	for _, req := range requiredContent {

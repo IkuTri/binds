@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // legacyDeletionRecord represents a single deletion entry from the legacy deletions.jsonl manifest.
@@ -68,7 +68,7 @@ func MigrateTombstones(path string) error {
 		return err
 	}
 
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 	deletionsPath := filepath.Join(beadsDir, "deletions.jsonl")
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
 

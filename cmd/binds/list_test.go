@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/util"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/util"
 )
 
 // listTestHelper provides test setup and assertion methods
@@ -93,7 +93,7 @@ func (h *listTestHelper) assertAtMost(count, maxCount int, desc string) {
 
 func TestListCommandSuite(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 
 	t.Run("ListCommand", func(t *testing.T) {
@@ -221,7 +221,7 @@ func TestListCommandSuite(t *testing.T) {
 
 func TestListQueryCapabilitiesSuite(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 
@@ -462,7 +462,7 @@ func TestListQueryCapabilitiesSuite(t *testing.T) {
 // unstable ordering of root issues and children within the same priority level
 func TestStableTreeOrdering(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	store := newTestStore(t, testDB)
 	ctx := context.Background()
 
@@ -908,7 +908,7 @@ func TestParseTimeFlag(t *testing.T) {
 // TestListTimeBasedFilters tests the time-based scheduling filters (GH#820)
 func TestListTimeBasedFilters(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 
@@ -1082,7 +1082,7 @@ func TestListTimeBasedFilters(t *testing.T) {
 // TestHierarchicalChildren tests the --tree --parent functionality for showing all descendants
 func TestHierarchicalChildren(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	store := newTestStore(t, testDB)
 	ctx := context.Background()
 

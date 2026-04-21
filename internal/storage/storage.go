@@ -7,7 +7,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // ErrAlreadyClaimed is returned when attempting to claim an issue that is already

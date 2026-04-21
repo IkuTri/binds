@@ -6,13 +6,13 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 func TestRepairDeps_NoOrphans(t *testing.T) {
 	dir := t.TempDir()
-	dbPath := filepath.Join(dir, ".beads", "beads.db")
+	dbPath := filepath.Join(dir, ".binds", "beads.db")
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -77,7 +77,7 @@ func TestRepairDeps_NoOrphans(t *testing.T) {
 
 func TestRepairDeps_FindOrphans(t *testing.T) {
 	dir := t.TempDir()
-	dbPath := filepath.Join(dir, ".beads", "beads.db")
+	dbPath := filepath.Join(dir, ".binds", "beads.db")
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -193,7 +193,7 @@ func TestRepairDeps_FindOrphans(t *testing.T) {
 
 func TestRepairDeps_FixOrphans(t *testing.T) {
 	dir := t.TempDir()
-	dbPath := filepath.Join(dir, ".beads", "beads.db")
+	dbPath := filepath.Join(dir, ".binds", "beads.db")
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -307,7 +307,7 @@ func TestRepairDeps_FixOrphans(t *testing.T) {
 
 func TestRepairDeps_MultipleTypes(t *testing.T) {
 	dir := t.TempDir()
-	dbPath := filepath.Join(dir, ".beads", "beads.db")
+	dbPath := filepath.Join(dir, ".binds", "beads.db")
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
 		t.Fatal(err)
 	}

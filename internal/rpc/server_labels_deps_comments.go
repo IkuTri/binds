@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // lookupIssueMeta fetches title and assignee for mutation events.

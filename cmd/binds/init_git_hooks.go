@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steveyegge/beads/internal/git"
-	"github.com/steveyegge/beads/internal/ui"
+	"github.com/IkuTri/binds/internal/git"
+	"github.com/IkuTri/binds/internal/ui"
 )
 
 
@@ -656,7 +656,7 @@ func printJJAliasInstructions() {
 	fmt.Printf("  %s\n", ui.RenderAccent("[aliases]"))
 	fmt.Printf("  %s\n", ui.RenderAccent(`push = ["util", "exec", "--", "sh", "-c", "binds sync --flush-only && jj git push \"$@\"", ""]`))
 	fmt.Printf("\nThen use %s instead of %s\n\n", ui.RenderAccent("jj push"), ui.RenderAccent("jj git push"))
-	fmt.Printf("For more details, see: https://github.com/steveyegge/beads/blob/main/docs/JUJUTSU.md\n\n")
+	fmt.Printf("For more details, see: https://github.com/IkuTri/binds/blob/main/docs/JUJUTSU.md\n\n")
 }
 
 // installMergeDriver configures git to use binds merge for JSONL files

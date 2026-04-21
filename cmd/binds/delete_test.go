@@ -13,8 +13,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 func TestReadIssueIDsFromFile(t *testing.T) {
@@ -115,7 +115,7 @@ func TestBulkDeleteNoResurrection(t *testing.T) {
 	}
 
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	testDB := filepath.Join(beadsDir, "beads.db")
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
 
@@ -280,7 +280,7 @@ func TestCreateTombstoneWrapper(t *testing.T) {
 	}
 
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	testDB := filepath.Join(beadsDir, "beads.db")
 
 	s := newTestStore(t, testDB)
@@ -429,7 +429,7 @@ func TestDeleteIssueWrapper(t *testing.T) {
 	}
 
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	testDB := filepath.Join(beadsDir, "beads.db")
 
 	s := newTestStore(t, testDB)

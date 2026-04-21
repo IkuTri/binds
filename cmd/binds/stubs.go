@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/storage"
+	"github.com/IkuTri/binds/internal/storage"
 )
 
 // stubs.go holds minimal stubs for functions/vars deleted during the beads

@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/storage"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/storage"
 )
 
 // Sync mode constants - re-exported from internal/config for backward compatibility.

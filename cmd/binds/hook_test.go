@@ -30,17 +30,17 @@ func TestGetWorktreeHash(t *testing.T) {
 }
 
 func TestExportStatePaths(t *testing.T) {
-	beadsDir := "/tmp/test/.beads"
+	beadsDir := "/tmp/test/.binds"
 	worktreeRoot := "/tmp/test/worktree"
 
 	stateDir := getExportStateDir(beadsDir)
-	if stateDir != "/tmp/test/.beads/export-state" {
-		t.Errorf("getExportStateDir() = %s, want /tmp/test/.beads/export-state", stateDir)
+	if stateDir != "/tmp/test/.binds/export-state" {
+		t.Errorf("getExportStateDir() = %s, want /tmp/test/.binds/export-state", stateDir)
 	}
 
 	statePath := getExportStatePath(beadsDir, worktreeRoot)
 	expectedHash := getWorktreeHash(worktreeRoot)
-	expectedPath := "/tmp/test/.beads/export-state/" + expectedHash + ".json"
+	expectedPath := "/tmp/test/.binds/export-state/" + expectedHash + ".json"
 	if statePath != expectedPath {
 		t.Errorf("getExportStatePath() = %s, want %s", statePath, expectedPath)
 	}
@@ -48,7 +48,7 @@ func TestExportStatePaths(t *testing.T) {
 
 func TestSaveAndLoadExportState(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	worktreeRoot := tmpDir
 
 	// Initially no state
@@ -143,7 +143,7 @@ func TestExportStateJSON(t *testing.T) {
 
 func TestUpdateExportStateCommit(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	worktreeRoot := tmpDir
 
 	// Create initial state

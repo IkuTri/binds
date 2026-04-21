@@ -10,15 +10,15 @@ import (
 
 	_ "github.com/ncruces/go-sqlite3/driver"
 	_ "github.com/ncruces/go-sqlite3/embed"
-	"github.com/steveyegge/beads/cmd/binds/doctor/fix"
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/git"
-	"github.com/steveyegge/beads/internal/syncbranch"
+	"github.com/IkuTri/binds/cmd/binds/doctor/fix"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/git"
+	"github.com/IkuTri/binds/internal/syncbranch"
 )
 
 // CheckInstallation verifies that .beads directory exists
 func CheckInstallation(path string) DoctorCheck {
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
 		// Auto-detect prefix from directory name
 		prefix := filepath.Base(path)
@@ -42,7 +42,7 @@ func CheckInstallation(path string) DoctorCheck {
 // CheckMultipleDatabases checks for multiple database files in .beads directory
 func CheckMultipleDatabases(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Find all .db files (excluding backups and vc.db)
 	files, err := filepath.Glob(filepath.Join(beadsDir, "*.db"))
@@ -91,7 +91,7 @@ func CheckMultipleDatabases(path string) DoctorCheck {
 // CheckPermissions verifies that .beads directory and database are readable/writable
 func CheckPermissions(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Check if .beads/ is writable
 	testFile := filepath.Join(beadsDir, ".doctor-test-write")
@@ -147,7 +147,7 @@ func CheckPermissions(path string) DoctorCheck {
 // In sync-branch mode, JSONL files are intentionally untracked in working branches
 // and only committed to the dedicated sync branch (GH#858).
 func CheckUntrackedBeadsFiles(path string) DoctorCheck {
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 
 	// Skip if .beads doesn't exist
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {

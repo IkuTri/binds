@@ -11,11 +11,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/routing"
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/utils"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/routing"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/utils"
 )
 
 // OrphanHandling is an alias for storage.OrphanHandling for backward compatibility.

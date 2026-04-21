@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 const testActor = "test"
@@ -18,12 +18,12 @@ const testActor = "test"
 func TestJSONLIntegrityValidation(t *testing.T) {
 	// Create temp directory
 	tmpDir := t.TempDir()
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
-	jsonlPath := filepath.Join(tmpDir, ".beads", "issues.jsonl")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
+	jsonlPath := filepath.Join(tmpDir, ".binds", "issues.jsonl")
 	
-	// Ensure .beads directory exists
+	// Ensure .binds directory exists
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
-		t.Fatalf("failed to create .beads directory: %v", err)
+		t.Fatalf("failed to create .binds directory: %v", err)
 	}
 	
 	// Create database
@@ -184,11 +184,11 @@ func TestJSONLIntegrityValidation(t *testing.T) {
 func TestImportClearsExportHashes(t *testing.T) {
 	// Create temp directory
 	tmpDir := t.TempDir()
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
 	
-	// Ensure .beads directory exists
+	// Ensure .binds directory exists
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
-		t.Fatalf("failed to create .beads directory: %v", err)
+		t.Fatalf("failed to create .binds directory: %v", err)
 	}
 	
 	// Create database
@@ -271,12 +271,12 @@ func TestImportClearsExportHashes(t *testing.T) {
 func TestExportPopulatesExportHashes(t *testing.T) {
 	// Create temp directory
 	tmpDir := t.TempDir()
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
-	jsonlPath := filepath.Join(tmpDir, ".beads", "issues.jsonl")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
+	jsonlPath := filepath.Join(tmpDir, ".binds", "issues.jsonl")
 
-	// Ensure .beads directory exists
+	// Ensure .binds directory exists
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
-		t.Fatalf("failed to create .beads directory: %v", err)
+		t.Fatalf("failed to create .binds directory: %v", err)
 	}
 
 	// Create database

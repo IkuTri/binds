@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/beads"
+	"github.com/IkuTri/binds/internal/beads"
 )
 
 func TestTruncateText(t *testing.T) {

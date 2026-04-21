@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // TestBackendListText tests `bd backend list` text output.
@@ -37,7 +37,7 @@ func TestBackendListText(t *testing.T) {
 	if !strings.Contains(output, "Available backends") {
 		t.Error("output should contain 'Available backends' header")
 	}
-	if !strings.Contains(output, "bd init --backend") {
+	if !strings.Contains(output, "binds init --backend") {
 		t.Error("output should contain usage hint")
 	}
 }
@@ -88,7 +88,7 @@ func TestBackendListJSON(t *testing.T) {
 func TestBackendShowSQLite(t *testing.T) {
 	// Create temp directory with sqlite backend
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -149,7 +149,7 @@ func TestBackendShowSQLite(t *testing.T) {
 func TestBackendShowJSONL(t *testing.T) {
 	// Create temp directory with no database (jsonl only mode)
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}

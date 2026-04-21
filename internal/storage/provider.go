@@ -4,7 +4,7 @@ package storage
 import (
 	"context"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // StorageProvider wraps a Storage interface to provide IssueProvider functionality.

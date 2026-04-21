@@ -35,7 +35,7 @@ func runGit(t *testing.T, dir string, args ...string) string {
 
 func initRepo(t *testing.T, dir string, branch string) {
 	t.Helper()
-	_ = os.MkdirAll(filepath.Join(dir, ".beads"), 0755)
+	_ = os.MkdirAll(filepath.Join(dir, ".binds"), 0755)
 	runGit(t, dir, "init", "-b", branch)
 	runGit(t, dir, "config", "user.email", "test@test.com")
 	runGit(t, dir, "config", "user.name", "Test User")

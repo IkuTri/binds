@@ -33,7 +33,7 @@ func TestIntegrityChecks_NoBeadsDir(t *testing.T) {
 }
 
 // TestIntegrityChecks_EmptyBeadsDir verifies all integrity check functions return OK
-// when .beads directory exists but is empty (no database/files to check).
+// when .binds directory exists but is empty (no database/files to check).
 func TestIntegrityChecks_EmptyBeadsDir(t *testing.T) {
 	checks := []struct {
 		name string
@@ -48,7 +48,7 @@ func TestIntegrityChecks_EmptyBeadsDir(t *testing.T) {
 	for _, tc := range checks {
 		t.Run(tc.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.Mkdir(beadsDir, 0755); err != nil {
 				t.Fatal(err)
 			}
@@ -66,7 +66,7 @@ func TestIntegrityChecks_EmptyBeadsDir(t *testing.T) {
 // deletions.jsonl file exists and should trigger a warning.
 func TestCheckDeletionsManifest_LegacyFile(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}

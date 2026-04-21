@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
 )
 
 var repoCmd = &cobra.Command{

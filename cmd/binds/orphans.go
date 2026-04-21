@@ -8,10 +8,10 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/cmd/binds/doctor"
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/ui"
+	"github.com/IkuTri/binds/cmd/binds/doctor"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/ui"
 )
 
 // doctorFindOrphanedIssues is the function used to find orphaned issues.

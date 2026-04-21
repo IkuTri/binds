@@ -8,11 +8,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/debug"
-	"github.com/steveyegge/beads/internal/storage/memory"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/utils"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/debug"
+	"github.com/IkuTri/binds/internal/storage/memory"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/utils"
 )
 
 // initializeNoDbMode sets up in-memory storage from JSONL file

@@ -12,9 +12,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/git"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/git"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
 )
 
 // testIDCounter ensures unique IDs across all test runs
@@ -34,7 +34,7 @@ func generateUniqueTestID(t *testing.T, prefix string, index int) string {
 const windowsOS = "windows"
 
 // initConfigForTest initializes viper config for a test and ensures cleanup.
-// main.go's init() calls config.Initialize() which picks up the real .beads/config.yaml.
+// main.go's init() calls config.Initialize() which picks up the real .binds/config.yaml.
 // TestMain resets viper, but any test calling config.Initialize() re-loads the real config.
 // This helper ensures viper is reset after the test completes, preventing state pollution
 // (e.g., sync.mode=dolt-native leaking into JSONL export tests).
@@ -86,7 +86,7 @@ func failIfProductionDatabase(t *testing.T, dbPath string) {
 		return
 	}
 
-	// Check if database is in .beads/ directory of this git repository
+	// Check if database is in .binds/ directory of this git repository
 	beadsPath := ""
 	gitDirAbs, err := filepath.Abs(gitDir)
 	if err != nil {
@@ -94,13 +94,13 @@ func failIfProductionDatabase(t *testing.T, dbPath string) {
 		return
 	}
 
-	// The .beads directory should be at the root of the git repository
+	// The .binds directory should be at the root of the git repository
 	// For worktrees, gitDir points to the main repo's .git directory
 	repoRoot := filepath.Dir(gitDirAbs)
-	beadsPath = filepath.Join(repoRoot, ".beads")
+	beadsPath = filepath.Join(repoRoot, ".binds")
 
 	if strings.HasPrefix(absPath, beadsPath) {
-		// Database is in .beads/ directory of a git repository
+		// Database is in .binds/ directory of a git repository
 		// This is ONLY allowed if we're in a temp directory
 		if !strings.Contains(absPath, os.TempDir()) {
 			t.Fatalf("PRODUCTION DATABASE POLLUTION DETECTED (bd-2c5a):\n"+

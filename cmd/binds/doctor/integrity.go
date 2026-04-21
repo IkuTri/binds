@@ -13,11 +13,11 @@ import (
 
 	_ "github.com/ncruces/go-sqlite3/driver"
 	_ "github.com/ncruces/go-sqlite3/embed"
-	"github.com/steveyegge/beads/cmd/binds/doctor/fix"
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/configfile"
-	"github.com/steveyegge/beads/internal/git"
-	storagefactory "github.com/steveyegge/beads/internal/storage/factory"
+	"github.com/IkuTri/binds/cmd/binds/doctor/fix"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/configfile"
+	"github.com/IkuTri/binds/internal/git"
+	storagefactory "github.com/IkuTri/binds/internal/storage/factory"
 )
 
 // CheckIDFormat checks whether issues use hash-based or sequential IDs
@@ -120,7 +120,7 @@ func CheckIDFormat(path string) DoctorCheck {
 // CheckDependencyCycles checks for circular dependencies in the issue graph
 func CheckDependencyCycles(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	dbPath := filepath.Join(beadsDir, beads.CanonicalDatabaseName)
 
 	// If no database, skip this check
@@ -217,7 +217,7 @@ func CheckDependencyCycles(path string) DoctorCheck {
 // Reports: total tombstones, expiring soon (within 7 days), already expired
 func CheckTombstones(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	dbPath := filepath.Join(beadsDir, beads.CanonicalDatabaseName)
 
 	// Skip if database doesn't exist
@@ -316,7 +316,7 @@ func CheckTombstones(path string) DoctorCheck {
 // CheckDeletionsManifest checks the status of deletions.jsonl and suggests migration to tombstones
 func CheckDeletionsManifest(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Skip if .beads doesn't exist
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {

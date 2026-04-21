@@ -53,7 +53,7 @@ func runBDSideDB(t *testing.T, exe, dir, dbPath string, args ...string) (string,
 	cmd.Dir = dir
 	cmd.Env = append(os.Environ(),
 		"BEADS_NO_DAEMON=1",
-		"BEADS_DIR="+filepath.Join(dir, ".beads"),
+		"BEADS_DIR="+filepath.Join(dir, ".binds"),
 	)
 	out, err := cmd.CombinedOutput()
 	return string(out), err
@@ -68,17 +68,17 @@ func TestDoctorRepair_CorruptDatabase_RebuildFromJSONL(t *testing.T) {
 
 	bdExe := buildBDForTest(t)
 	ws := mkTmpDirInTmp(t, "bd-doctor-repair-*")
-	dbPath := filepath.Join(ws, ".beads", "beads.db")
-	jsonlPath := filepath.Join(ws, ".beads", "issues.jsonl")
+	dbPath := filepath.Join(ws, ".binds", "beads.db")
+	jsonlPath := filepath.Join(ws, ".binds", "issues.jsonl")
 
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "init", "--prefix", "chaos", "--quiet"); err != nil {
-		t.Fatalf("bd init failed: %v", err)
+		t.Fatalf("binds init failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "create", "Chaos issue", "-p", "1"); err != nil {
-		t.Fatalf("bd create failed: %v", err)
+		t.Fatalf("binds create failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "export", "-o", jsonlPath, "--force"); err != nil {
-		t.Fatalf("bd export failed: %v", err)
+		t.Fatalf("binds export failed: %v", err)
 	}
 
 	// Corrupt the SQLite file (truncate) and verify doctor reports an integrity error.
@@ -114,13 +114,13 @@ func TestDoctorRepair_CorruptDatabase_RebuildFromJSONL(t *testing.T) {
 	// Attempt auto-repair.
 	out, err = runBDSideDB(t, bdExe, ws, dbPath, "doctor", "--fix", "--yes")
 	if err != nil {
-		t.Fatalf("bd doctor --fix failed: %v\n%s", err, out)
+		t.Fatalf("binds doctor --fix failed: %v\n%s", err, out)
 	}
 
 	// Doctor should now pass.
 	out, err = runBDSideDB(t, bdExe, ws, dbPath, "doctor", "--json")
 	if err != nil {
-		t.Fatalf("bd doctor after fix failed: %v\n%s", err, out)
+		t.Fatalf("binds doctor after fix failed: %v\n%s", err, out)
 	}
 	jsonStart = strings.Index(out, "{")
 	if jsonStart < 0 {
@@ -137,7 +137,7 @@ func TestDoctorRepair_CorruptDatabase_RebuildFromJSONL(t *testing.T) {
 	// Data should still be present.
 	out, err = runBDSideDB(t, bdExe, ws, dbPath, "list", "--json")
 	if err != nil {
-		t.Fatalf("bd list failed after repair: %v\n%s", err, out)
+		t.Fatalf("binds list failed after repair: %v\n%s", err, out)
 	}
 	jsonStart = strings.Index(out, "[")
 	if jsonStart < 0 {

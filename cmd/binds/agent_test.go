@@ -54,9 +54,9 @@ func TestFormatTimeOrNil(t *testing.T) {
 func TestParseAgentIDFields(t *testing.T) {
 	// Set up config with agent roles for testing
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
-		t.Fatalf("failed to create .beads directory: %v", err)
+		t.Fatalf("failed to create .binds directory: %v", err)
 	}
 
 	// Write config with test agent roles

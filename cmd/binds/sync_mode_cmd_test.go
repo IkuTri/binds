@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
 )
 
 // TestSyncModeListText tests `bd sync mode list` text output.
@@ -37,7 +37,7 @@ func TestSyncModeListText(t *testing.T) {
 	}
 
 	// Verify usage hint
-	if !strings.Contains(output, "bd sync mode set") {
+	if !strings.Contains(output, "binds sync mode set") {
 		t.Error("output should contain usage hint")
 	}
 }
@@ -89,7 +89,7 @@ func TestSyncModeCurrentWithStore(t *testing.T) {
 	ctx := context.Background()
 	tmpDir := t.TempDir()
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -252,7 +252,7 @@ func TestSyncModeSetValidModes(t *testing.T) {
 			ctx := context.Background()
 			tmpDir := t.TempDir()
 
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.MkdirAll(beadsDir, 0755); err != nil {
 				t.Fatalf("failed to create .beads dir: %v", err)
 			}
@@ -283,7 +283,7 @@ func TestSyncModeSetInvalidMode(t *testing.T) {
 	ctx := context.Background()
 	tmpDir := t.TempDir()
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}

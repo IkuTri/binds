@@ -13,8 +13,8 @@ import (
 	_ "github.com/ncruces/go-sqlite3/driver"
 	_ "github.com/ncruces/go-sqlite3/embed"
 	"github.com/spf13/viper"
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // validRoutingModes are the allowed values for routing.mode
@@ -71,7 +71,7 @@ func CheckConfigValues(repoPath string) DoctorCheck {
 
 // findConfigPath locates config.yaml in standard locations.
 func findConfigPath(repoPath string) string {
-	configPath := filepath.Join(repoPath, ".beads", "config.yaml")
+	configPath := filepath.Join(repoPath, ".binds", "config.yaml")
 	if _, err := os.Stat(configPath); err == nil {
 		return configPath
 	}
@@ -82,7 +82,7 @@ func findConfigPath(repoPath string) string {
 		}
 	}
 	if homeDir, err := os.UserHomeDir(); err == nil {
-		homeConfigPath := filepath.Join(homeDir, ".beads", "config.yaml")
+		homeConfigPath := filepath.Join(homeDir, ".binds", "config.yaml")
 		if _, err := os.Stat(homeConfigPath); err == nil {
 			return homeConfigPath
 		}
@@ -337,7 +337,7 @@ func expandPath(path string) string {
 func checkMetadataConfigValues(repoPath string) []string {
 	var issues []string
 
-	beadsDir := filepath.Join(repoPath, ".beads")
+	beadsDir := filepath.Join(repoPath, ".binds")
 	cfg, err := configfile.Load(beadsDir)
 	if err != nil {
 		issues = append(issues, fmt.Sprintf("metadata.json: failed to load: %v", err))
@@ -396,7 +396,7 @@ func checkMetadataConfigValues(repoPath string) []string {
 func checkDatabaseConfigValues(repoPath string) []string {
 	var issues []string
 
-	beadsDir := filepath.Join(repoPath, ".beads")
+	beadsDir := filepath.Join(repoPath, ".binds")
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
 		return issues // No .beads directory, nothing to check
 	}

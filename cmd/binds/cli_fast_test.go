@@ -162,7 +162,7 @@ func runBDInProcess(t *testing.T, dir string, args ...string) string {
 	stderr := errBuf.String()
 	
 	if err != nil {
-		t.Fatalf("bd %v failed: %v\nStdout: %s\nStderr: %s", args, err, stdout, stderr)
+		t.Fatalf("binds %v failed: %v\nStdout: %s\nStderr: %s", args, err, stdout, stderr)
 	}
 	
 	// Return only stdout (stderr contains warnings that break JSON parsing)
@@ -697,7 +697,7 @@ func runBDExec(t *testing.T, dir string, args ...string) string {
 	
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		t.Fatalf("bd %v failed: %v\nOutput: %s", args, err, out)
+		t.Fatalf("binds %v failed: %v\nOutput: %s", args, err, out)
 	}
 	return string(out)
 }

@@ -10,11 +10,11 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads"
-	internalbeads "github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/rpc"
-	"github.com/steveyegge/beads/internal/syncbranch"
+	"github.com/IkuTri/binds"
+	internalbeads "github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/rpc"
+	"github.com/IkuTri/binds/internal/syncbranch"
 )
 
 // isDaemonAutoSyncing checks if daemon is running with auto-commit and auto-push enabled.

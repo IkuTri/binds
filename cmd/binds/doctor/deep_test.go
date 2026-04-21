@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-// TestRunDeepValidation_NoBeadsDir verifies deep validation handles missing .beads directory
+// TestRunDeepValidation_NoBeadsDir verifies deep validation handles missing .binds directory
 func TestRunDeepValidation_NoBeadsDir(t *testing.T) {
 	tmpDir := t.TempDir()
 	result := RunDeepValidation(tmpDir)
@@ -20,10 +20,10 @@ func TestRunDeepValidation_NoBeadsDir(t *testing.T) {
 	}
 }
 
-// TestRunDeepValidation_EmptyBeadsDir verifies deep validation with empty .beads directory
+// TestRunDeepValidation_EmptyBeadsDir verifies deep validation with empty .binds directory
 func TestRunDeepValidation_EmptyBeadsDir(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -42,7 +42,7 @@ func TestRunDeepValidation_EmptyBeadsDir(t *testing.T) {
 // TestRunDeepValidation_WithDatabase verifies deep validation with a basic database
 func TestRunDeepValidation_WithDatabase(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -105,7 +105,7 @@ func TestRunDeepValidation_WithDatabase(t *testing.T) {
 // TestCheckParentConsistency_OrphanedDeps verifies detection of orphaned parent-child deps
 func TestCheckParentConsistency_OrphanedDeps(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -157,7 +157,7 @@ func TestCheckParentConsistency_OrphanedDeps(t *testing.T) {
 // TestCheckEpicCompleteness_CompletedEpic verifies detection of closeable epics
 func TestCheckEpicCompleteness_CompletedEpic(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -217,7 +217,7 @@ func TestCheckEpicCompleteness_CompletedEpic(t *testing.T) {
 // TestCheckMailThreadIntegrity_ValidThreads verifies valid thread references pass
 func TestCheckMailThreadIntegrity_ValidThreads(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}

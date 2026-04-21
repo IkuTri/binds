@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 func TestReadySuite(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 
@@ -283,7 +283,7 @@ func TestReadyCommandInit(t *testing.T) {
 // GH#820: Tests for defer_until filtering in ready work
 func TestReadyWorkDeferUntil(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 
@@ -386,7 +386,7 @@ func TestReadyWorkDeferUntil(t *testing.T) {
 
 func TestReadyWorkUnassigned(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 

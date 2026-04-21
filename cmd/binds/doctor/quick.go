@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/git"
-	"github.com/steveyegge/beads/internal/syncbranch"
+	"github.com/IkuTri/binds/internal/git"
+	"github.com/IkuTri/binds/internal/syncbranch"
 )
 
 // CheckSyncBranchQuick does a fast check for sync-branch configuration.

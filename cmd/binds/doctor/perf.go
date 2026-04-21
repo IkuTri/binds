@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steveyegge/beads/internal/beads"
+	"github.com/IkuTri/binds/internal/beads"
 )
 
 var cpuProfileFile *os.File
@@ -22,7 +22,7 @@ func RunPerformanceDiagnostics(path string) {
 
 	// Check if .beads directory exists
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
 		fmt.Fprintf(os.Stderr, "Error: No .binds/ directory found at %s\n", path)
 		fmt.Fprintf(os.Stderr, "Run 'binds init' to initialize beads\n")
@@ -108,7 +108,7 @@ func CollectPlatformInfo(path string) map[string]string {
 
 	// SQLite version - try to find database
 	// Follow redirect to resolve actual beads directory
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	dbPath := filepath.Join(beadsDir, beads.CanonicalDatabaseName)
 	db, err := sql.Open("sqlite3", "file:"+dbPath+"?mode=ro")
 	if err == nil {

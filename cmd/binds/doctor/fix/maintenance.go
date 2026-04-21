@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steveyegge/beads/internal/configfile"
-	"github.com/steveyegge/beads/internal/storage/factory"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/configfile"
+	"github.com/IkuTri/binds/internal/storage/factory"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // CleanupResult contains the results of a cleanup operation
@@ -31,7 +31,7 @@ func StaleClosedIssues(path string) error {
 		return err
 	}
 
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Load config and check if cleanup is enabled
 	cfg, err := configfile.Load(beadsDir)
@@ -113,7 +113,7 @@ func ExpiredTombstones(path string) error {
 		return err
 	}
 
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
 
 	if _, err := os.Stat(jsonlPath); os.IsNotExist(err) {
@@ -198,7 +198,7 @@ func PatrolPollution(path string) error {
 		return err
 	}
 
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
 
 	if _, err := os.Stat(jsonlPath); os.IsNotExist(err) {

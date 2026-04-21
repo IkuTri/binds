@@ -9,7 +9,7 @@ import (
 func TestCheckStaleClosedIssues_NoDatabase(t *testing.T) {
 	// Create temp directory with .beads but no database
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -30,7 +30,7 @@ func TestCheckStaleClosedIssues_NoDatabase(t *testing.T) {
 func TestCheckExpiredTombstones_NoJSONL(t *testing.T) {
 	// Create temp directory with .beads but no JSONL
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -51,7 +51,7 @@ func TestCheckExpiredTombstones_NoJSONL(t *testing.T) {
 func TestCheckExpiredTombstones_EmptyJSONL(t *testing.T) {
 	// Create temp directory with .beads and empty JSONL
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -74,7 +74,7 @@ func TestCheckExpiredTombstones_EmptyJSONL(t *testing.T) {
 func TestCheckCompactionCandidates_NoDatabase(t *testing.T) {
 	// Create temp directory with .beads but no database
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -95,7 +95,7 @@ func TestCheckCompactionCandidates_NoDatabase(t *testing.T) {
 func TestCheckStaleMQFiles_NoMQDirectory(t *testing.T) {
 	// Create temp directory with .beads but no mq subdirectory
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -117,11 +117,11 @@ func TestCheckStaleMQFiles_NoMQDirectory(t *testing.T) {
 }
 
 func TestCheckStaleMQFiles_EmptyMQDirectory(t *testing.T) {
-	// Create temp directory with .beads/mq but no JSON files
+	// Create temp directory with .binds/mq but no JSON files
 	tmpDir := t.TempDir()
-	mqDir := filepath.Join(tmpDir, ".beads", "mq")
+	mqDir := filepath.Join(tmpDir, ".binds", "mq")
 	if err := os.MkdirAll(mqDir, 0755); err != nil {
-		t.Fatalf("failed to create .beads/mq dir: %v", err)
+		t.Fatalf("failed to create .binds/mq dir: %v", err)
 	}
 
 	check := CheckStaleMQFiles(tmpDir)
@@ -132,11 +132,11 @@ func TestCheckStaleMQFiles_EmptyMQDirectory(t *testing.T) {
 }
 
 func TestCheckStaleMQFiles_WithJSONFiles(t *testing.T) {
-	// Create temp directory with .beads/mq containing JSON files
+	// Create temp directory with .binds/mq containing JSON files
 	tmpDir := t.TempDir()
-	mqDir := filepath.Join(tmpDir, ".beads", "mq")
+	mqDir := filepath.Join(tmpDir, ".binds", "mq")
 	if err := os.MkdirAll(mqDir, 0755); err != nil {
-		t.Fatalf("failed to create .beads/mq dir: %v", err)
+		t.Fatalf("failed to create .binds/mq dir: %v", err)
 	}
 
 	// Create some stale MQ files
@@ -155,7 +155,7 @@ func TestCheckStaleMQFiles_WithJSONFiles(t *testing.T) {
 	if check.Status != StatusWarning {
 		t.Errorf("expected status Warning for mq dir with files, got %q", check.Status)
 	}
-	if check.Message != "2 stale .beads/mq/*.json file(s)" {
+	if check.Message != "2 stale .binds/mq/*.json file(s)" {
 		t.Errorf("expected message about 2 stale files, got %q", check.Message)
 	}
 	if check.Fix == "" {
@@ -164,11 +164,11 @@ func TestCheckStaleMQFiles_WithJSONFiles(t *testing.T) {
 }
 
 func TestFixStaleMQFiles_RemovesDirectory(t *testing.T) {
-	// Create temp directory with .beads/mq containing JSON files
+	// Create temp directory with .binds/mq containing JSON files
 	tmpDir := t.TempDir()
-	mqDir := filepath.Join(tmpDir, ".beads", "mq")
+	mqDir := filepath.Join(tmpDir, ".binds", "mq")
 	if err := os.MkdirAll(mqDir, 0755); err != nil {
-		t.Fatalf("failed to create .beads/mq dir: %v", err)
+		t.Fatalf("failed to create .binds/mq dir: %v", err)
 	}
 
 	// Create a stale MQ file
@@ -202,7 +202,7 @@ func TestFixStaleMQFiles_RemovesDirectory(t *testing.T) {
 func TestFixStaleMQFiles_NoDirectory(t *testing.T) {
 	// Create temp directory with .beads but no mq subdirectory
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}

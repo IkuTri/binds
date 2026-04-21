@@ -7,17 +7,17 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/git"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/git"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestMultiRepoPathResolutionCWDInvariant verifies that path resolution for
 // repos.additional produces the same absolute paths regardless of CWD.
 //
-// The bug (oss-lbp): Running from .beads/ caused paths like "oss/" to become
-// ".beads/oss/" instead of "{repo}/oss/". This test ensures the fix works
+// The bug (oss-lbp): Running from .binds/ caused paths like "oss/" to become
+// ".binds/oss/" instead of "{repo}/oss/". This test ensures the fix works
 // by verifying resolution from multiple CWDs produces identical results.
 //
 // Covers: T040-T042
@@ -43,8 +43,8 @@ func TestMultiRepoPathResolutionCWDInvariant(t *testing.T) {
 		t.Fatalf("failed to setup git repo: %v", err)
 	}
 
-	// Create .beads directory structure
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory structure
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -57,7 +57,7 @@ func TestMultiRepoPathResolutionCWDInvariant(t *testing.T) {
 
 	// Create oss/ directory (the multi-repo target)
 	ossDir := filepath.Join(tmpDir, "oss")
-	ossBeadsDir := filepath.Join(ossDir, ".beads")
+	ossBeadsDir := filepath.Join(ossDir, ".binds")
 	if err := os.MkdirAll(ossBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create oss/.beads dir: %v", err)
 	}
@@ -130,7 +130,7 @@ func TestMultiRepoPathResolutionCWDInvariant(t *testing.T) {
 		t.Logf("ConfigFileUsed() = %q", configUsed)
 	})
 
-	// T041: Test from .beads/ directory (the bug trigger location)
+	// T041: Test from .binds/ directory (the bug trigger location)
 	t.Run("T041_from_beads_directory", func(t *testing.T) {
 		if err := os.Chdir(beadsDir); err != nil {
 			t.Fatalf("chdir to .beads failed: %v", err)
@@ -156,7 +156,7 @@ func TestMultiRepoPathResolutionCWDInvariant(t *testing.T) {
 			t.Errorf("ConfigFileUsed() = %q, want %q", configUsed, expectedConfig)
 		}
 
-		t.Logf("From .beads/: additional[0] = %q", multiRepo.Additional[0])
+		t.Logf("From .binds/: additional[0] = %q", multiRepo.Additional[0])
 		t.Logf("ConfigFileUsed() = %q", configUsed)
 	})
 
@@ -217,14 +217,14 @@ func TestExportToMultiRepoCWDInvariant(t *testing.T) {
 		t.Fatalf("failed to setup git repo: %v", err)
 	}
 
-	// Create .beads directory
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
 
-	// Create oss/.beads directory
-	ossBeadsDir := filepath.Join(tmpDir, "oss", ".beads")
+	// Create oss/.binds directory
+	ossBeadsDir := filepath.Join(tmpDir, "oss", ".binds")
 	if err := os.MkdirAll(ossBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create oss/.beads dir: %v", err)
 	}
@@ -299,7 +299,7 @@ func TestExportToMultiRepoCWDInvariant(t *testing.T) {
 			t.Fatal("ExportToMultiRepo returned nil results")
 		}
 
-		// The export should create issues.jsonl in oss/.beads/
+		// The export should create issues.jsonl in oss/.binds/
 		expectedPath := filepath.Join(ossBeadsDir, "issues.jsonl")
 		if _, err := os.Stat(expectedPath); os.IsNotExist(err) {
 			t.Errorf("expected %s to exist after export from %s", expectedPath, testCwd)
@@ -314,13 +314,13 @@ func TestExportToMultiRepoCWDInvariant(t *testing.T) {
 		t.Logf("Export from repo root created: %s", path)
 	})
 
-	// Test from .beads/ directory
+	// Test from .binds/ directory
 	t.Run("export_from_beads_dir", func(t *testing.T) {
 		path := runExportTest(t, beadsDir)
-		t.Logf("Export from .beads/ created: %s", path)
+		t.Logf("Export from .binds/ created: %s", path)
 
-		// Key assertion: should NOT create .beads/oss/.beads/issues.jsonl
-		badPath := filepath.Join(beadsDir, "oss", ".beads", "issues.jsonl")
+		// Key assertion: should NOT create .binds/oss/.binds/issues.jsonl
+		badPath := filepath.Join(beadsDir, "oss", ".binds", "issues.jsonl")
 		if _, err := os.Stat(badPath); err == nil {
 			t.Errorf("BUG: export created %s (CWD-relative path)", badPath)
 		}
@@ -371,14 +371,14 @@ func TestSyncModePathResolution(t *testing.T) {
 			t.Fatalf("failed to setup git repo: %v", err)
 		}
 
-		// Create .beads directory
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		// Create .binds directory
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("failed to create .beads dir: %v", err)
 		}
 
-		// Create oss/.beads directory
-		ossBeadsDir := filepath.Join(tmpDir, "oss", ".beads")
+		// Create oss/.binds directory
+		ossBeadsDir := filepath.Join(tmpDir, "oss", ".binds")
 		if err := os.MkdirAll(ossBeadsDir, 0755); err != nil {
 			t.Fatalf("failed to create oss/.beads dir: %v", err)
 		}
@@ -465,14 +465,14 @@ func TestSyncModePathResolution(t *testing.T) {
 			t.Fatalf("failed to setup git repo: %v", err)
 		}
 
-		// Create .beads directory
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		// Create .binds directory
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("failed to create .beads dir: %v", err)
 		}
 
-		// Create oss/.beads directory
-		ossBeadsDir := filepath.Join(tmpDir, "oss", ".beads")
+		// Create oss/.binds directory
+		ossBeadsDir := filepath.Join(tmpDir, "oss", ".binds")
 		if err := os.MkdirAll(ossBeadsDir, 0755); err != nil {
 			t.Fatalf("failed to create oss/.beads dir: %v", err)
 		}
@@ -522,10 +522,10 @@ repos:
 			t.Fatalf("failed to create issue: %v", err)
 		}
 
-		// Simulate daemon context: CWD is .beads/
+		// Simulate daemon context: CWD is .binds/
 		if err := os.Chdir(beadsDir); err != nil {
 			store.Close()
-			t.Fatalf("chdir to .beads/ failed: %v", err)
+			t.Fatalf("chdir to .binds/ failed: %v", err)
 		}
 		git.ResetCaches()
 
@@ -541,11 +541,11 @@ repos:
 		// Key assertion: should still export to correct location
 		expectedPath := filepath.Join(ossBeadsDir, "issues.jsonl")
 		if _, err := os.Stat(expectedPath); os.IsNotExist(err) {
-			t.Errorf("expected %s to exist (sync-branch mode from .beads/)", expectedPath)
+			t.Errorf("expected %s to exist (sync-branch mode from .binds/)", expectedPath)
 		}
 
 		// Verify no spurious directory created
-		badPath := filepath.Join(beadsDir, "oss", ".beads", "issues.jsonl")
+		badPath := filepath.Join(beadsDir, "oss", ".binds", "issues.jsonl")
 		if _, err := os.Stat(badPath); err == nil {
 			t.Errorf("BUG: created %s (CWD-relative in sync-branch mode)", badPath)
 		}
@@ -581,13 +581,13 @@ repos:
 		}
 
 		// Create .beads in external repo
-		externalBeadsDir := filepath.Join(externalDir, ".beads")
+		externalBeadsDir := filepath.Join(externalDir, ".binds")
 		if err := os.MkdirAll(externalBeadsDir, 0755); err != nil {
 			t.Fatalf("failed to create external .beads: %v", err)
 		}
 
 		// Create oss/.beads in external repo (sibling to external .beads)
-		ossBeadsDir := filepath.Join(externalDir, "oss", ".beads")
+		ossBeadsDir := filepath.Join(externalDir, "oss", ".binds")
 		if err := os.MkdirAll(ossBeadsDir, 0755); err != nil {
 			t.Fatalf("failed to create oss/.beads: %v", err)
 		}

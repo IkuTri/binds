@@ -16,7 +16,7 @@ func skipOnWindows(t *testing.T) {
 }
 
 // TestPermissions_SkipsSymlinkedBeadsDir verifies that permission fixes are skipped
-// when .beads directory is a symlink (common on NixOS with home-manager).
+// when .binds directory is a symlink (common on NixOS with home-manager).
 //
 // Behavior being tested:
 // - When .beads is a symlink, Permissions() should return nil without changing anything
@@ -25,7 +25,7 @@ func TestPermissions_SkipsSymlinkedBeadsDir(t *testing.T) {
 	skipOnWindows(t)
 	tmpDir := t.TempDir()
 
-	// Create target .beads directory with wrong permissions
+	// Create target .binds directory with wrong permissions
 	targetDir := filepath.Join(tmpDir, "target-beads")
 	if err := os.MkdirAll(targetDir, 0777); err != nil { // intentionally wrong permissions
 		t.Fatal(err)
@@ -37,7 +37,7 @@ func TestPermissions_SkipsSymlinkedBeadsDir(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	symlinkPath := filepath.Join(workspaceDir, ".beads")
+	symlinkPath := filepath.Join(workspaceDir, ".binds")
 	if err := os.Symlink(targetDir, symlinkPath); err != nil {
 		t.Fatal(err)
 	}
@@ -70,13 +70,13 @@ func TestPermissions_SkipsSymlinkedBeadsDir(t *testing.T) {
 }
 
 // TestPermissions_SkipsSymlinkedDatabase verifies that chmod is skipped for
-// symlinked database files, but .beads directory permissions are still fixed.
+// symlinked database files, but .binds directory permissions are still fixed.
 func TestPermissions_SkipsSymlinkedDatabase(t *testing.T) {
 	skipOnWindows(t)
 	tmpDir := t.TempDir()
 
-	// Create real .beads directory with wrong permissions
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create real .binds directory with wrong permissions
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0777); err != nil { // intentionally wrong
 		t.Fatal(err)
 	}
@@ -110,7 +110,7 @@ func TestPermissions_SkipsSymlinkedDatabase(t *testing.T) {
 		t.Fatalf("Permissions() returned error for symlinked database: %v", err)
 	}
 
-	// Verify .beads directory permissions WERE fixed (not a symlink)
+	// Verify .binds directory permissions WERE fixed (not a symlink)
 	beadsInfo, err := os.Stat(beadsDir)
 	if err != nil {
 		t.Fatal(err)
@@ -139,8 +139,8 @@ func TestPermissions_FixesRegularFiles(t *testing.T) {
 	skipOnWindows(t)
 	tmpDir := t.TempDir()
 
-	// Create .beads directory with wrong permissions
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory with wrong permissions
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0777); err != nil { // intentionally wrong
 		t.Fatal(err)
 	}
@@ -157,7 +157,7 @@ func TestPermissions_FixesRegularFiles(t *testing.T) {
 		t.Fatalf("Permissions() failed: %v", err)
 	}
 
-	// Verify .beads directory now has 0700
+	// Verify .binds directory now has 0700
 	beadsInfo, err := os.Stat(beadsDir)
 	if err != nil {
 		t.Fatal(err)

@@ -56,7 +56,7 @@ func TestLocalOnlyMode(t *testing.T) {
 	}
 
 	// Create a dummy JSONL file to commit
-	beadsDir := filepath.Join(tempDir, ".beads")
+	beadsDir := filepath.Join(tempDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0750); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -67,7 +67,7 @@ func TestLocalOnlyMode(t *testing.T) {
 	}
 
 	// Test gitCommit works (local commits should work fine)
-	runGitCmd(t, tempDir, "add", ".beads")
+	runGitCmd(t, tempDir, "add", ".binds")
 	if err := gitCommit(ctx, jsonlPath, "Test commit"); err != nil {
 		t.Errorf("gitCommit should work in local-only mode, got error: %v", err)
 	}

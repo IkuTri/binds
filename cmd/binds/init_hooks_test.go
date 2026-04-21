@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/git"
+	"github.com/IkuTri/binds/internal/git"
 )
 
 func TestDetectExistingHooks(t *testing.T) {
@@ -37,7 +37,7 @@ func TestDetectExistingHooks(t *testing.T) {
 				wantExists: false,
 			},
 			{
-				name:         "bd hook",
+				name:         "binds hook",
 				setupHook:    "pre-commit",
 				hookContent:  "#!/bin/sh\n# bd (beads) pre-commit hook\necho test",
 				wantExists:   true,
@@ -121,7 +121,7 @@ func TestInstallGitHooks_NoExistingHooks(t *testing.T) {
 
 		if _, err := os.Stat(preCommitPath); err == nil {
 			content, _ := os.ReadFile(preCommitPath)
-			if !strings.Contains(string(content), "bd (beads)") {
+			if !strings.Contains(string(content), "binds (beads)") {
 				t.Error("pre-commit hook doesn't contain bd marker")
 			}
 			if strings.Contains(string(content), "chained") {
@@ -131,7 +131,7 @@ func TestInstallGitHooks_NoExistingHooks(t *testing.T) {
 
 		if _, err := os.Stat(postMergePath); err == nil {
 			content, _ := os.ReadFile(postMergePath)
-			if !strings.Contains(string(content), "bd (beads)") {
+			if !strings.Contains(string(content), "binds (beads)") {
 				t.Error("post-merge hook doesn't contain bd marker")
 			}
 		}

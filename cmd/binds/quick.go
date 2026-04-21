@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/validation"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/validation"
 )
 
 var quickCmd = &cobra.Command{

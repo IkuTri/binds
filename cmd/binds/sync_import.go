@@ -10,9 +10,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/debug"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/debug"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // importFromJSONL imports the JSONL file by running the import command
@@ -179,7 +179,7 @@ func importFromJSONLInline(ctx context.Context, jsonlPath string, renameOnImport
 // resolveNoGitHistoryForFromMain returns the resolved noGitHistory value for sync operations.
 // When syncing from main (--from-main), noGitHistory is forced to true to prevent creating
 // incorrect deletion records for locally-created beads that don't exist on main.
-// See: https://github.com/steveyegge/beads/issues/417
+// See: https://github.com/IkuTri/binds/issues/417
 func resolveNoGitHistoryForFromMain(fromMain, noGitHistory bool) bool {
 	if fromMain {
 		return true

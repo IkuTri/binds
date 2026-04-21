@@ -6,15 +6,15 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
 )
 
 func TestMigrateCommand(t *testing.T) {
 	// Create temporary test directory
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0750); err != nil {
-		t.Fatalf("Failed to create .beads directory: %v", err)
+		t.Fatalf("Failed to create .binds directory: %v", err)
 	}
 
 	t.Run("no databases", func(t *testing.T) {
@@ -102,8 +102,8 @@ func TestMigrateCommand(t *testing.T) {
 
 func TestFormatDBList(t *testing.T) {
 	dbs := []*dbInfo{
-		{path: "/tmp/.beads/beads.db", version: "0.17.5"},
-		{path: "/tmp/.beads/old.db", version: "0.16.0"},
+		{path: "/tmp/.binds/beads.db", version: "0.17.5"},
+		{path: "/tmp/.binds/old.db", version: "0.16.0"},
 	}
 
 	result := formatDBList(dbs)
@@ -129,9 +129,9 @@ func TestFormatDBList(t *testing.T) {
 func TestMigrateRespectsConfigJSON(t *testing.T) {
 	// Test that migrate respects custom database name from metadata.json
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0750); err != nil {
-		t.Fatalf("Failed to create .beads directory: %v", err)
+		t.Fatalf("Failed to create .binds directory: %v", err)
 	}
 
 	// Create metadata.json with custom database name

@@ -75,14 +75,14 @@ func TestAddHookCommand(t *testing.T) {
 			name:          "add hook to empty hooks",
 			existingHooks: make(map[string]interface{}),
 			event:         "SessionStart",
-			command:       "bd prime",
+			command:       "binds prime",
 			wantAdded:     true,
 		},
 		{
 			name:          "add stealth hook to empty hooks",
 			existingHooks: make(map[string]interface{}),
 			event:         "SessionStart",
-			command:       "bd prime --stealth",
+			command:       "binds prime --stealth",
 			wantAdded:     true,
 		},
 		{
@@ -94,14 +94,14 @@ func TestAddHookCommand(t *testing.T) {
 						"hooks": []interface{}{
 							map[string]interface{}{
 								"type":    "command",
-								"command": "bd prime",
+								"command": "binds prime",
 							},
 						},
 					},
 				},
 			},
 			event:     "SessionStart",
-			command:   "bd prime",
+			command:   "binds prime",
 			wantAdded: false,
 		},
 		{
@@ -113,14 +113,14 @@ func TestAddHookCommand(t *testing.T) {
 						"hooks": []interface{}{
 							map[string]interface{}{
 								"type":    "command",
-								"command": "bd prime --stealth",
+								"command": "binds prime --stealth",
 							},
 						},
 					},
 				},
 			},
 			event:     "SessionStart",
-			command:   "bd prime --stealth",
+			command:   "binds prime --stealth",
 			wantAdded: false,
 		},
 		{
@@ -139,7 +139,7 @@ func TestAddHookCommand(t *testing.T) {
 				},
 			},
 			event:     "SessionStart",
-			command:   "bd prime",
+			command:   "binds prime",
 			wantAdded: true,
 		},
 	}
@@ -194,14 +194,14 @@ func TestRemoveHookCommand(t *testing.T) {
 						"hooks": []interface{}{
 							map[string]interface{}{
 								"type":    "command",
-								"command": "bd prime",
+								"command": "binds prime",
 							},
 						},
 					},
 				},
 			},
 			event:         "SessionStart",
-			command:       "bd prime",
+			command:       "binds prime",
 			wantRemaining: 0,
 		},
 		{
@@ -213,14 +213,14 @@ func TestRemoveHookCommand(t *testing.T) {
 						"hooks": []interface{}{
 							map[string]interface{}{
 								"type":    "command",
-								"command": "bd prime --stealth",
+								"command": "binds prime --stealth",
 							},
 						},
 					},
 				},
 			},
 			event:         "SessionStart",
-			command:       "bd prime --stealth",
+			command:       "binds prime --stealth",
 			wantRemaining: 0,
 		},
 		{
@@ -241,14 +241,14 @@ func TestRemoveHookCommand(t *testing.T) {
 						"hooks": []interface{}{
 							map[string]interface{}{
 								"type":    "command",
-								"command": "bd prime",
+								"command": "binds prime",
 							},
 						},
 					},
 				},
 			},
 			event:         "SessionStart",
-			command:       "bd prime",
+			command:       "binds prime",
 			wantRemaining: 1,
 		},
 	}
@@ -291,14 +291,14 @@ func TestRemoveHookCommandNoNull(t *testing.T) {
 				"hooks": []interface{}{
 					map[string]interface{}{
 						"type":    "command",
-						"command": "bd prime",
+						"command": "binds prime",
 					},
 				},
 			},
 		},
 	}
 
-	removeHookCommand(hooks, "SessionStart", "bd prime")
+	removeHookCommand(hooks, "SessionStart", "binds prime")
 
 	// Key should be deleted, not set to null or empty array
 	if _, exists := hooks["SessionStart"]; exists {
@@ -387,7 +387,7 @@ func TestHasBeadsHooks(t *testing.T) {
 							"hooks": []interface{}{
 								map[string]interface{}{
 									"type":    "command",
-									"command": "bd prime",
+									"command": "binds prime",
 								},
 							},
 						},
@@ -406,7 +406,7 @@ func TestHasBeadsHooks(t *testing.T) {
 							"hooks": []interface{}{
 								map[string]interface{}{
 									"type":    "command",
-									"command": "bd prime --stealth",
+									"command": "binds prime --stealth",
 								},
 							},
 						},
@@ -425,7 +425,7 @@ func TestHasBeadsHooks(t *testing.T) {
 							"hooks": []interface{}{
 								map[string]interface{}{
 									"type":    "command",
-									"command": "bd prime",
+									"command": "binds prime",
 								},
 							},
 						},
@@ -444,7 +444,7 @@ func TestHasBeadsHooks(t *testing.T) {
 							"hooks": []interface{}{
 								map[string]interface{}{
 									"type":    "command",
-									"command": "bd prime --stealth",
+									"command": "binds prime --stealth",
 								},
 							},
 						},
@@ -505,13 +505,13 @@ func TestIdempotency(t *testing.T) {
 	hooks := make(map[string]interface{})
 
 	// First add
-	added1 := addHookCommand(hooks, "SessionStart", "bd prime")
+	added1 := addHookCommand(hooks, "SessionStart", "binds prime")
 	if !added1 {
 		t.Error("First call should have added the hook")
 	}
 
 	// Second add (should detect existing)
-	added2 := addHookCommand(hooks, "SessionStart", "bd prime")
+	added2 := addHookCommand(hooks, "SessionStart", "binds prime")
 	if added2 {
 		t.Error("Second call should have detected existing hook")
 	}
@@ -527,12 +527,12 @@ func TestIdempotency(t *testing.T) {
 func TestIdempotencyWithStealth(t *testing.T) {
 	hooks := make(map[string]any)
 
-	if !addHookCommand(hooks, "SessionStart", "bd prime --stealth") {
+	if !addHookCommand(hooks, "SessionStart", "binds prime --stealth") {
 		t.Error("First call should have added the stealth hook")
 	}
 
 	// Second add (should detect existing)
-	if addHookCommand(hooks, "SessionStart", "bd prime --stealth") {
+	if addHookCommand(hooks, "SessionStart", "binds prime --stealth") {
 		t.Error("Second call should have detected existing stealth hook")
 	}
 
@@ -546,7 +546,7 @@ func TestIdempotencyWithStealth(t *testing.T) {
 	hookMap := eventHooks[0].(map[string]any)
 	commands := hookMap["hooks"].([]any)
 	cmdMap := commands[0].(map[string]any)
-	if cmdMap["command"] != "bd prime --stealth" {
+	if cmdMap["command"] != "binds prime --stealth" {
 		t.Errorf("Expected 'bd prime --stealth', got %v", cmdMap["command"])
 	}
 }
@@ -584,7 +584,7 @@ func TestInstallClaudeGlobalStealth(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read global settings: %v", err)
 	}
-	if !strings.Contains(string(data), "bd prime --stealth") {
+	if !strings.Contains(string(data), "binds prime --stealth") {
 		t.Error("expected stealth command in settings")
 	}
 	if !strings.Contains(stdout.String(), "globally") {
@@ -628,7 +628,7 @@ func TestCheckClaudeScenarios(t *testing.T) {
 					map[string]interface{}{
 						"matcher": "",
 						"hooks": []interface{}{
-							map[string]interface{}{"type": "command", "command": "bd prime"},
+							map[string]interface{}{"type": "command", "command": "binds prime"},
 						},
 					},
 				},
@@ -650,7 +650,7 @@ func TestCheckClaudeScenarios(t *testing.T) {
 					map[string]interface{}{
 						"matcher": "",
 						"hooks": []interface{}{
-							map[string]interface{}{"type": "command", "command": "bd prime"},
+							map[string]interface{}{"type": "command", "command": "binds prime"},
 						},
 					},
 				},
@@ -685,7 +685,7 @@ func TestRemoveClaudeScenarios(t *testing.T) {
 					map[string]interface{}{
 						"matcher": "",
 						"hooks": []interface{}{
-							map[string]interface{}{"type": "command", "command": "bd prime"},
+							map[string]interface{}{"type": "command", "command": "binds prime"},
 							map[string]interface{}{"type": "command", "command": "other"},
 						},
 					},
@@ -699,7 +699,7 @@ func TestRemoveClaudeScenarios(t *testing.T) {
 		if err != nil {
 			t.Fatalf("read file: %v", err)
 		}
-		if strings.Contains(string(data), "bd prime") {
+		if strings.Contains(string(data), "binds prime") {
 			t.Error("expected bd prime hooks removed")
 		}
 		if !strings.Contains(stdout.String(), "hooks removed") {

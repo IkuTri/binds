@@ -76,7 +76,7 @@ For detailed docs: see AGENTS.md, QUICKSTART.md, or run ` + "`bd --help`" + `
 
 const aiderReadmeTemplate = `# Aider + Binds Integration
 
-This project uses [Binds (bd)](https://github.com/steveyegge/beads) for issue tracking.
+This project uses [Binds (bd)](https://github.com/IkuTri/binds) for issue tracking.
 
 ## How This Works with Aider
 

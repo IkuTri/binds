@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/git"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/git"
 )
 
-// setupGitRepoWithBeads creates a temporary git repository with a .beads directory.
+// setupGitRepoWithBeads creates a temporary git repository with a .binds directory.
 // Returns the repo path and cleanup function.
 func setupGitRepoWithBeads(t *testing.T) (repoPath string, cleanup func()) {
 	t.Helper()
@@ -42,11 +42,11 @@ func setupGitRepoWithBeads(t *testing.T) (repoPath string, cleanup func()) {
 	_ = exec.Command("git", "config", "user.email", "test@test.com").Run()
 	_ = exec.Command("git", "config", "user.name", "Test User").Run()
 
-	// Create .beads directory with issues.jsonl
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory with issues.jsonl
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		_ = os.Chdir(originalWd)
-		t.Fatalf("failed to create .beads directory: %v", err)
+		t.Fatalf("failed to create .binds directory: %v", err)
 	}
 
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
@@ -56,7 +56,7 @@ func setupGitRepoWithBeads(t *testing.T) (repoPath string, cleanup func()) {
 	}
 
 	// Create initial commit
-	_ = exec.Command("git", "add", ".beads").Run()
+	_ = exec.Command("git", "add", ".binds").Run()
 	if err := exec.Command("git", "commit", "-m", "initial").Run(); err != nil {
 		_ = os.Chdir(originalWd)
 		t.Fatalf("failed to create initial commit: %v", err)
@@ -88,9 +88,9 @@ func setupRedirectedBeadsRepo(t *testing.T) (sourcePath, targetPath string, clea
 		t.Fatalf("failed to create target directory: %v", err)
 	}
 
-	targetBeadsDir := filepath.Join(targetPath, ".beads")
+	targetBeadsDir := filepath.Join(targetPath, ".binds")
 	if err := os.MkdirAll(targetBeadsDir, 0755); err != nil {
-		t.Fatalf("failed to create target .beads directory: %v", err)
+		t.Fatalf("failed to create target .binds directory: %v", err)
 	}
 
 	// Initialize target as git repo
@@ -115,7 +115,7 @@ func setupRedirectedBeadsRepo(t *testing.T) (sourcePath, targetPath string, clea
 	}
 
 	// Commit in target
-	cmd = exec.Command("git", "add", ".beads")
+	cmd = exec.Command("git", "add", ".binds")
 	cmd.Dir = targetPath
 	_ = cmd.Run()
 
@@ -131,9 +131,9 @@ func setupRedirectedBeadsRepo(t *testing.T) (sourcePath, targetPath string, clea
 		t.Fatalf("failed to create source directory: %v", err)
 	}
 
-	sourceBeadsDir := filepath.Join(sourcePath, ".beads")
+	sourceBeadsDir := filepath.Join(sourcePath, ".binds")
 	if err := os.MkdirAll(sourceBeadsDir, 0755); err != nil {
-		t.Fatalf("failed to create source .beads directory: %v", err)
+		t.Fatalf("failed to create source .binds directory: %v", err)
 	}
 
 	// Write redirect file pointing to target
@@ -159,7 +159,7 @@ func setupRedirectedBeadsRepo(t *testing.T) (sourcePath, targetPath string, clea
 	_ = cmd.Run()
 
 	// Commit redirect in source
-	cmd = exec.Command("git", "add", ".beads")
+	cmd = exec.Command("git", "add", ".binds")
 	cmd.Dir = sourcePath
 	_ = cmd.Run()
 
@@ -205,7 +205,7 @@ func TestGitHasBeadsChanges_WithChanges(t *testing.T) {
 	defer cleanup()
 
 	// Modify the issues.jsonl file
-	jsonlPath := filepath.Join(repoPath, ".beads", "issues.jsonl")
+	jsonlPath := filepath.Join(repoPath, ".binds", "issues.jsonl")
 	if err := os.WriteFile(jsonlPath, []byte(`{"id":"test-2"}`+"\n"), 0644); err != nil {
 		t.Fatalf("failed to modify issues.jsonl: %v", err)
 	}
@@ -226,7 +226,7 @@ func TestGitHasBeadsChanges_WithRedirect_NoChanges(t *testing.T) {
 
 	// Set BEADS_DIR to point to source's .beads (which has the redirect)
 	oldBeadsDir := os.Getenv("BEADS_DIR")
-	os.Setenv("BEADS_DIR", filepath.Join(sourcePath, ".beads"))
+	os.Setenv("BEADS_DIR", filepath.Join(sourcePath, ".binds"))
 	defer os.Setenv("BEADS_DIR", oldBeadsDir)
 
 	hasChanges, err := gitHasBeadsChanges(ctx)
@@ -245,11 +245,11 @@ func TestGitHasBeadsChanges_WithRedirect_WithChanges(t *testing.T) {
 
 	// Set BEADS_DIR to point to source's .beads (which has the redirect)
 	oldBeadsDir := os.Getenv("BEADS_DIR")
-	os.Setenv("BEADS_DIR", filepath.Join(sourcePath, ".beads"))
+	os.Setenv("BEADS_DIR", filepath.Join(sourcePath, ".binds"))
 	defer os.Setenv("BEADS_DIR", oldBeadsDir)
 
 	// Modify the issues.jsonl file in target (where actual beads is)
-	jsonlPath := filepath.Join(targetPath, ".beads", "issues.jsonl")
+	jsonlPath := filepath.Join(targetPath, ".binds", "issues.jsonl")
 	if err := os.WriteFile(jsonlPath, []byte(`{"id":"test-2"}`+"\n"), 0644); err != nil {
 		t.Fatalf("failed to modify issues.jsonl: %v", err)
 	}
@@ -283,7 +283,7 @@ func TestGitHasUncommittedBeadsChanges_WithChanges(t *testing.T) {
 	defer cleanup()
 
 	// Modify the issues.jsonl file
-	jsonlPath := filepath.Join(repoPath, ".beads", "issues.jsonl")
+	jsonlPath := filepath.Join(repoPath, ".binds", "issues.jsonl")
 	if err := os.WriteFile(jsonlPath, []byte(`{"id":"test-2"}`+"\n"), 0644); err != nil {
 		t.Fatalf("failed to modify issues.jsonl: %v", err)
 	}
@@ -304,7 +304,7 @@ func TestGitHasUncommittedBeadsChanges_WithRedirect_NoChanges(t *testing.T) {
 
 	// Set BEADS_DIR to point to source's .beads (which has the redirect)
 	oldBeadsDir := os.Getenv("BEADS_DIR")
-	os.Setenv("BEADS_DIR", filepath.Join(sourcePath, ".beads"))
+	os.Setenv("BEADS_DIR", filepath.Join(sourcePath, ".binds"))
 	defer os.Setenv("BEADS_DIR", oldBeadsDir)
 
 	hasChanges, err := gitHasUncommittedBeadsChanges(ctx)
@@ -323,11 +323,11 @@ func TestGitHasUncommittedBeadsChanges_WithRedirect_WithChanges(t *testing.T) {
 
 	// Set BEADS_DIR to point to source's .beads (which has the redirect)
 	oldBeadsDir := os.Getenv("BEADS_DIR")
-	os.Setenv("BEADS_DIR", filepath.Join(sourcePath, ".beads"))
+	os.Setenv("BEADS_DIR", filepath.Join(sourcePath, ".binds"))
 	defer os.Setenv("BEADS_DIR", oldBeadsDir)
 
 	// Modify the issues.jsonl file in target (where actual beads is)
-	jsonlPath := filepath.Join(targetPath, ".beads", "issues.jsonl")
+	jsonlPath := filepath.Join(targetPath, ".binds", "issues.jsonl")
 	if err := os.WriteFile(jsonlPath, []byte(`{"id":"test-2"}`+"\n"), 0644); err != nil {
 		t.Fatalf("failed to modify issues.jsonl: %v", err)
 	}
@@ -362,60 +362,60 @@ func TestParseGitStatusForBeadsChanges(t *testing.T) {
 		// Modified (should return true)
 		{
 			name:     "staged modified",
-			status:   "M  .beads/issues.jsonl",
+			status:   "M  .binds/issues.jsonl",
 			expected: true,
 		},
 		{
 			name:     "unstaged modified",
-			status:   " M .beads/issues.jsonl",
+			status:   " M .binds/issues.jsonl",
 			expected: true,
 		},
 		{
 			name:     "staged and unstaged modified",
-			status:   "MM .beads/issues.jsonl",
+			status:   "MM .binds/issues.jsonl",
 			expected: true,
 		},
 
 		// Added (should return true)
 		{
 			name:     "staged added",
-			status:   "A  .beads/issues.jsonl",
+			status:   "A  .binds/issues.jsonl",
 			expected: true,
 		},
 		{
 			name:     "added then modified",
-			status:   "AM .beads/issues.jsonl",
+			status:   "AM .binds/issues.jsonl",
 			expected: true,
 		},
 
 		// Untracked (should return false)
 		{
 			name:     "untracked file",
-			status:   "?? .beads/issues.jsonl",
+			status:   "?? .binds/issues.jsonl",
 			expected: false,
 		},
 
 		// Deleted (should return false)
 		{
 			name:     "staged deleted",
-			status:   "D  .beads/issues.jsonl",
+			status:   "D  .binds/issues.jsonl",
 			expected: false,
 		},
 		{
 			name:     "unstaged deleted",
-			status:   " D .beads/issues.jsonl",
+			status:   " D .binds/issues.jsonl",
 			expected: false,
 		},
 
 		// Edge cases
 		{
 			name:     "renamed file",
-			status:   "R  old.jsonl -> .beads/issues.jsonl",
+			status:   "R  old.jsonl -> .binds/issues.jsonl",
 			expected: false,
 		},
 		{
 			name:     "copied file",
-			status:   "C  source.jsonl -> .beads/issues.jsonl",
+			status:   "C  source.jsonl -> .binds/issues.jsonl",
 			expected: false,
 		},
 		{
@@ -475,8 +475,8 @@ func TestGitBranchHasUpstream(t *testing.T) {
 		}
 	}
 
-	// Create .beads directory (required for RepoContext)
-	beadsDir := filepath.Join(localDir, ".beads")
+	// Create .binds directory (required for RepoContext)
+	beadsDir := filepath.Join(localDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -581,10 +581,10 @@ func TestGitBranchHasUpstream(t *testing.T) {
 // TestGetCurrentBranchOrHEAD tests getCurrentBranchOrHEAD which returns "HEAD"
 // when in detached HEAD state (e.g., jj/jujutsu) instead of failing.
 // TestConfigPreservedDuringSync is a regression test for GH#1100.
-// It verifies that config.yaml in .beads/ is not overwritten during sync operations.
+// It verifies that config.yaml in .binds/ is not overwritten during sync operations.
 // The bug was caused by restoreBeadsDirFromBranch() which ran:
-//   git checkout HEAD -- .beads/
-// This restored the ENTIRE .beads/ directory, including user's uncommitted config.yaml.
+//   git checkout HEAD -- .binds/
+// This restored the ENTIRE .binds/ directory, including user's uncommitted config.yaml.
 // The function was removed in PR #918 (pull-first refactor).
 // This test ensures similar restoration logic is never reintroduced.
 func TestConfigPreservedDuringSync(t *testing.T) {
@@ -593,11 +593,11 @@ func TestConfigPreservedDuringSync(t *testing.T) {
 	}
 
 	t.Run("uncommitted config.yaml not overwritten by git operations", func(t *testing.T) {
-		// Setup: Create git repo with .beads directory
+		// Setup: Create git repo with .binds directory
 		repoPath, cleanup := setupGitRepoWithBeads(t)
 		defer cleanup()
 
-		beadsDir := filepath.Join(repoPath, ".beads")
+		beadsDir := filepath.Join(repoPath, ".binds")
 
 		// Create config.yaml and commit it
 		configPath := filepath.Join(beadsDir, "config.yaml")
@@ -607,7 +607,7 @@ func TestConfigPreservedDuringSync(t *testing.T) {
 		}
 
 		// Commit the config
-		_ = exec.Command("git", "add", ".beads/config.yaml").Run()
+		_ = exec.Command("git", "add", ".binds/config.yaml").Run()
 		if err := exec.Command("git", "commit", "-m", "add config").Run(); err != nil {
 			t.Fatalf("failed to commit config: %v", err)
 		}
@@ -627,7 +627,7 @@ func TestConfigPreservedDuringSync(t *testing.T) {
 			t.Fatal("expected test-marker in config before operations")
 		}
 
-		// Simulate what the old buggy code did: git checkout HEAD -- .beads/
+		// Simulate what the old buggy code did: git checkout HEAD -- .binds/
 		// This should NOT happen during normal sync, but we test that IF it did,
 		// it would restore committed state (losing uncommitted changes).
 		// The fact that no code calls this anymore is the fix.
@@ -645,7 +645,7 @@ func TestConfigPreservedDuringSync(t *testing.T) {
 		}
 
 		// Also verify that git status shows the file as modified (uncommitted)
-		cmd := exec.Command("git", "status", "--porcelain", ".beads/config.yaml")
+		cmd := exec.Command("git", "status", "--porcelain", ".binds/config.yaml")
 		output, err := cmd.Output()
 		if err != nil {
 			t.Fatalf("git status failed: %v", err)
@@ -671,7 +671,7 @@ func TestConfigPreservedDuringSync(t *testing.T) {
 		// The function should NOT exist
 		if strings.Contains(string(content), "func restoreBeadsDirFromBranch") {
 			t.Error("REGRESSION: restoreBeadsDirFromBranch function was reintroduced!\n" +
-				"This function caused GH#1100 by restoring entire .beads/ directory.\n" +
+				"This function caused GH#1100 by restoring entire .binds/ directory.\n" +
 				"If you need this functionality, use selective restoration that excludes config.yaml.")
 		}
 	})

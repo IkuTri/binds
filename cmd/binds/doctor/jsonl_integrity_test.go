@@ -8,7 +8,7 @@ import (
 
 func TestCheckJSONLIntegrity_MalformedLine(t *testing.T) {
 	ws := t.TempDir()
-	beadsDir := filepath.Join(ws, ".beads")
+	beadsDir := filepath.Join(ws, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -32,7 +32,7 @@ func TestCheckJSONLIntegrity_MalformedLine(t *testing.T) {
 
 func TestCheckJSONLIntegrity_NoJSONL(t *testing.T) {
 	ws := t.TempDir()
-	beadsDir := filepath.Join(ws, ".beads")
+	beadsDir := filepath.Join(ws, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}

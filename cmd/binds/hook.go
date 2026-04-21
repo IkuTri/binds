@@ -14,12 +14,12 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/configfile"
-	"github.com/steveyegge/beads/internal/git"
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/storage/factory"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/configfile"
+	"github.com/IkuTri/binds/internal/git"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/storage/factory"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // jsonlFilePaths lists all JSONL files that should be staged/tracked.
@@ -334,7 +334,7 @@ func getHooksDir() (string, error) {
 func hookPreCommit() int {
 	beadsDir := beads.FindBeadsDir()
 	if beadsDir == "" {
-		return 0 // Not a beads workspace
+		return 0 // Not a binds workspace
 	}
 
 	cfg := loadHookConfig(beadsDir)
@@ -560,7 +560,7 @@ func stageJSONLFiles(ctx context.Context) {
 func hookPostMerge(args []string) int {
 	beadsDir := beads.FindBeadsDir()
 	if beadsDir == "" {
-		return 0 // Not a beads workspace
+		return 0 // Not a binds workspace
 	}
 
 	cfg := loadHookConfig(beadsDir)
@@ -730,7 +730,7 @@ func hookPostCheckout(args []string) int {
 
 	beadsDir := beads.FindBeadsDir()
 	if beadsDir == "" {
-		return 0 // Not a beads workspace
+		return 0 // Not a binds workspace
 	}
 
 	cfg := loadHookConfig(beadsDir)

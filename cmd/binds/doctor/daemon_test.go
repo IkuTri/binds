@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/git"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/git"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
 )
 
 func TestCheckDaemonStatus(t *testing.T) {
@@ -17,7 +17,7 @@ func TestCheckDaemonStatus(t *testing.T) {
 
 		check := CheckDaemonStatus(tmpDir, "1.0.0")
 
-		// Should return OK when no .beads directory (daemon not needed)
+		// Should return OK when no .binds directory (daemon not needed)
 		if check.Status != StatusOK {
 			t.Errorf("Status = %q, want %q", check.Status, StatusOK)
 		}
@@ -25,7 +25,7 @@ func TestCheckDaemonStatus(t *testing.T) {
 
 	t.Run("beads directory exists", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.Mkdir(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -110,7 +110,7 @@ func TestCheckGitSyncSetup(t *testing.T) {
 func TestCheckDaemonAutoSync(t *testing.T) {
 	t.Run("no daemon socket", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.Mkdir(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -127,7 +127,7 @@ func TestCheckDaemonAutoSync(t *testing.T) {
 
 	t.Run("no sync-branch configured", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.Mkdir(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -160,7 +160,7 @@ func TestCheckDaemonAutoSync(t *testing.T) {
 
 	t.Run("sync-branch configured but cannot connect", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.Mkdir(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -195,7 +195,7 @@ func TestCheckDaemonAutoSync(t *testing.T) {
 func TestCheckHydratedRepoDaemons(t *testing.T) {
 	t.Run("no additional repos configured", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.Mkdir(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -225,14 +225,14 @@ func TestCheckHydratedRepoDaemons(t *testing.T) {
 
 	t.Run("additional repos configured but no daemons running", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.Mkdir(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
 
 		// Create a fake additional repo directory
 		additionalRepo := t.TempDir()
-		additionalBeadsDir := filepath.Join(additionalRepo, ".beads")
+		additionalBeadsDir := filepath.Join(additionalRepo, ".binds")
 		if err := os.Mkdir(additionalBeadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -269,7 +269,7 @@ func TestCheckHydratedRepoDaemons(t *testing.T) {
 
 	t.Run("database unavailable", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.Mkdir(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}

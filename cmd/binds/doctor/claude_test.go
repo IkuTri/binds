@@ -314,7 +314,7 @@ func TestHasClaudeHooksProjectLevel(t *testing.T) {
 	hooksContent := `{
 		"hooks": {
 			"SessionStart": [
-				{"matcher": "", "hooks": [{"type": "command", "command": "bd prime"}]}
+				{"matcher": "", "hooks": [{"type": "command", "command": "binds prime"}]}
 			]
 		}
 	}`
@@ -462,7 +462,7 @@ func TestHasBeadsHooksWithBdPrime(t *testing.T) {
 					"hooks": [
 						{
 							"type": "command",
-							"command": "bd prime"
+							"command": "binds prime"
 						}
 					]
 				}

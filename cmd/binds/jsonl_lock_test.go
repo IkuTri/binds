@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/gofrs/flock"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestJSONLLock_MissingLockCoordination tests scenarios where multiple processes
@@ -19,7 +19,7 @@ import (
 // Run with: go test -race -run TestJSONLLock_MissingLockCoordination
 func TestJSONLLock_MissingLockCoordination(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create beads dir: %v", err)
 	}
@@ -100,7 +100,7 @@ func TestJSONLLock_MissingLockCoordination(t *testing.T) {
 // cannot acquire the lock due to another process holding it.
 func TestJSONLLock_ExportLockAcquisitionFailure(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create beads dir: %v", err)
 	}
@@ -204,7 +204,7 @@ func TestJSONLLock_ExportLockAcquisitionFailure(t *testing.T) {
 // while an export is in progress.
 func TestJSONLLock_ImportWithExportInProgress(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create beads dir: %v", err)
 	}
@@ -324,7 +324,7 @@ func TestJSONLLock_ImportWithExportInProgress(t *testing.T) {
 // TestJSONLLock_TimeoutScenarios tests lock timeout behavior.
 func TestJSONLLock_TimeoutScenarios(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create beads dir: %v", err)
 	}
@@ -461,7 +461,7 @@ func TestJSONLLock_TimeoutScenarios(t *testing.T) {
 // competing for the same lock.
 func TestJSONLLock_ConcurrentSyncOperations(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create beads dir: %v", err)
 	}

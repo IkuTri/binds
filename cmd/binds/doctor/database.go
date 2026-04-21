@@ -14,10 +14,10 @@ import (
 
 	_ "github.com/ncruces/go-sqlite3/driver"
 	_ "github.com/ncruces/go-sqlite3/embed"
-	"github.com/steveyegge/beads/cmd/binds/doctor/fix"
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/configfile"
-	storagefactory "github.com/steveyegge/beads/internal/storage/factory"
+	"github.com/IkuTri/binds/cmd/binds/doctor/fix"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/configfile"
+	storagefactory "github.com/IkuTri/binds/internal/storage/factory"
 	"gopkg.in/yaml.v3"
 )
 

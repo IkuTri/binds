@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/configfile"
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/storage/factory"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/configfile"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/storage/factory"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // CheckStaleClosedIssues detects closed issues that could be cleaned up.
@@ -145,7 +145,7 @@ func CheckStaleClosedIssues(path string) DoctorCheck {
 // CheckExpiredTombstones detects tombstones that have exceeded their TTL.
 func CheckExpiredTombstones(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
 
 	if _, err := os.Stat(jsonlPath); os.IsNotExist(err) {
@@ -377,7 +377,7 @@ func resolveBeadsDir(beadsDir string) string {
 // When users run "binds mol pour" on formulas that should use "binds mol wisp", the resulting
 // issues get the "mol-" prefix but persist in JSONL. These should be cleaned up.
 func CheckPersistentMolIssues(path string) DoctorCheck {
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
 
 	if _, err := os.Stat(jsonlPath); os.IsNotExist(err) {
@@ -453,7 +453,7 @@ func CheckPersistentMolIssues(path string) DoctorCheck {
 // entries from the old mrqueue implementation. They are safe to delete since
 // gt done already creates merge-request wisps in beads.
 func CheckStaleMQFiles(path string) DoctorCheck {
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	mqDir := filepath.Join(beadsDir, "mq")
 
 	if _, err := os.Stat(mqDir); os.IsNotExist(err) {
@@ -487,7 +487,7 @@ func CheckStaleMQFiles(path string) DoctorCheck {
 
 // FixStaleMQFiles removes the legacy .beads/mq/ directory and all its contents.
 func FixStaleMQFiles(path string) error {
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	mqDir := filepath.Join(beadsDir, "mq")
 
 	if _, err := os.Stat(mqDir); os.IsNotExist(err) {
@@ -505,7 +505,7 @@ func FixStaleMQFiles(path string) error {
 // Issues with IDs containing "-wisp-" should always have Ephemeral=true.
 // If they're in JSONL without the ephemeral flag, they'll pollute bd ready.
 func CheckMisclassifiedWisps(path string) DoctorCheck {
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
 
 	if _, err := os.Stat(jsonlPath); os.IsNotExist(err) {
@@ -597,7 +597,7 @@ type PatrolPollutionResult struct {
 // - Patrol digests: titles matching "Digest: mol-*-patrol"
 // - Session ended beads: titles matching "Session ended: *"
 func CheckPatrolPollution(path string) DoctorCheck {
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
 
 	if _, err := os.Stat(jsonlPath); os.IsNotExist(err) {
@@ -705,7 +705,7 @@ func detectPatrolPollution(file *os.File) PatrolPollutionResult {
 
 // GetPatrolPollutionIDs returns all IDs of patrol pollution beads for deletion
 func GetPatrolPollutionIDs(path string) ([]string, error) {
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
 
 	file, err := os.Open(jsonlPath) // #nosec G304 - path constructed safely

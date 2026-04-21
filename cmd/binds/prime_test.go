@@ -22,8 +22,8 @@ func TestOutputContextFunction(t *testing.T) {
 			stealthMode:   false,
 			ephemeralMode: false,
 			localOnlyMode: false,
-			expectText:    []string{"Beads Workflow Context", "bd sync", "git push"},
-			rejectText:    []string{"bd sync --flush-only", "--from-main"},
+			expectText:    []string{"Beads Workflow Context", "binds sync", "git push"},
+			rejectText:    []string{"binds sync --flush-only", "--from-main"},
 		},
 		{
 			name:          "CLI Normal (ephemeral)",
@@ -31,8 +31,8 @@ func TestOutputContextFunction(t *testing.T) {
 			stealthMode:   false,
 			ephemeralMode: true,
 			localOnlyMode: false,
-			expectText:    []string{"Beads Workflow Context", "bd sync --from-main", "ephemeral branch"},
-			rejectText:    []string{"bd sync --flush-only", "git push"},
+			expectText:    []string{"Beads Workflow Context", "binds sync --from-main", "ephemeral branch"},
+			rejectText:    []string{"binds sync --flush-only", "git push"},
 		},
 		{
 			name:          "CLI Stealth",
@@ -40,7 +40,7 @@ func TestOutputContextFunction(t *testing.T) {
 			stealthMode:   true,
 			ephemeralMode: false, // stealth mode overrides ephemeral detection
 			localOnlyMode: false,
-			expectText:    []string{"Beads Workflow Context", "bd sync --flush-only"},
+			expectText:    []string{"Beads Workflow Context", "binds sync --flush-only"},
 			rejectText:    []string{"git push", "git pull", "git commit", "git status", "git add"},
 		},
 		{
@@ -49,7 +49,7 @@ func TestOutputContextFunction(t *testing.T) {
 			stealthMode:   false,
 			ephemeralMode: false,
 			localOnlyMode: true,
-			expectText:    []string{"Beads Workflow Context", "bd sync --flush-only", "No git remote configured"},
+			expectText:    []string{"Beads Workflow Context", "binds sync --flush-only", "No git remote configured"},
 			rejectText:    []string{"git push", "git pull", "--from-main"},
 		},
 		{
@@ -58,7 +58,7 @@ func TestOutputContextFunction(t *testing.T) {
 			stealthMode:   false,
 			ephemeralMode: true, // ephemeral is true but local-only takes precedence
 			localOnlyMode: true,
-			expectText:    []string{"Beads Workflow Context", "bd sync --flush-only", "No git remote configured"},
+			expectText:    []string{"Beads Workflow Context", "binds sync --flush-only", "No git remote configured"},
 			rejectText:    []string{"git push", "--from-main", "ephemeral branch"},
 		},
 		{
@@ -67,7 +67,7 @@ func TestOutputContextFunction(t *testing.T) {
 			stealthMode:   true,
 			ephemeralMode: false,
 			localOnlyMode: true, // local-only is true but stealth takes precedence
-			expectText:    []string{"Beads Workflow Context", "bd sync --flush-only"},
+			expectText:    []string{"Beads Workflow Context", "binds sync --flush-only"},
 			rejectText:    []string{"git push", "git pull", "git commit", "git status", "git add", "No git remote configured"},
 		},
 		{
@@ -76,8 +76,8 @@ func TestOutputContextFunction(t *testing.T) {
 			stealthMode:   false,
 			ephemeralMode: false,
 			localOnlyMode: false,
-			expectText:    []string{"Beads Issue Tracker Active", "bd sync", "git push"},
-			rejectText:    []string{"bd sync --flush-only", "--from-main"},
+			expectText:    []string{"Beads Issue Tracker Active", "binds sync", "git push"},
+			rejectText:    []string{"binds sync --flush-only", "--from-main"},
 		},
 		{
 			name:          "MCP Normal (ephemeral)",
@@ -85,8 +85,8 @@ func TestOutputContextFunction(t *testing.T) {
 			stealthMode:   false,
 			ephemeralMode: true,
 			localOnlyMode: false,
-			expectText:    []string{"Beads Issue Tracker Active", "bd sync --from-main", "ephemeral branch"},
-			rejectText:    []string{"bd sync --flush-only", "git push"},
+			expectText:    []string{"Beads Issue Tracker Active", "binds sync --from-main", "ephemeral branch"},
+			rejectText:    []string{"binds sync --flush-only", "git push"},
 		},
 		{
 			name:          "MCP Stealth",
@@ -94,7 +94,7 @@ func TestOutputContextFunction(t *testing.T) {
 			stealthMode:   true,
 			ephemeralMode: false, // stealth mode overrides ephemeral detection
 			localOnlyMode: false,
-			expectText:    []string{"Beads Issue Tracker Active", "bd sync --flush-only"},
+			expectText:    []string{"Beads Issue Tracker Active", "binds sync --flush-only"},
 			rejectText:    []string{"git push", "git pull", "git commit", "git status", "git add"},
 		},
 		{
@@ -103,7 +103,7 @@ func TestOutputContextFunction(t *testing.T) {
 			stealthMode:   false,
 			ephemeralMode: false,
 			localOnlyMode: true,
-			expectText:    []string{"Beads Issue Tracker Active", "bd sync --flush-only"},
+			expectText:    []string{"Beads Issue Tracker Active", "binds sync --flush-only"},
 			rejectText:    []string{"git push", "git pull", "--from-main"},
 		},
 		{
@@ -112,7 +112,7 @@ func TestOutputContextFunction(t *testing.T) {
 			stealthMode:   false,
 			ephemeralMode: true, // ephemeral is true but local-only takes precedence
 			localOnlyMode: true,
-			expectText:    []string{"Beads Issue Tracker Active", "bd sync --flush-only"},
+			expectText:    []string{"Beads Issue Tracker Active", "binds sync --flush-only"},
 			rejectText:    []string{"git push", "--from-main", "ephemeral branch"},
 		},
 		{
@@ -121,7 +121,7 @@ func TestOutputContextFunction(t *testing.T) {
 			stealthMode:   true,
 			ephemeralMode: false,
 			localOnlyMode: true, // local-only is true but stealth takes precedence
-			expectText:    []string{"Beads Issue Tracker Active", "bd sync --flush-only"},
+			expectText:    []string{"Beads Issue Tracker Active", "binds sync --flush-only"},
 			rejectText:    []string{"git push", "git pull", "git commit", "git status", "git add"},
 		},
 	}

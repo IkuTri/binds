@@ -24,8 +24,8 @@ func TestFixGitignore_FilePermissions(t *testing.T) {
 		{
 			name:          "creates new file with 0600 permissions",
 			setupFunc:     func(t *testing.T, tmpDir string) {
-				// Create .beads directory but no .gitignore
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				// Create .binds directory but no .gitignore
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -36,7 +36,7 @@ func TestFixGitignore_FilePermissions(t *testing.T) {
 		{
 			name: "replaces existing file with insecure permissions",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -52,7 +52,7 @@ func TestFixGitignore_FilePermissions(t *testing.T) {
 		{
 			name: "replaces existing file with secure permissions",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -66,9 +66,9 @@ func TestFixGitignore_FilePermissions(t *testing.T) {
 			expectError:   false,
 		},
 		{
-			name: "fails gracefully when .beads directory doesn't exist",
+			name: "fails gracefully when .binds directory doesn't exist",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				// Don't create .beads directory
+				// Don't create .binds directory
 			},
 			expectedPerms: 0,
 			expectError:   true,
@@ -112,7 +112,7 @@ func TestFixGitignore_FilePermissions(t *testing.T) {
 			}
 
 			// Verify file permissions
-			gitignorePath := filepath.Join(".beads", ".gitignore")
+			gitignorePath := filepath.Join(".binds", ".gitignore")
 			info, err := os.Stat(gitignorePath)
 			if err != nil {
 				t.Fatalf("Failed to stat .gitignore: %v", err)
@@ -162,8 +162,8 @@ func TestFixGitignore_FileOwnership(t *testing.T) {
 		}
 	}()
 
-	// Create .beads directory
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -174,7 +174,7 @@ func TestFixGitignore_FileOwnership(t *testing.T) {
 	}
 
 	// Verify file ownership matches current user
-	gitignorePath := filepath.Join(".beads", ".gitignore")
+	gitignorePath := filepath.Join(".binds", ".gitignore")
 	info, err := os.Stat(gitignorePath)
 	if err != nil {
 		t.Fatalf("Failed to stat .gitignore: %v", err)
@@ -222,14 +222,14 @@ func TestFixGitignore_DoesNotLoosenPermissions(t *testing.T) {
 		}
 	}()
 
-	// Create .beads directory
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
 
 	// Create file with very restrictive permissions (0400 - read-only)
-	gitignorePath := filepath.Join(".beads", ".gitignore")
+	gitignorePath := filepath.Join(".binds", ".gitignore")
 	if err := os.WriteFile(gitignorePath, []byte("old content"), 0400); err != nil {
 		t.Fatal(err)
 	}
@@ -276,7 +276,7 @@ func TestCheckGitignore(t *testing.T) {
 		{
 			name: "missing .gitignore file",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -287,7 +287,7 @@ func TestCheckGitignore(t *testing.T) {
 		{
 			name: "up-to-date .gitignore",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -302,7 +302,7 @@ func TestCheckGitignore(t *testing.T) {
 		{
 			name: "outdated .gitignore missing required patterns",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -474,12 +474,12 @@ custom-pattern.txt
 				}
 			}()
 
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.Mkdir(beadsDir, 0750); err != nil {
 				t.Fatal(err)
 			}
 
-			gitignorePath := filepath.Join(".beads", ".gitignore")
+			gitignorePath := filepath.Join(".binds", ".gitignore")
 			if err := os.WriteFile(gitignorePath, []byte(tt.initialContent), 0600); err != nil {
 				t.Fatal(err)
 			}
@@ -531,7 +531,7 @@ func TestFixGitignore_PreservesNothing(t *testing.T) {
 		}
 	}()
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -552,7 +552,7 @@ beads.left.meta.json
 beads.right.meta.json
 `
 
-	gitignorePath := filepath.Join(".beads", ".gitignore")
+	gitignorePath := filepath.Join(".binds", ".gitignore")
 	if err := os.WriteFile(gitignorePath, []byte(customContent), 0600); err != nil {
 		t.Fatal(err)
 	}
@@ -604,7 +604,7 @@ func TestFixGitignore_Symlink(t *testing.T) {
 		}
 	}()
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -615,8 +615,8 @@ func TestFixGitignore_Symlink(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// Create symlink at .beads/.gitignore pointing to target
-	gitignorePath := filepath.Join(".beads", ".gitignore")
+	// Create symlink at .binds/.gitignore pointing to target
+	gitignorePath := filepath.Join(".binds", ".gitignore")
 	if err := os.Symlink(targetPath, gitignorePath); err != nil {
 		t.Fatal(err)
 	}
@@ -732,12 +732,12 @@ beads.right.meta.json
 				}
 			}()
 
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.Mkdir(beadsDir, 0750); err != nil {
 				t.Fatal(err)
 			}
 
-			gitignorePath := filepath.Join(".beads", ".gitignore")
+			gitignorePath := filepath.Join(".binds", ".gitignore")
 			if err := os.WriteFile(gitignorePath, []byte(tt.initialContent), 0600); err != nil {
 				t.Fatal(err)
 			}
@@ -831,13 +831,13 @@ func TestFixGitignore_VeryLongLines(t *testing.T) {
 				}
 			}()
 
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.Mkdir(beadsDir, 0750); err != nil {
 				t.Fatal(err)
 			}
 
 			initialContent := tt.setupFunc(t, tmpDir)
-			gitignorePath := filepath.Join(".beads", ".gitignore")
+			gitignorePath := filepath.Join(".binds", ".gitignore")
 			if err := os.WriteFile(gitignorePath, []byte(initialContent), 0600); err != nil {
 				t.Fatal(err)
 			}
@@ -876,18 +876,18 @@ func TestCheckGitignore_VariousStatuses(t *testing.T) {
 		description    string
 	}{
 		{
-			name: "missing .beads directory",
+			name: "missing .binds directory",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				// Don't create .beads directory
+				// Don't create .binds directory
 			},
 			expectedStatus: StatusWarning,
 			expectedFix:    "Run: bd init (safe to re-run) or bd doctor --fix",
-			description:    "returns warning when .beads directory doesn't exist",
+			description:    "returns warning when .binds directory doesn't exist",
 		},
 		{
 			name: "missing .gitignore file",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -899,7 +899,7 @@ func TestCheckGitignore_VariousStatuses(t *testing.T) {
 		{
 			name: "perfect gitignore",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -915,7 +915,7 @@ func TestCheckGitignore_VariousStatuses(t *testing.T) {
 		{
 			name: "missing one merge artifact pattern",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -940,7 +940,7 @@ beads.right.meta.json
 		{
 			name: "missing multiple required patterns",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -959,7 +959,7 @@ daemon.log
 		{
 			name: "empty gitignore file",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -975,7 +975,7 @@ daemon.log
 		{
 			name: "gitignore with only comments",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -998,7 +998,7 @@ daemon.log
 				if runtime.GOOS == "windows" {
 					t.Skip("Skipping symlink test on Windows")
 				}
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -1054,7 +1054,7 @@ daemon.log
 }
 
 func TestFixGitignore_SubdirectoryGitignore(t *testing.T) {
-	// This test verifies that FixGitignore only operates on .beads/.gitignore
+	// This test verifies that FixGitignore only operates on .binds/.gitignore
 	// and doesn't touch other .gitignore files
 
 	tmpDir := t.TempDir()
@@ -1072,14 +1072,14 @@ func TestFixGitignore_SubdirectoryGitignore(t *testing.T) {
 		}
 	}()
 
-	// Create .beads directory and gitignore
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory and gitignore
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
 
-	// Create .beads/.gitignore with old content
-	beadsGitignorePath := filepath.Join(".beads", ".gitignore")
+	// Create .binds/.gitignore with old content
+	beadsGitignorePath := filepath.Join(".binds", ".gitignore")
 	oldBeadsContent := "old beads content"
 	if err := os.WriteFile(beadsGitignorePath, []byte(oldBeadsContent), 0600); err != nil {
 		t.Fatal(err)
@@ -1109,13 +1109,13 @@ func TestFixGitignore_SubdirectoryGitignore(t *testing.T) {
 		t.Fatalf("FixGitignore failed: %v", err)
 	}
 
-	// Verify .beads/.gitignore was updated
+	// Verify .binds/.gitignore was updated
 	beadsContent, err := os.ReadFile(beadsGitignorePath)
 	if err != nil {
-		t.Fatalf("Failed to read .beads/.gitignore: %v", err)
+		t.Fatalf("Failed to read .binds/.gitignore: %v", err)
 	}
 	if string(beadsContent) != GitignoreTemplate {
-		t.Error(".beads/.gitignore should be updated to template")
+		t.Error(".binds/.gitignore should be updated to template")
 	}
 
 	// Verify subdirectory .gitignore was NOT touched
@@ -1153,8 +1153,8 @@ func TestCheckRedirectNotTracked_NoFile(t *testing.T) {
 		}
 	}()
 
-	// Create .beads directory but no redirect file
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory but no redirect file
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -1196,13 +1196,13 @@ func TestCheckRedirectNotTracked_FileExistsNotTracked(t *testing.T) {
 		t.Skipf("git init failed: %v", err)
 	}
 
-	// Create .beads directory with redirect file
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory with redirect file
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
 	redirectPath := filepath.Join(beadsDir, "redirect")
-	if err := os.WriteFile(redirectPath, []byte("../../../.beads"), 0600); err != nil {
+	if err := os.WriteFile(redirectPath, []byte("../../../.binds"), 0600); err != nil {
 		t.Fatal(err)
 	}
 
@@ -1247,13 +1247,13 @@ func TestCheckRedirectNotTracked_FileTracked(t *testing.T) {
 	exec.Command("git", "config", "user.email", "test@test.com").Run()
 	exec.Command("git", "config", "user.name", "Test").Run()
 
-	// Create .beads directory with redirect file
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory with redirect file
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
 	redirectPath := filepath.Join(beadsDir, "redirect")
-	if err := os.WriteFile(redirectPath, []byte("../../../.beads"), 0600); err != nil {
+	if err := os.WriteFile(redirectPath, []byte("../../../.binds"), 0600); err != nil {
 		t.Fatal(err)
 	}
 
@@ -1307,13 +1307,13 @@ func TestFixRedirectTracking(t *testing.T) {
 	exec.Command("git", "config", "user.email", "test@test.com").Run()
 	exec.Command("git", "config", "user.name", "Test").Run()
 
-	// Create .beads directory with redirect file
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory with redirect file
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
 	redirectPath := filepath.Join(beadsDir, "redirect")
-	if err := os.WriteFile(redirectPath, []byte("../../../.beads"), 0600); err != nil {
+	if err := os.WriteFile(redirectPath, []byte("../../../.binds"), 0600); err != nil {
 		t.Fatal(err)
 	}
 
@@ -1387,7 +1387,7 @@ func TestGitignoreTemplate_ContainsSyncStateFiles(t *testing.T) {
 }
 
 // TestRequiredPatterns_ContainsSyncStatePatterns verifies that bd doctor
-// validates the presence of sync state patterns in .beads/.gitignore.
+// validates the presence of sync state patterns in .binds/.gitignore.
 // GH#974
 func TestRequiredPatterns_ContainsSyncStatePatterns(t *testing.T) {
 	syncStatePatterns := []string{
@@ -1426,8 +1426,8 @@ func TestCheckLastTouchedNotTracked_NoFile(t *testing.T) {
 		}
 	}()
 
-	// Create .beads directory but no last-touched file
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory but no last-touched file
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -1469,8 +1469,8 @@ func TestCheckLastTouchedNotTracked_FileExistsNotTracked(t *testing.T) {
 		t.Skipf("git init failed: %v", err)
 	}
 
-	// Create .beads directory with last-touched file
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory with last-touched file
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -1520,8 +1520,8 @@ func TestCheckLastTouchedNotTracked_FileTracked(t *testing.T) {
 	exec.Command("git", "config", "user.email", "test@test.com").Run()
 	exec.Command("git", "config", "user.name", "Test").Run()
 
-	// Create .beads directory with last-touched file
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory with last-touched file
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -1580,8 +1580,8 @@ func TestFixLastTouchedTracking(t *testing.T) {
 	exec.Command("git", "config", "user.email", "test@test.com").Run()
 	exec.Command("git", "config", "user.name", "Test").Run()
 
-	// Create .beads directory with last-touched file
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory with last-touched file
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -1619,7 +1619,7 @@ func TestFixLastTouchedTracking(t *testing.T) {
 	}
 }
 
-// TestGitignoreTemplate_ContainsLastTouched verifies that the .beads/.gitignore template
+// TestGitignoreTemplate_ContainsLastTouched verifies that the .binds/.gitignore template
 // includes last-touched to prevent it from being tracked.
 func TestGitignoreTemplate_ContainsLastTouched(t *testing.T) {
 	if !strings.Contains(GitignoreTemplate, "last-touched") {
@@ -1628,7 +1628,7 @@ func TestGitignoreTemplate_ContainsLastTouched(t *testing.T) {
 }
 
 // TestRequiredPatterns_ContainsLastTouched verifies that bd doctor validates
-// the presence of the last-touched pattern in .beads/.gitignore.
+// the presence of the last-touched pattern in .binds/.gitignore.
 func TestRequiredPatterns_ContainsLastTouched(t *testing.T) {
 	found := false
 	for _, pattern := range requiredPatterns {

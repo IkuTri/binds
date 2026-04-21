@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/storage"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/storage"
 )
 
 // SetConfig sets a configuration value

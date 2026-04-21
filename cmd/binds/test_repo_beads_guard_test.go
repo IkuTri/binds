@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/config"
+	"github.com/IkuTri/binds/internal/config"
 )
 
 // Guardrail: ensure the cmd/bd test suite does not touch the real repo .beads state.
@@ -16,9 +16,9 @@ import (
 func TestMain(m *testing.M) {
 	origWD, _ := os.Getwd()
 
-	// Isolate config discovery from the repo's tracked `.beads/config.yaml`.
+	// Isolate config discovery from the repo's tracked `.binds/config.yaml`.
 	// Many tests expect default config values; running from within this repo would
-	// cause config.Initialize() to walk up from CWD and load `.beads/config.yaml`,
+	// cause config.Initialize() to walk up from CWD and load `.binds/config.yaml`,
 	// which sets sync.mode=dolt-native and makes tests assert the wrong behavior.
 	tmp, err := os.MkdirTemp("", "beads-bd-tests-*")
 	if err != nil {
@@ -52,8 +52,8 @@ func TestMain(m *testing.M) {
 	}()
 
 	// Clear BEADS_DIR to prevent tests from accidentally picking up the project's
-	// .beads directory via git repo detection when there's a redirect file.
-	// Each test that needs a .beads directory should set BEADS_DIR explicitly.
+	// .binds directory via git repo detection when there's a redirect file.
+	// Each test that needs a .binds directory should set BEADS_DIR explicitly.
 	origBeadsDir := os.Getenv("BEADS_DIR")
 	os.Unsetenv("BEADS_DIR")
 	defer func() {
@@ -76,7 +76,7 @@ func TestMain(m *testing.M) {
 		os.Exit(m.Run())
 	}
 
-	repoBeadsDir := filepath.Join(repoRoot, ".beads")
+	repoBeadsDir := filepath.Join(repoRoot, ".binds")
 	if _, err := os.Stat(repoBeadsDir); err != nil {
 		os.Exit(m.Run())
 	}
@@ -178,7 +178,7 @@ func findRepoRootFrom(wd string) string {
 // This prevents false positives in the test guard when a background daemon
 // touches .beads files during test execution. Uses exec to avoid import cycles.
 func stopRepoDaemon(repoRoot string) {
-	beadsDir := filepath.Join(repoRoot, ".beads")
+	beadsDir := filepath.Join(repoRoot, ".binds")
 	socketPath := filepath.Join(beadsDir, "bd.sock")
 
 	// Check if socket exists (quick check before shelling out)

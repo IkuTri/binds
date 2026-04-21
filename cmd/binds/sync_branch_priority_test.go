@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/syncbranch"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/syncbranch"
 )
 
 // TestSyncBranchConfigPriorityOverUpstream tests that when sync.branch is configured,
@@ -27,7 +27,7 @@ func TestSyncBranchConfigPriorityOverUpstream(t *testing.T) {
 		defer cleanup()
 
 		// Create beads database and configure sync.branch
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0750); err != nil {
 			t.Fatalf("Failed to create .beads dir: %v", err)
 		}
@@ -116,7 +116,7 @@ func TestSyncBranchConfigPriorityOverUpstream(t *testing.T) {
 		}
 
 		// Create beads database and configure sync.branch
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0750); err != nil {
 			t.Fatalf("Failed to create .beads dir: %v", err)
 		}
@@ -149,7 +149,7 @@ func TestSyncBranchConfigPriorityOverUpstream(t *testing.T) {
 
 // TestSyncBranchBypassesGitHasBeadsChanges tests that when sync.branch is configured,
 // bd sync bypasses gitHasBeadsChanges and always calls CommitToSyncBranch.
-// This is the regression test for GH#812: when .beads/ is gitignored on code branches
+// This is the regression test for GH#812: when .binds/ is gitignored on code branches
 // (but tracked on the sync branch), gitHasBeadsChanges would return false, causing
 // sync to skip CommitToSyncBranch entirely - even though CommitToSyncBranch has its
 // own internal change detection that checks the worktree where gitignore is different.
@@ -165,7 +165,7 @@ func TestSyncBranchBypassesGitHasBeadsChanges(t *testing.T) {
 		tmpDir, cleanup := setupGitRepo(t)
 		defer cleanup()
 
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0750); err != nil {
 			t.Fatalf("Failed to create .beads dir: %v", err)
 		}
@@ -193,7 +193,7 @@ func TestSyncBranchBypassesGitHasBeadsChanges(t *testing.T) {
 			t.Fatalf("Failed to checkout main: %v", err)
 		}
 
-		// Recreate .beads directory on main branch (it may not exist after checkout)
+		// Recreate .binds directory on main branch (it may not exist after checkout)
 		if err := os.MkdirAll(beadsDir, 0750); err != nil {
 			t.Fatalf("Failed to recreate .beads dir: %v", err)
 		}

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // setupSyncValidationTest creates a test store and properly initializes globals.
@@ -16,7 +16,7 @@ func setupSyncValidationTest(t *testing.T) (*testing.T, func()) {
 	t.Helper()
 
 	tmpDir := t.TempDir()
-	testDBPath := filepath.Join(tmpDir, ".beads", "issues.db")
+	testDBPath := filepath.Join(tmpDir, ".binds", "issues.db")
 
 	testStore := newTestStore(t, testDBPath)
 

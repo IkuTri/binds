@@ -85,8 +85,8 @@ type HookIntegrationStatus struct {
 	DetectionOnly    bool     // True if we detected the manager but can't verify its config
 }
 
-// bdHookPattern matches the recommended binds hooks run pattern with word boundaries
-var bdHookPattern = regexp.MustCompile(`\bbd\s+hooks\s+run\b`)
+// bdHookPattern matches the recommended binds/bd hooks run pattern with word boundaries
+var bdHookPattern = regexp.MustCompile(`\b(?:binds|bd)\s+hooks\s+run\b`)
 
 // hookManagerPattern pairs a manager name with its detection pattern.
 type hookManagerPattern struct {

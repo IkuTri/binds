@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 func TestExpandTilde(t *testing.T) {

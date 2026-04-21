@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // CheckMultiRepoTypes discovers and reports custom types used by child repos in multi-repo setups.
@@ -75,7 +75,7 @@ func discoverChildTypes(repoPath string) []string {
 		}
 	}
 
-	beadsDir := filepath.Join(repoPath, ".beads")
+	beadsDir := filepath.Join(repoPath, ".binds")
 
 	// First try reading from database config table
 	types, err := readTypesFromDB(beadsDir)
@@ -189,7 +189,7 @@ func readTypesFromYAML(beadsDir string) ([]string, error) {
 
 // findUnknownTypesInHydratedIssues checks if any hydrated issues use types not found in any config
 func findUnknownTypesInHydratedIssues(repoPath string, multiRepo *config.MultiRepoConfig) []string {
-	beadsDir := filepath.Join(repoPath, ".beads")
+	beadsDir := filepath.Join(repoPath, ".binds")
 
 	// Get database path
 	var dbPath string

@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/cmd/binds/doctor/fix"
-	"github.com/steveyegge/beads/internal/syncbranch"
+	"github.com/IkuTri/binds/cmd/binds/doctor/fix"
+	"github.com/IkuTri/binds/internal/syncbranch"
 )
 
 // GitignoreTemplate is the canonical .beads/.gitignore content
@@ -80,7 +80,7 @@ var requiredPatterns = []string{
 
 // CheckGitignore checks if .beads/.gitignore is up to date
 func CheckGitignore() DoctorCheck {
-	gitignorePath := filepath.Join(".beads", ".gitignore")
+	gitignorePath := filepath.Join(".binds", ".gitignore")
 	
 	// Check if file exists
 	content, err := os.ReadFile(gitignorePath) // #nosec G304 -- path is hardcoded
@@ -121,7 +121,7 @@ func CheckGitignore() DoctorCheck {
 
 // FixGitignore updates .beads/.gitignore to the current template
 func FixGitignore() error {
-	gitignorePath := filepath.Join(".beads", ".gitignore")
+	gitignorePath := filepath.Join(".binds", ".gitignore")
 
 	// If file exists and is read-only, fix permissions first
 	if info, err := os.Stat(gitignorePath); err == nil {
@@ -150,7 +150,7 @@ func FixGitignore() error {
 // cause issues.jsonl to be ignored, breaking bd sync.
 // In sync-branch mode, the file may be intentionally ignored in working branches (GH#858).
 func CheckIssuesTracking() DoctorCheck {
-	issuesPath := filepath.Join(".beads", "issues.jsonl")
+	issuesPath := filepath.Join(".binds", "issues.jsonl")
 
 	// First check if the file exists
 	if _, err := os.Stat(issuesPath); os.IsNotExist(err) {
@@ -206,7 +206,7 @@ func CheckIssuesTracking() DoctorCheck {
 // Redirect files contain relative paths that only work in the original worktree.
 // If committed, they cause warnings in other clones where the path is invalid.
 func CheckRedirectNotTracked() DoctorCheck {
-	redirectPath := filepath.Join(".beads", "redirect")
+	redirectPath := filepath.Join(".binds", "redirect")
 
 	// First check if the file exists
 	if _, err := os.Stat(redirectPath); os.IsNotExist(err) {
@@ -253,7 +253,7 @@ func CheckRedirectNotTracked() DoctorCheck {
 
 // FixRedirectTracking untracks the .beads/redirect file from git
 func FixRedirectTracking() error {
-	redirectPath := filepath.Join(".beads", "redirect")
+	redirectPath := filepath.Join(".binds", "redirect")
 
 	// Check if file is actually tracked first
 	cmd := exec.Command("git", "ls-files", redirectPath) // #nosec G204 - args are hardcoded paths
@@ -279,7 +279,7 @@ func FixRedirectTracking() error {
 // CheckRedirectTargetValid verifies that the redirect target exists and has a valid beads database.
 // This catches cases where the redirect points to a non-existent directory or one without a database.
 func CheckRedirectTargetValid() DoctorCheck {
-	redirectPath := filepath.Join(".beads", "redirect")
+	redirectPath := filepath.Join(".binds", "redirect")
 
 	// Check if redirect file exists
 	data, err := os.ReadFile(redirectPath) // #nosec G304 - path is hardcoded
@@ -376,7 +376,7 @@ func CheckRedirectTargetValid() DoctorCheck {
 // CheckRedirectTargetSyncWorktree verifies that the redirect target has a working beads-sync worktree.
 // This is important for repos using sync-branch mode with redirects.
 func CheckRedirectTargetSyncWorktree() DoctorCheck {
-	redirectPath := filepath.Join(".beads", "redirect")
+	redirectPath := filepath.Join(".binds", "redirect")
 
 	// Check if redirect file exists
 	data, err := os.ReadFile(redirectPath) // #nosec G304 - path is hardcoded
@@ -464,7 +464,7 @@ func CheckRedirectTargetSyncWorktree() DoctorCheck {
 // When a repo uses .beads/redirect, it doesn't need its own beads-sync worktree since
 // sync operations happen in the redirect target. These vestigial worktrees waste space.
 func CheckNoVestigialSyncWorktrees() DoctorCheck {
-	redirectPath := filepath.Join(".beads", "redirect")
+	redirectPath := filepath.Join(".binds", "redirect")
 
 	// Check if redirect file exists
 	if _, err := os.Stat(redirectPath); os.IsNotExist(err) {
@@ -529,7 +529,7 @@ func CheckNoVestigialSyncWorktrees() DoctorCheck {
 // The last-touched file is local runtime state that should never be committed.
 // If committed, it causes spurious diffs in other clones.
 func CheckLastTouchedNotTracked() DoctorCheck {
-	lastTouchedPath := filepath.Join(".beads", "last-touched")
+	lastTouchedPath := filepath.Join(".binds", "last-touched")
 
 	// First check if the file exists
 	if _, err := os.Stat(lastTouchedPath); os.IsNotExist(err) {
@@ -576,7 +576,7 @@ func CheckLastTouchedNotTracked() DoctorCheck {
 
 // FixLastTouchedTracking untracks the .beads/last-touched file from git
 func FixLastTouchedTracking() error {
-	lastTouchedPath := filepath.Join(".beads", "last-touched")
+	lastTouchedPath := filepath.Join(".binds", "last-touched")
 
 	// Check if file is actually tracked first
 	cmd := exec.Command("git", "ls-files", lastTouchedPath) // #nosec G204 - args are hardcoded paths
@@ -613,7 +613,7 @@ func CheckSyncBranchGitignore() DoctorCheck {
 		}
 	}
 
-	issuesPath := filepath.Join(".beads", "issues.jsonl")
+	issuesPath := filepath.Join(".binds", "issues.jsonl")
 
 	// Check if file exists
 	if _, err := os.Stat(issuesPath); os.IsNotExist(err) {

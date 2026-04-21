@@ -31,7 +31,7 @@ func TestCheckBeadsRole_NotConfigured(t *testing.T) {
 	if check.Name != "Role Configuration" {
 		t.Errorf("expected name 'Role Configuration', got %q", check.Name)
 	}
-	if check.Fix != "bd init" {
+	if check.Fix != "binds init" {
 		t.Errorf("expected fix 'bd init', got %q", check.Fix)
 	}
 }
@@ -124,7 +124,7 @@ func TestCheckBeadsRole_InvalidValue(t *testing.T) {
 	if check.Status != StatusWarning {
 		t.Errorf("expected status %s, got %s", StatusWarning, check.Status)
 	}
-	if check.Fix != "bd init" {
+	if check.Fix != "binds init" {
 		t.Errorf("expected fix 'bd init', got %q", check.Fix)
 	}
 }

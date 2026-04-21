@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestEnsureDatabaseFresh_AutoImportsOnStale verifies that when the database
@@ -19,7 +19,7 @@ import (
 func TestEnsureDatabaseFresh_AutoImportsOnStale(t *testing.T) {
 	ctx := context.Background()
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create beads dir: %v", err)
 	}
@@ -116,7 +116,7 @@ func TestEnsureDatabaseFresh_AutoImportsOnStale(t *testing.T) {
 func TestEnsureDatabaseFresh_NoAutoImportFlag(t *testing.T) {
 	ctx := context.Background()
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create beads dir: %v", err)
 	}
@@ -213,7 +213,7 @@ func TestEnsureDatabaseFresh_NoAutoImportFlag(t *testing.T) {
 func TestEnsureDatabaseFresh_AllowStaleFlag(t *testing.T) {
 	ctx := context.Background()
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create beads dir: %v", err)
 	}
@@ -305,7 +305,7 @@ func TestEnsureDatabaseFresh_AllowStaleFlag(t *testing.T) {
 func TestEnsureDatabaseFresh_FreshDB(t *testing.T) {
 	ctx := context.Background()
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create beads dir: %v", err)
 	}
@@ -394,7 +394,7 @@ func TestEnsureDatabaseFresh_FreshDB(t *testing.T) {
 func TestEnsureDatabaseFresh_DoltNativeSkipsCheck(t *testing.T) {
 	ctx := context.Background()
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create beads dir: %v", err)
 	}

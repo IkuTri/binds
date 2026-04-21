@@ -15,9 +15,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/rpc"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/rpc"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestDeleteViaDaemon_SuccessfulDeletion tests successful single issue deletion via daemon RPC
@@ -886,7 +886,7 @@ func setupDaemonTestEnvForDelete(t *testing.T) (context.Context, context.CancelF
 	tmpDir := makeSocketTempDir(t)
 	initTestGitRepo(t, tmpDir)
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create beads dir: %v", err)
 	}

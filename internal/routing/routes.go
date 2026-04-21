@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
 )
 
 // RoutesFileName is the name of the routes configuration file

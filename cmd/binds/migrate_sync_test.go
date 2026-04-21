@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/git"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/git"
 )
 
 func TestMigrateSyncValidation(t *testing.T) {
@@ -84,8 +84,8 @@ func TestMigrateSyncDryRun(t *testing.T) {
 		t.Fatalf("failed to git commit: %v", err)
 	}
 
-	// Create .beads directory and initialize
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory and initialize
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0750); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -177,8 +177,8 @@ func TestMigrateSyncOrphan(t *testing.T) {
 	}
 	mainBranch := strings.TrimSpace(string(output))
 
-	// Create .beads directory
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0750); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -219,8 +219,8 @@ func TestMigrateSyncOrphan(t *testing.T) {
 		cmd.Dir = tmpDir
 		_ = cmd.Run() // Best effort
 
-		// Create .beads directory on orphan branch
-		orphanBeadsDir := filepath.Join(tmpDir, ".beads")
+		// Create .binds directory on orphan branch
+		orphanBeadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(orphanBeadsDir, 0750); err != nil {
 			t.Fatalf("failed to create .beads dir on orphan: %v", err)
 		}
@@ -230,7 +230,7 @@ func TestMigrateSyncOrphan(t *testing.T) {
 		if err := os.WriteFile(orphanFile, []byte("orphan content"), 0644); err != nil {
 			t.Fatalf("failed to create orphan file: %v", err)
 		}
-		cmd = exec.Command("git", "add", ".beads/test.txt")
+		cmd = exec.Command("git", "add", ".binds/test.txt")
 		cmd.Dir = tmpDir
 		if err := cmd.Run(); err != nil {
 			t.Fatalf("failed to git add on orphan: %v", err)
@@ -341,14 +341,14 @@ func TestMigrateSyncOrphanWorktree(t *testing.T) {
 	_ = cmd.Run()
 
 	// Create .beads content on orphan branch
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0750); err != nil {
 		t.Fatalf("failed to create .beads: %v", err)
 	}
 	if err := os.WriteFile(filepath.Join(beadsDir, "issues.jsonl"), []byte(""), 0644); err != nil {
 		t.Fatalf("failed to create issues.jsonl: %v", err)
 	}
-	cmd = exec.Command("git", "add", ".beads")
+	cmd = exec.Command("git", "add", ".binds")
 	cmd.Dir = tmpDir
 	_ = cmd.Run()
 	cmd = exec.Command("git", "commit", "-m", "orphan initial")
@@ -381,7 +381,7 @@ func TestMigrateSyncOrphanWorktree(t *testing.T) {
 		}
 
 		// Verify .beads exists in worktree (from orphan branch)
-		wtBeadsDir := filepath.Join(worktreePath, ".beads")
+		wtBeadsDir := filepath.Join(worktreePath, ".binds")
 		if _, err := os.Stat(wtBeadsDir); os.IsNotExist(err) {
 			t.Error(".beads should exist in worktree from orphan branch")
 		}
@@ -570,7 +570,7 @@ func TestMigrateSyncOrphanMigration(t *testing.T) {
 		_ = cmd.Run()
 
 		// Create .beads and commit
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0750); err != nil {
 			t.Fatalf("failed to create .beads: %v", err)
 		}
@@ -578,7 +578,7 @@ func TestMigrateSyncOrphanMigration(t *testing.T) {
 		if err := os.WriteFile(jsonlPath, []byte(""), 0644); err != nil {
 			t.Fatalf("failed to create issues.jsonl: %v", err)
 		}
-		cmd = exec.Command("git", "add", ".beads")
+		cmd = exec.Command("git", "add", ".binds")
 		cmd.Dir = tmpDir
 		_ = cmd.Run()
 		cmd = exec.Command("git", "commit", "-m", "init beads on orphan")

@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/cmd/binds/doctor"
-	"github.com/steveyegge/beads/internal/git"
+	"github.com/IkuTri/binds/cmd/binds/doctor"
+	"github.com/IkuTri/binds/internal/git"
 )
 
 func TestDoctorNoBeadsDir(t *testing.T) {
@@ -23,7 +23,7 @@ func TestDoctorNoBeadsDir(t *testing.T) {
 
 	// Should fail overall
 	if result.OverallOK {
-		t.Error("Expected OverallOK to be false when .beads/ directory is missing")
+		t.Error("Expected OverallOK to be false when .binds/ directory is missing")
 	}
 
 	// Check installation check failed
@@ -46,7 +46,7 @@ func TestDoctorNoBeadsDir(t *testing.T) {
 func TestDoctorWithBeadsDir(t *testing.T) {
 	// Create temporary directory with .beads
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -278,7 +278,7 @@ func TestCheckIDFormat(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Create temporary workspace
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.Mkdir(beadsDir, 0750); err != nil {
 				t.Fatal(err)
 			}
@@ -349,7 +349,7 @@ func TestCheckIDFormat(t *testing.T) {
 }
 
 func TestCheckInstallation(t *testing.T) {
-	// Test with missing .beads directory
+	// Test with missing .binds directory
 	tmpDir := t.TempDir()
 	check := doctor.CheckInstallation(tmpDir)
 
@@ -360,8 +360,8 @@ func TestCheckInstallation(t *testing.T) {
 		t.Error("Expected fix to be provided")
 	}
 
-	// Test with existing .beads directory
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Test with existing .binds directory
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -375,7 +375,7 @@ func TestCheckInstallation(t *testing.T) {
 func TestCheckDatabaseVersionJSONLMode(t *testing.T) {
 	// Create temporary directory with .beads but no database
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -410,7 +410,7 @@ func TestCheckDatabaseVersionFreshClone(t *testing.T) {
 	// Create temporary directory with .beads and JSONL but no database
 	// This simulates a fresh clone that needs 'bd init'
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -500,7 +500,7 @@ func TestCheckMultipleDatabases(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.Mkdir(beadsDir, 0750); err != nil {
 				t.Fatal(err)
 			}
@@ -528,7 +528,7 @@ func TestCheckMultipleDatabases(t *testing.T) {
 
 func TestCheckPermissions(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -564,7 +564,7 @@ func TestCheckDatabaseJSONLSync(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.Mkdir(beadsDir, 0750); err != nil {
 				t.Fatal(err)
 			}
@@ -600,7 +600,7 @@ func TestCheckDatabaseJSONLSync(t *testing.T) {
 
 func TestCountJSONLIssuesWithMalformedLines(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -968,7 +968,7 @@ func TestCheckMetadataVersionTracking(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.Mkdir(beadsDir, 0750); err != nil {
 				t.Fatal(err)
 			}
@@ -1052,7 +1052,7 @@ func TestCheckSyncBranchConfig(t *testing.T) {
 		{
 			name: "no beads directory",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				// No .beads directory
+				// No .binds directory
 			},
 			expectedStatus: doctor.StatusOK,
 			expectWarning:  false,
@@ -1060,7 +1060,7 @@ func TestCheckSyncBranchConfig(t *testing.T) {
 		{
 			name: "not a git repo",
 			setupFunc: func(t *testing.T, tmpDir string) {
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -1078,8 +1078,8 @@ func TestCheckSyncBranchConfig(t *testing.T) {
 					t.Fatal(err)
 				}
 
-				// Create .beads directory
-				beadsDir := filepath.Join(tmpDir, ".beads")
+				// Create .binds directory
+				beadsDir := filepath.Join(tmpDir, ".binds")
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
 					t.Fatal(err)
 				}
@@ -1163,7 +1163,7 @@ func TestExportDiagnostics(t *testing.T) {
 			{
 				Name:    "Installation",
 				Status:  "ok",
-				Message: ".beads/ directory found",
+				Message: ".binds/ directory found",
 			},
 			{
 				Name:    "Git Hooks",
@@ -1411,7 +1411,7 @@ func TestDoctor_WithBEADS_DIR(t *testing.T) {
 
 	// Create target directory (where BEADS_DIR points)
 	targetDir := t.TempDir()
-	targetBeadsDir := filepath.Join(targetDir, ".beads")
+	targetBeadsDir := filepath.Join(targetDir, ".binds")
 	if err := os.Mkdir(targetBeadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -1472,7 +1472,7 @@ func TestDoctor_WithBEADS_DIR(t *testing.T) {
 func TestDoctor_ExplicitPathOverridesBEADS_DIR(t *testing.T) {
 	// Create two directories: one for explicit path, one for BEADS_DIR
 	explicitDir := t.TempDir()
-	explicitBeadsDir := filepath.Join(explicitDir, ".beads")
+	explicitBeadsDir := filepath.Join(explicitDir, ".binds")
 	if err := os.Mkdir(explicitBeadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -1482,7 +1482,7 @@ func TestDoctor_ExplicitPathOverridesBEADS_DIR(t *testing.T) {
 	}
 
 	beadsDirTarget := t.TempDir()
-	beadsDirBeads := filepath.Join(beadsDirTarget, ".beads")
+	beadsDirBeads := filepath.Join(beadsDirTarget, ".binds")
 	if err := os.Mkdir(beadsDirBeads, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -1510,7 +1510,7 @@ func TestDoctor_ExplicitPathOverridesBEADS_DIR(t *testing.T) {
 	}
 
 	// Verify the marker file exists at the chosen path
-	markerPath := filepath.Join(checkPath, ".beads", "explicit-marker")
+	markerPath := filepath.Join(checkPath, ".binds", "explicit-marker")
 	if _, err := os.Stat(markerPath); os.IsNotExist(err) {
 		t.Error("Expected to find explicit-marker in chosen path - wrong directory was selected")
 	}

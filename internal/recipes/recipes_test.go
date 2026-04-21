@@ -166,7 +166,7 @@ func TestTemplate(t *testing.T) {
 		t.Error("Template is suspiciously short")
 	}
 	// Check for key content
-	if !containsAll(Template, "Beads", "bd ready", "bd create", "bd close") {
+	if !containsAll(Template, "Beads", "binds ready", "binds create", "binds close") {
 		t.Error("Template missing expected content")
 	}
 }

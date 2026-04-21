@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/util"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/util"
 )
 
 var countCmd = &cobra.Command{

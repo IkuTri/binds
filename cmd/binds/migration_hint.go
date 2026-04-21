@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/steveyegge/beads/internal/configfile"
-	"github.com/steveyegge/beads/internal/debug"
+	"github.com/IkuTri/binds/internal/configfile"
+	"github.com/IkuTri/binds/internal/debug"
 	"gopkg.in/yaml.v3"
 )
 

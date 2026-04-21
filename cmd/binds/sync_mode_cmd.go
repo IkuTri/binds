@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/config"
+	"github.com/IkuTri/binds/internal/config"
 )
 
 // Sync mode info for display

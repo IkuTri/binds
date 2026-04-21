@@ -10,12 +10,12 @@ import (
 func TestCursorRulesTemplate(t *testing.T) {
 	// Verify template contains required content
 	requiredContent := []string{
-		"bd prime",
-		"bd ready",
-		"bd create",
-		"bd update",
-		"bd close",
-		"bd sync",
+		"binds prime",
+		"binds ready",
+		"binds create",
+		"binds update",
+		"binds close",
+		"binds sync",
 		"BEADS INTEGRATION",
 	}
 

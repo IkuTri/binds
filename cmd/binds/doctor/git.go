@@ -12,17 +12,17 @@ import (
 
 	_ "github.com/ncruces/go-sqlite3/driver"
 	_ "github.com/ncruces/go-sqlite3/embed"
-	"github.com/steveyegge/beads/cmd/binds/doctor/fix"
-	"github.com/steveyegge/beads/internal/configfile"
-	"github.com/steveyegge/beads/internal/git"
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/syncbranch"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/cmd/binds/doctor/fix"
+	"github.com/IkuTri/binds/internal/configfile"
+	"github.com/IkuTri/binds/internal/git"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/syncbranch"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 const (
-	hooksExamplesURL = "https://github.com/steveyegge/beads/tree/main/examples/git-hooks"
-	hooksUpgradeURL  = "https://github.com/steveyegge/beads/issues/615"
+	hooksExamplesURL = "https://github.com/IkuTri/binds/tree/main/examples/git-hooks"
+	hooksUpgradeURL  = "https://github.com/IkuTri/binds/issues/615"
 )
 
 // bdShimMarker identifies bd shim hooks (GH#946)
@@ -576,7 +576,7 @@ func CheckMergeDriver(path string) DoctorCheck {
 // CheckSyncBranchConfig checks if sync-branch is properly configured.
 func CheckSyncBranchConfig(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Skip if .beads doesn't exist
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
@@ -953,7 +953,7 @@ func FindOrphanedIssues(gitPath string, provider types.IssueProvider) ([]OrphanI
 // This preserves backward compatibility for CheckOrphanedIssues and similar callers.
 func FindOrphanedIssuesFromPath(path string) ([]OrphanIssue, error) {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Skip if no .beads directory
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
@@ -993,7 +993,7 @@ func CheckOrphanedIssues(path string) DoctorCheck {
 	}
 
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Skip if no .beads directory
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {

@@ -6,14 +6,14 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 const testUserAlice = "alice"
 
 func TestCommentsSuite(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 

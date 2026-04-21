@@ -7,7 +7,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/steveyegge/beads/internal/storage"
+	"github.com/IkuTri/binds/internal/storage"
 )
 
 // exportEventsToJSONL appends new events to the events JSONL file.

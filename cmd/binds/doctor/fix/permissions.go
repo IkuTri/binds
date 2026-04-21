@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // Permissions fixes file permission issues in the .beads directory
@@ -15,7 +15,7 @@ func Permissions(path string) error {
 		return err
 	}
 
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 
 	// Check if .beads/ directory exists
 	// Use Lstat to detect symlinks - we shouldn't chmod symlinked directories

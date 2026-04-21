@@ -68,7 +68,7 @@ func CheckClaude() DoctorCheck {
 			Fix: "Set up Claude integration:\n" +
 				"  Option 1: Install the beads plugin (recommended)\n" +
 				"    • Provides hooks, slash commands, and MCP tools automatically\n" +
-				"    • See: https://github.com/steveyegge/beads/blob/main/docs/PLUGIN.md\n" +
+				"    • See: https://github.com/IkuTri/binds/blob/main/docs/PLUGIN.md\n" +
 				"\n" +
 				"  Option 2: CLI-only mode\n" +
 				"    • Run 'binds setup claude' to add SessionStart/PreCompact hooks\n" +

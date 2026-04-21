@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // TestDatabaseConfigFix_JSONLMismatch tests that DatabaseConfig fixes JSONL mismatches.
@@ -13,7 +13,7 @@ import (
 func TestDatabaseConfigFix_JSONLMismatch(t *testing.T) {
 	// Create temporary directory
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -54,7 +54,7 @@ func TestDatabaseConfigFix_JSONLMismatch(t *testing.T) {
 func TestDatabaseConfigFix_PrefersIssuesJSONL(t *testing.T) {
 	// Create temporary directory
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -130,7 +130,7 @@ func TestFindActualJSONLFile_SkipsBackups(t *testing.T) {
 func TestLegacyJSONLConfig_MigratesBeadsToIssues(t *testing.T) {
 	// Create temporary directory
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -179,7 +179,7 @@ func TestLegacyJSONLConfig_MigratesBeadsToIssues(t *testing.T) {
 func TestLegacyJSONLConfig_UpdatesGitattributes(t *testing.T) {
 	// Create temporary directory
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -192,7 +192,7 @@ func TestLegacyJSONLConfig_UpdatesGitattributes(t *testing.T) {
 
 	// Create .gitattributes with legacy reference
 	gitattrsPath := filepath.Join(tmpDir, ".gitattributes")
-	if err := os.WriteFile(gitattrsPath, []byte(".beads/beads.jsonl merge=beads\n"), 0644); err != nil {
+	if err := os.WriteFile(gitattrsPath, []byte(".binds/beads.jsonl merge=beads\n"), 0644); err != nil {
 		t.Fatalf("Failed to create .gitattributes: %v", err)
 	}
 
@@ -216,7 +216,7 @@ func TestLegacyJSONLConfig_UpdatesGitattributes(t *testing.T) {
 		t.Fatalf("Failed to read .gitattributes: %v", err)
 	}
 
-	if string(content) != ".beads/issues.jsonl merge=beads\n" {
+	if string(content) != ".binds/issues.jsonl merge=beads\n" {
 		t.Errorf("Expected .gitattributes to reference issues.jsonl, got: %q", string(content))
 	}
 }
@@ -244,7 +244,7 @@ func TestFindActualJSONLFile_SkipsSystemFiles(t *testing.T) {
 
 func TestDatabaseConfigFix_RejectsSystemJSONLExport(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}

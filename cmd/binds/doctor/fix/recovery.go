@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // DatabaseCorruptionRecovery recovers a corrupted database from JSONL backup.
@@ -17,7 +17,7 @@ func DatabaseCorruptionRecovery(path string) error {
 		return err
 	}
 
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Dolt backend: SQLite-specific corruption recovery doesn't apply
 	if cfg, _ := configfile.Load(beadsDir); cfg != nil && cfg.GetBackend() == configfile.BackendDolt {
@@ -104,7 +104,7 @@ func DatabaseCorruptionRecoveryWithOptions(path string, force bool, source strin
 		return err
 	}
 
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Dolt backend: SQLite-specific corruption recovery doesn't apply
 	if cfg, _ := configfile.Load(beadsDir); cfg != nil && cfg.GetBackend() == configfile.BackendDolt {

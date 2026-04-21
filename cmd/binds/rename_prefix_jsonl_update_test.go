@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestRenamePrefixUpdatesJSONL verifies that rename-prefix updates the JSONL file
@@ -19,10 +19,10 @@ import (
 func TestRenamePrefixUpdatesJSONL(t *testing.T) {
 	// Create temp directory for test
 	tempDir := t.TempDir()
-	testDBPath := filepath.Join(tempDir, ".beads", "beads.db")
-	jsonlPath := filepath.Join(tempDir, ".beads", "issues.jsonl")
+	testDBPath := filepath.Join(tempDir, ".binds", "beads.db")
+	jsonlPath := filepath.Join(tempDir, ".binds", "issues.jsonl")
 
-	// Create .beads directory
+	// Create .binds directory
 	if err := os.MkdirAll(filepath.Dir(testDBPath), 0750); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -150,10 +150,10 @@ func TestRenamePrefixUpdatesJSONL(t *testing.T) {
 func TestRenamePrefixImportsFromJSONLFirst(t *testing.T) {
 	// Create temp directory for test
 	tempDir := t.TempDir()
-	testDBPath := filepath.Join(tempDir, ".beads", "beads.db")
-	jsonlPath := filepath.Join(tempDir, ".beads", "issues.jsonl")
+	testDBPath := filepath.Join(tempDir, ".binds", "beads.db")
+	jsonlPath := filepath.Join(tempDir, ".binds", "issues.jsonl")
 
-	// Create .beads directory
+	// Create .binds directory
 	if err := os.MkdirAll(filepath.Dir(testDBPath), 0750); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -293,10 +293,10 @@ func TestRenamePrefixImportsFromJSONLFirst(t *testing.T) {
 func TestRenamePrefixNoJSONL(t *testing.T) {
 	// Create temp directory for test
 	tempDir := t.TempDir()
-	testDBPath := filepath.Join(tempDir, ".beads", "beads.db")
-	jsonlPath := filepath.Join(tempDir, ".beads", "issues.jsonl")
+	testDBPath := filepath.Join(tempDir, ".binds", "beads.db")
+	jsonlPath := filepath.Join(tempDir, ".binds", "issues.jsonl")
 
-	// Create .beads directory
+	// Create .binds directory
 	if err := os.MkdirAll(filepath.Dir(testDBPath), 0750); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -377,10 +377,10 @@ func TestRenamePrefixNoJSONL(t *testing.T) {
 func TestRepairPrefixesUpdatesJSONL(t *testing.T) {
 	// Create temp directory for test
 	tempDir := t.TempDir()
-	testDBPath := filepath.Join(tempDir, ".beads", "beads.db")
-	jsonlPath := filepath.Join(tempDir, ".beads", "issues.jsonl")
+	testDBPath := filepath.Join(tempDir, ".binds", "beads.db")
+	jsonlPath := filepath.Join(tempDir, ".binds", "issues.jsonl")
 
-	// Create .beads directory
+	// Create .binds directory
 	if err := os.MkdirAll(filepath.Dir(testDBPath), 0750); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}

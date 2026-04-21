@@ -30,7 +30,7 @@ func TestCheckCodexMissingFile(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected error for missing AGENTS.md")
 	}
-	if !strings.Contains(stdout.String(), "bd setup codex") {
+	if !strings.Contains(stdout.String(), "binds setup codex") {
 		t.Error("expected setup guidance for codex")
 	}
 }

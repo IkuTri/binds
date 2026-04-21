@@ -10,18 +10,21 @@ import (
 	"time"
 )
 
-// setupTestWorkspace creates a temporary directory with a .beads directory
+// setupTestWorkspace creates a temporary directory with a .binds directory
 func setupTestWorkspace(t *testing.T) string {
 	t.Helper()
 	dir := t.TempDir()
-	beadsDir := filepath.Join(dir, ".beads")
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
-		t.Fatalf("failed to create .beads directory: %v", err)
+		t.Fatalf("failed to create .binds directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(beadsDir, "config.yaml"), []byte("sync-branch: \"binds-sync\"\n"), 0644); err != nil {
+		t.Fatalf("failed to create config.yaml: %v", err)
 	}
 	return dir
 }
 
-// setupTestGitRepo creates a temporary git repository with a .beads directory
+// setupTestGitRepo creates a temporary git repository with a .binds directory
 func setupTestGitRepo(t *testing.T) string {
 	t.Helper()
 	dir := setupTestWorkspace(t)
@@ -99,7 +102,7 @@ func TestMergeDriver_Validation(t *testing.T) {
 			t.Fatalf("failed to get git config: %v", err)
 		}
 
-		expected := "bd merge %A %O %A %B\n"
+		expected := "binds merge %A %O %A %B\n"
 		if string(output) != expected {
 			t.Errorf("expected %q, got %q", expected, string(output))
 		}
@@ -130,7 +133,7 @@ func TestDBJSONLSync_Validation(t *testing.T) {
 	t.Run("no JSONL - nothing to do", func(t *testing.T) {
 		dir := setupTestWorkspace(t)
 		// Create a database file
-		dbPath := filepath.Join(dir, ".beads", "beads.db")
+		dbPath := filepath.Join(dir, ".binds", "beads.db")
 		if err := os.WriteFile(dbPath, []byte("test"), 0600); err != nil {
 			t.Fatalf("failed to create test db: %v", err)
 		}
@@ -212,7 +215,7 @@ func TestMigrateTombstones(t *testing.T) {
 
 	t.Run("empty deletions.jsonl", func(t *testing.T) {
 		dir := setupTestWorkspace(t)
-		deletionsPath := filepath.Join(dir, ".beads", "deletions.jsonl")
+		deletionsPath := filepath.Join(dir, ".binds", "deletions.jsonl")
 		if err := os.WriteFile(deletionsPath, []byte(""), 0600); err != nil {
 			t.Fatalf("failed to create deletions.jsonl: %v", err)
 		}
@@ -226,7 +229,7 @@ func TestMigrateTombstones(t *testing.T) {
 		dir := setupTestWorkspace(t)
 
 		// Create deletions.jsonl with a deletion record
-		deletionsPath := filepath.Join(dir, ".beads", "deletions.jsonl")
+		deletionsPath := filepath.Join(dir, ".binds", "deletions.jsonl")
 		deletion := legacyDeletionRecord{
 			ID:        "test-123",
 			Timestamp: time.Now(),
@@ -239,7 +242,7 @@ func TestMigrateTombstones(t *testing.T) {
 		}
 
 		// Create empty issues.jsonl
-		jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+		jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 		if err := os.WriteFile(jsonlPath, []byte(""), 0600); err != nil {
 			t.Fatalf("failed to create issues.jsonl: %v", err)
 		}
@@ -287,7 +290,7 @@ func TestMigrateTombstones(t *testing.T) {
 		dir := setupTestWorkspace(t)
 
 		// Create deletions.jsonl with a deletion record
-		deletionsPath := filepath.Join(dir, ".beads", "deletions.jsonl")
+		deletionsPath := filepath.Join(dir, ".binds", "deletions.jsonl")
 		deletion := legacyDeletionRecord{
 			ID:        "test-123",
 			Timestamp: time.Now(),
@@ -299,7 +302,7 @@ func TestMigrateTombstones(t *testing.T) {
 		}
 
 		// Create issues.jsonl with an existing tombstone for the same ID
-		jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+		jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 		existingTombstone := map[string]interface{}{
 			"id":     "test-123",
 			"status": "tombstone",
@@ -553,7 +556,7 @@ func TestIsWithinWorkspace(t *testing.T) {
 // TestDBJSONLSync_MissingDatabase tests DBJSONLSync when database doesn't exist
 func TestDBJSONLSync_MissingDatabase(t *testing.T) {
 	dir := setupTestWorkspace(t)
-	beadsDir := filepath.Join(dir, ".beads")
+	beadsDir := filepath.Join(dir, ".binds")
 
 	// Create only JSONL file
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
@@ -633,7 +636,7 @@ func TestCountJSONLIssues(t *testing.T) {
 
 	t.Run("empty_JSONL", func(t *testing.T) {
 		dir := setupTestWorkspace(t)
-		jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+		jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 
 		// Create empty JSONL
 		if err := os.WriteFile(jsonlPath, []byte(""), 0644); err != nil {
@@ -651,7 +654,7 @@ func TestCountJSONLIssues(t *testing.T) {
 
 	t.Run("valid_issues", func(t *testing.T) {
 		dir := setupTestWorkspace(t)
-		jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+		jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 
 		// Create JSONL with 3 issues
 		jsonl := []byte(`{"id":"bd-1","title":"First"}
@@ -673,7 +676,7 @@ func TestCountJSONLIssues(t *testing.T) {
 
 	t.Run("mixed_valid_and_invalid", func(t *testing.T) {
 		dir := setupTestWorkspace(t)
-		jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+		jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 
 		// Create JSONL with 2 valid and some invalid lines
 		jsonl := []byte(`{"id":"bd-1","title":"First"}
@@ -696,7 +699,7 @@ invalid json line
 
 	t.Run("nonexistent_file", func(t *testing.T) {
 		dir := setupTestWorkspace(t)
-		jsonlPath := filepath.Join(dir, ".beads", "nonexistent.jsonl")
+		jsonlPath := filepath.Join(dir, ".binds", "nonexistent.jsonl")
 
 		count, err := countJSONLIssues(jsonlPath)
 		if err == nil {

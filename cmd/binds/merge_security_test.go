@@ -72,7 +72,7 @@ func TestCleanupMergeArtifacts_CommandInjectionPrevention(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Create temporary test environment
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.MkdirAll(beadsDir, 0755); err != nil {
 				t.Fatalf("Failed to create .beads dir: %v", err)
 			}
@@ -126,7 +126,7 @@ func TestCleanupMergeArtifacts_CommandInjectionPrevention(t *testing.T) {
 // deletion of other files.
 func TestCleanupMergeArtifacts_OnlyBackupFiles(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -181,7 +181,7 @@ func TestCleanupMergeArtifacts_GitRmSafety(t *testing.T) {
 	// 4. Working directory is set correctly
 
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}

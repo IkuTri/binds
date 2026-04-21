@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/rpc"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/rpc"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestParseDurationString tests the duration parsing function

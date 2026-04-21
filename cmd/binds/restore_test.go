@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 func TestReadIssueFromJSONL(t *testing.T) {
@@ -154,7 +154,7 @@ func TestGitCheckout_InvalidRef(t *testing.T) {
 // returns (nil, nil) for non-existent issues.
 func TestRestoreWithInvalidIssueID(t *testing.T) {
 	tmpDir := t.TempDir()
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
 
 	testStore := newTestStore(t, dbPath)
 	defer testStore.Close()

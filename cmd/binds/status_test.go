@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // Helper function to create a time pointer
@@ -20,11 +20,11 @@ func timePtr(t time.Time) *time.Time {
 func TestStatusCommand(t *testing.T) {
 	// Create a temporary directory for the test database
 	tempDir := t.TempDir()
-	dbPath := filepath.Join(tempDir, ".beads", "test.db")
+	dbPath := filepath.Join(tempDir, ".binds", "test.db")
 
-	// Create .beads directory
+	// Create .binds directory
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
-		t.Fatalf("Failed to create .beads directory: %v", err)
+		t.Fatalf("Failed to create .binds directory: %v", err)
 	}
 
 	// Initialize the database
@@ -171,11 +171,11 @@ func TestGetGitActivity(t *testing.T) {
 func TestGetAssignedStatistics(t *testing.T) {
 	// Create a temporary directory for the test database
 	tempDir := t.TempDir()
-	dbPath := filepath.Join(tempDir, ".beads", "test.db")
+	dbPath := filepath.Join(tempDir, ".binds", "test.db")
 
-	// Create .beads directory
+	// Create .binds directory
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
-		t.Fatalf("Failed to create .beads directory: %v", err)
+		t.Fatalf("Failed to create .binds directory: %v", err)
 	}
 
 	// Initialize the database

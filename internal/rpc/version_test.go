@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	sqlitestorage "github.com/steveyegge/beads/internal/storage/sqlite"
+	sqlitestorage "github.com/IkuTri/binds/internal/storage/sqlite"
 )
 
 const testVersion100 = "1.0.0"

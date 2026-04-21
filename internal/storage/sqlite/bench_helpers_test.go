@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/testutil/fixtures"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/testutil/fixtures"
 )
 
 var (

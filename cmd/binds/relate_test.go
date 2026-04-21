@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestRelateCommand tests the bd relate command functionality.
@@ -14,7 +14,7 @@ import (
 // are now stored in the dependencies table.
 func TestRelateCommand(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 

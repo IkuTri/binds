@@ -36,7 +36,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // Issue embeds types.Issue to prevent field drift (GH#1481).

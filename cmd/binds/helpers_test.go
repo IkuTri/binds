@@ -3,8 +3,8 @@ package main
 import (
 	"testing"
 
-	"github.com/steveyegge/beads/internal/importer"
-	"github.com/steveyegge/beads/internal/utils"
+	"github.com/IkuTri/binds/internal/importer"
+	"github.com/IkuTri/binds/internal/utils"
 )
 
 func TestIsNumeric(t *testing.T) {

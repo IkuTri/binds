@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestImportWarnsUncommittedChanges tests bd-u4f5
@@ -49,8 +49,8 @@ func TestImportWarnsUncommittedChanges(t *testing.T) {
 		t.Fatalf("Failed to configure git: %v", err)
 	}
 
-	// Create .beads directory
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -96,7 +96,7 @@ func TestImportWarnsUncommittedChanges(t *testing.T) {
 	f.Close()
 
 	// Commit the initial JSONL to git
-	gitAdd := exec.Command("git", "add", ".beads/issues.jsonl")
+	gitAdd := exec.Command("git", "add", ".binds/issues.jsonl")
 	gitAdd.Dir = tmpDir
 	if err := gitAdd.Run(); err != nil {
 		t.Fatalf("Failed to git add: %v", err)
@@ -244,8 +244,8 @@ func TestImportNoWarningWhenClean(t *testing.T) {
 		t.Fatalf("Failed to configure git: %v", err)
 	}
 
-	// Create .beads directory
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -291,7 +291,7 @@ func TestImportNoWarningWhenClean(t *testing.T) {
 	f.Close()
 
 	// Commit to git (now working tree matches HEAD)
-	gitAdd := exec.Command("git", "add", ".beads/issues.jsonl")
+	gitAdd := exec.Command("git", "add", ".binds/issues.jsonl")
 	gitAdd.Dir = tmpDir
 	if err := gitAdd.Run(); err != nil {
 		t.Fatalf("Failed to git add: %v", err)

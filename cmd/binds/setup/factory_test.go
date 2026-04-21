@@ -351,7 +351,7 @@ func TestWrapperExitsOnError(t *testing.T) {
 
 func TestFactoryBeadsSectionContent(t *testing.T) {
 	section := agentsBeadsSection
-	required := []string{"bd create", "bd update", "bd close", "bd ready", "discovered-from"}
+	required := []string{"binds create", "binds update", "binds close", "binds ready", "discovered-from"}
 	for _, token := range required {
 		if !strings.Contains(section, token) {
 			t.Errorf("agentsBeadsSection missing %q", token)

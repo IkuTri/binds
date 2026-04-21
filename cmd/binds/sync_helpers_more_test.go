@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/config"
+	"github.com/IkuTri/binds/internal/config"
 )
 
 func TestBuildGitCommitArgs_ConfigOptions(t *testing.T) {
@@ -16,7 +16,7 @@ func TestBuildGitCommitArgs_ConfigOptions(t *testing.T) {
 	config.Set("git.author", "Test User <test@example.com>")
 	config.Set("git.no-gpg-sign", true)
 
-	args := buildGitCommitArgs("/repo", "hello", "--", ".beads")
+	args := buildGitCommitArgs("/repo", "hello", "--", ".binds")
 	joined := strings.Join(args, " ")
 	if !strings.Contains(joined, "--author") {
 		t.Fatalf("expected --author in args: %v", args)
@@ -40,7 +40,7 @@ func TestBuildCommitArgs_ForRepoContext(t *testing.T) {
 	config.Set("git.author", "Test User <test@example.com>")
 	config.Set("git.no-gpg-sign", true)
 
-	args := buildCommitArgs("hello", "--", ".beads")
+	args := buildCommitArgs("hello", "--", ".binds")
 	joined := strings.Join(args, " ")
 
 	// Should start with "commit", not "-C"
@@ -67,7 +67,7 @@ func TestGitCommitBeadsDir_PathspecDoesNotCommitOtherStagedFiles(t *testing.T) {
 
 	initConfigForTest(t)
 
-	if err := os.MkdirAll(".beads", 0o755); err != nil {
+	if err := os.MkdirAll(".binds", 0o755); err != nil {
 		t.Fatalf("MkdirAll: %v", err)
 	}
 
@@ -78,7 +78,7 @@ func TestGitCommitBeadsDir_PathspecDoesNotCommitOtherStagedFiles(t *testing.T) {
 	_ = exec.Command("git", "add", "other.txt").Run()
 
 	// Create a beads sync file to commit.
-	issuesPath := filepath.Join(".beads", "issues.jsonl")
+	issuesPath := filepath.Join(".binds", "issues.jsonl")
 	if err := os.WriteFile(issuesPath, []byte("{\"id\":\"test-1\"}\n"), 0o600); err != nil {
 		t.Fatalf("WriteFile issues: %v", err)
 	}

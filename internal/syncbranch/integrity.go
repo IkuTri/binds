@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/storage"
+	"github.com/IkuTri/binds/internal/storage"
 )
 
 // Config keys for sync branch integrity tracking

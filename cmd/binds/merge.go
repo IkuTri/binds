@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/merge"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/merge"
 )
 
 var (

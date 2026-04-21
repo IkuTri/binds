@@ -10,7 +10,7 @@ import (
 
 	_ "github.com/ncruces/go-sqlite3/driver"
 	_ "github.com/ncruces/go-sqlite3/embed"
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // MergeArtifacts removes temporary git merge files from .beads directory.
@@ -19,7 +19,7 @@ func MergeArtifacts(path string) error {
 		return err
 	}
 
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Read patterns from .gitignore or use defaults
 	patterns, err := readMergeArtifactPatterns(beadsDir)
@@ -106,7 +106,7 @@ func OrphanedDependencies(path string, verbose bool) error {
 		return err
 	}
 
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Dolt backend: this fix uses raw SQL queries against SQLite, skip for now
 	cfg, _ := configfile.Load(beadsDir)
@@ -187,7 +187,7 @@ func ChildParentDependencies(path string, verbose bool) error {
 		return err
 	}
 
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Dolt backend: this fix uses raw SQL queries against SQLite, skip for now
 	cfg, _ := configfile.Load(beadsDir)

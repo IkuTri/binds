@@ -47,7 +47,7 @@ func TestCommitToSyncBranch(t *testing.T) {
 		if result.Branch != syncBranch {
 			t.Errorf("CommitToSyncBranch() Branch = %q, want %q", result.Branch, syncBranch)
 		}
-		if !strings.Contains(result.Message, "bd sync:") {
+		if !strings.Contains(result.Message, "binds sync:") {
 			t.Errorf("CommitToSyncBranch() Message = %q, want to contain 'bd sync:'", result.Message)
 		}
 	})

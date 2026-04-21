@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/beads"
+	"github.com/IkuTri/binds/internal/beads"
 )
 
 // integrationTestHelper provides common test setup and assertion methods

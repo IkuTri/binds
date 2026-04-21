@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestFindJSONLPath_RelativeDbPath tests that findJSONLPath() returns an absolute
@@ -17,11 +17,11 @@ import (
 // which calls filepath.Rel(repoRoot, jsonlPath) - mixing absolute base with relative
 // target fails.
 //
-// Bug: When dbPath is set to a relative fallback (e.g., ".beads/beads.db"),
-// findJSONLPath() returns ".beads/issues.jsonl" (relative), causing:
-//   "Rel: can't make .beads/issues.jsonl relative to /path/to/repo"
+// Bug: When dbPath is set to a relative fallback (e.g., ".binds/beads.db"),
+// findJSONLPath() returns ".binds/issues.jsonl" (relative), causing:
+//   "Rel: can't make .binds/issues.jsonl relative to /path/to/repo"
 //
-// See: https://github.com/steveyegge/beads/issues/959
+// See: https://github.com/IkuTri/binds/issues/959
 func TestFindJSONLPath_RelativeDbPath(t *testing.T) {
 	// Save/restore global state
 	origDbPath := dbPath
@@ -29,11 +29,11 @@ func TestFindJSONLPath_RelativeDbPath(t *testing.T) {
 
 	// Set relative dbPath (triggers bug)
 	// This simulates the fallback in main.go:471 when no database is found
-	dbPath = filepath.Join(".beads", beads.CanonicalDatabaseName)
+	dbPath = filepath.Join(".binds", beads.CanonicalDatabaseName)
 
 	result := findJSONLPath()
 
-	// Bug: returns ".beads/issues.jsonl" (relative)
+	// Bug: returns ".binds/issues.jsonl" (relative)
 	// Fixed: returns absolute path or ""
 	if result != "" && !filepath.IsAbs(result) {
 		t.Errorf("findJSONLPath() returned relative path: %q\n"+
@@ -97,7 +97,7 @@ func TestFindJSONLPath_BEADS_DIR_Relative(t *testing.T) {
 
 	// Create temp directory with .beads structure
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0750); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -113,7 +113,7 @@ func TestFindJSONLPath_BEADS_DIR_Relative(t *testing.T) {
 	os.Chdir(filepath.Dir(tmpDir))
 
 	// Set relative BEADS_DIR (should be canonicalized by FindBeadsDir)
-	relPath := filepath.Base(tmpDir) + "/.beads"
+	relPath := filepath.Base(tmpDir) + "/.binds"
 	os.Setenv("BEADS_DIR", relPath)
 	os.Unsetenv("BEADS_JSONL")
 	dbPath = ""
@@ -163,7 +163,7 @@ func TestFindJSONLPath_EmptyDbPath(t *testing.T) {
 // This caused comments to be lost during autoflush full-export triggered by hash mismatch.
 func TestFetchAndMergeIssues_IncludesComments(t *testing.T) {
 	tmpDir := t.TempDir()
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
 
 	// Create storage
 	store, err := sqlite.New(context.Background(), dbPath)
@@ -225,7 +225,7 @@ func TestFetchAndMergeIssues_IncludesComments(t *testing.T) {
 // populates all comments on issues, not just one.
 func TestFetchAndMergeIssues_IncludesMultipleComments(t *testing.T) {
 	tmpDir := t.TempDir()
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
 
 	// Create storage
 	store, err := sqlite.New(context.Background(), dbPath)

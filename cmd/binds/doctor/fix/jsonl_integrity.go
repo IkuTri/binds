@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/configfile"
-	"github.com/steveyegge/beads/internal/utils"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/configfile"
+	"github.com/IkuTri/binds/internal/utils"
 )
 
 // JSONLIntegrity backs up a malformed JSONL export and regenerates it from the database.
@@ -23,7 +23,7 @@ func JSONLIntegrity(path string) error {
 		return fmt.Errorf("failed to resolve path: %w", err)
 	}
 
-	beadsDir := filepath.Join(absPath, ".beads")
+	beadsDir := filepath.Join(absPath, ".binds")
 
 	// Resolve db path.
 	dbPath := filepath.Join(beadsDir, beads.CanonicalDatabaseName)

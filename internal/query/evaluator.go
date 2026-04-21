@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steveyegge/beads/internal/timeparsing"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/timeparsing"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // QueryResult contains the result of evaluating a query.

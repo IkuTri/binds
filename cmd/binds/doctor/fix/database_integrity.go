@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // DatabaseIntegrity attempts to recover from database corruption by:
@@ -26,7 +26,7 @@ func DatabaseIntegrity(path string) error {
 		return fmt.Errorf("failed to resolve path: %w", err)
 	}
 
-	beadsDir := filepath.Join(absPath, ".beads")
+	beadsDir := filepath.Join(absPath, ".binds")
 
 	// Best-effort: stop any running daemon to reduce the chance of DB file locks.
 	_ = Daemon(absPath)

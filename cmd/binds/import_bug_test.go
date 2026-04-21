@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestImportReturnsCorrectCounts reproduces bd-88
@@ -20,7 +20,7 @@ func TestImportReturnsCorrectCounts(t *testing.T) {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	dbPath := filepath.Join(tmpDir, ".beads", "issues.db")
+	dbPath := filepath.Join(tmpDir, ".binds", "issues.db")
 	// Initialize database
 	store := newTestStore(t, dbPath)
 

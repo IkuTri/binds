@@ -194,7 +194,7 @@ func TestCheckLegacyBeadsSlashCommands(t *testing.T) {
 				if check.Fix == "" {
 					t.Error("Expected fix message for warning, got empty string")
 				}
-				if !strings.Contains(check.Fix, "bd setup claude") {
+				if !strings.Contains(check.Fix, "binds setup claude") {
 					t.Error("Expected fix message to mention 'bd setup claude'")
 				}
 				if !strings.Contains(check.Fix, "token") {
@@ -337,7 +337,7 @@ func TestCheckLegacyJSONLFilename(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.Mkdir(beadsDir, 0750); err != nil {
 				t.Fatal(err)
 			}
@@ -411,7 +411,7 @@ func TestCheckLegacyJSONLConfig(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if err := os.Mkdir(beadsDir, 0750); err != nil {
 				t.Fatal(err)
 			}
@@ -448,7 +448,7 @@ func TestCheckLegacyJSONLConfig(t *testing.T) {
 
 func TestCheckDatabaseConfig_IgnoresSystemJSONLs(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -470,7 +470,7 @@ func TestCheckDatabaseConfig_IgnoresSystemJSONLs(t *testing.T) {
 
 func TestCheckDatabaseConfig_SystemJSONLExportIsError(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -549,7 +549,7 @@ func TestCheckFreshClone(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tmpDir := t.TempDir()
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			beadsDir := filepath.Join(tmpDir, ".binds")
 
 			if tt.hasBeadsDir {
 				if err := os.Mkdir(beadsDir, 0750); err != nil {
@@ -594,7 +594,7 @@ func TestCheckFreshClone(t *testing.T) {
 				if tt.expectPrefix != "" && !strings.Contains(check.Fix, tt.expectPrefix) {
 					t.Errorf("Expected fix to contain prefix %q, got: %s", tt.expectPrefix, check.Fix)
 				}
-				if !strings.Contains(check.Fix, "bd init") {
+				if !strings.Contains(check.Fix, "binds init") {
 					t.Error("Expected fix to mention 'bd init'")
 				}
 			}

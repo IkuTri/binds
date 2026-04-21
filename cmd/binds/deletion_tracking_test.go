@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestMultiWorkspaceDeletionSync simulates the bd-hv01 bug scenario:
@@ -405,8 +405,8 @@ func TestMultiRepoDeletionTracking(t *testing.T) {
 	additionalDir := t.TempDir()
 
 	// Setup .beads directories
-	primaryBeadsDir := filepath.Join(primaryDir, ".beads")
-	additionalBeadsDir := filepath.Join(additionalDir, ".beads")
+	primaryBeadsDir := filepath.Join(primaryDir, ".binds")
+	additionalBeadsDir := filepath.Join(additionalDir, ".binds")
 	if err := os.MkdirAll(primaryBeadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create primary .beads dir: %v", err)
 	}
@@ -590,7 +590,7 @@ func TestGetMultiRepoJSONLPaths_Duplicates(t *testing.T) {
 	primaryDir := t.TempDir()
 	
 	// Create .beads directories
-	if err := os.MkdirAll(filepath.Join(primaryDir, ".beads"), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Join(primaryDir, ".binds"), 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
 
@@ -612,7 +612,7 @@ func TestGetMultiRepoJSONLPaths_Duplicates(t *testing.T) {
 	}
 	
 	// All should point to same JSONL location
-	expectedJSONL := filepath.Join(primaryDir, ".beads", "issues.jsonl")
+	expectedJSONL := filepath.Join(primaryDir, ".binds", "issues.jsonl")
 	for i, p := range paths {
 		if p != expectedJSONL {
 			t.Errorf("Path[%d] = %s, want %s", i, p, expectedJSONL)
@@ -629,10 +629,10 @@ func TestGetMultiRepoJSONLPaths_PathsWithSpaces(t *testing.T) {
 	additionalDir := filepath.Join(baseDir, "other repo")
 	
 	// Create .beads directories
-	if err := os.MkdirAll(filepath.Join(primaryDir, ".beads"), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Join(primaryDir, ".binds"), 0755); err != nil {
 		t.Fatalf("Failed to create primary .beads: %v", err)
 	}
-	if err := os.MkdirAll(filepath.Join(additionalDir, ".beads"), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Join(additionalDir, ".binds"), 0755); err != nil {
 		t.Fatalf("Failed to create additional .beads: %v", err)
 	}
 
@@ -650,8 +650,8 @@ func TestGetMultiRepoJSONLPaths_PathsWithSpaces(t *testing.T) {
 	}
 	
 	// Verify paths are constructed correctly
-	expectedPrimary := filepath.Join(primaryDir, ".beads", "issues.jsonl")
-	expectedAdditional := filepath.Join(additionalDir, ".beads", "issues.jsonl")
+	expectedPrimary := filepath.Join(primaryDir, ".binds", "issues.jsonl")
+	expectedAdditional := filepath.Join(additionalDir, ".binds", "issues.jsonl")
 	
 	if paths[0] != expectedPrimary {
 		t.Errorf("Primary path = %s, want %s", paths[0], expectedPrimary)
@@ -681,9 +681,9 @@ func TestGetMultiRepoJSONLPaths_RelativePaths(t *testing.T) {
 	
 	// Current implementation: relative paths are NOT expanded to absolute
 	// They're used as-is with filepath.Join
-	expectedPrimary := filepath.Join(".", ".beads", "issues.jsonl")
-	expectedOther := filepath.Join("../other", ".beads", "issues.jsonl")
-	expectedBar := filepath.Join("./foo/../bar", ".beads", "issues.jsonl")
+	expectedPrimary := filepath.Join(".", ".binds", "issues.jsonl")
+	expectedOther := filepath.Join("../other", ".binds", "issues.jsonl")
+	expectedBar := filepath.Join("./foo/../bar", ".binds", "issues.jsonl")
 	
 	if paths[0] != expectedPrimary {
 		t.Errorf("Primary path = %s, want %s", paths[0], expectedPrimary)
@@ -714,8 +714,8 @@ func TestGetMultiRepoJSONLPaths_TildeExpansion(t *testing.T) {
 	}
 	
 	// Tilde should be literal (NOT expanded) in current implementation
-	expectedPrimary := filepath.Join("~/repos/main", ".beads", "issues.jsonl")
-	expectedAdditional := filepath.Join("~/repos/other", ".beads", "issues.jsonl")
+	expectedPrimary := filepath.Join("~/repos/main", ".binds", "issues.jsonl")
+	expectedAdditional := filepath.Join("~/repos/other", ".binds", "issues.jsonl")
 	
 	if paths[0] != expectedPrimary {
 		t.Errorf("Primary path = %s, want %s", paths[0], expectedPrimary)
@@ -732,9 +732,9 @@ func TestMultiRepoSnapshotIsolation(t *testing.T) {
 	repo1Dir := t.TempDir()
 	repo2Dir := t.TempDir()
 
-	// Create .beads/issues.jsonl in each
-	repo1JSONL := filepath.Join(repo1Dir, ".beads", "issues.jsonl")
-	repo2JSONL := filepath.Join(repo2Dir, ".beads", "issues.jsonl")
+	// Create .binds/issues.jsonl in each
+	repo1JSONL := filepath.Join(repo1Dir, ".binds", "issues.jsonl")
+	repo2JSONL := filepath.Join(repo2Dir, ".binds", "issues.jsonl")
 
 	if err := os.MkdirAll(filepath.Dir(repo1JSONL), 0755); err != nil {
 		t.Fatalf("Failed to create repo1 .beads: %v", err)
@@ -859,8 +859,8 @@ func TestMultiRepoFlushPrefixFiltering(t *testing.T) {
 	additionalDir := t.TempDir()
 
 	// Setup .beads directories
-	primaryBeadsDir := filepath.Join(primaryDir, ".beads")
-	additionalBeadsDir := filepath.Join(additionalDir, ".beads")
+	primaryBeadsDir := filepath.Join(primaryDir, ".binds")
+	additionalBeadsDir := filepath.Join(additionalDir, ".binds")
 	if err := os.MkdirAll(primaryBeadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create primary .beads dir: %v", err)
 	}

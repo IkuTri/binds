@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steveyegge/beads/internal/lockfile"
+	"github.com/IkuTri/binds/internal/lockfile"
 )
 
 // StaleLockFiles removes stale lock files from the .beads directory.
@@ -16,7 +16,7 @@ import (
 // - If the flock is released but the file remains, the file is just clutter
 // - Daemon lock staleness is verified via flock probe (not just file age)
 func StaleLockFiles(path string) error {
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
 		return nil
 	}

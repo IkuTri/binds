@@ -10,13 +10,13 @@ import (
 	"testing"
 )
 
-// setupTestGitRepoIntegration creates a temporary git repository with a .beads directory
+// setupTestGitRepoIntegration creates a temporary git repository with a .binds directory
 func setupTestGitRepoIntegration(t *testing.T) string {
 	t.Helper()
 	dir := t.TempDir()
-	beadsDir := filepath.Join(dir, ".beads")
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
-		t.Fatalf("failed to create .beads directory: %v", err)
+		t.Fatalf("failed to create .binds directory: %v", err)
 	}
 
 	// Initialize git repo

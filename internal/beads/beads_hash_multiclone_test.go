@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/testutil"
+	"github.com/IkuTri/binds/internal/testutil"
 )
 
 var testBDBinary string
@@ -88,7 +88,7 @@ func TestHashIDs_MultiCloneConverge(t *testing.T) {
 
 	bdPath := getBDPath()
 	if _, err := os.Stat(bdPath); err != nil {
-		t.Fatalf("bd binary not found at %s", bdPath)
+		t.Fatalf("binds binary not found at %s", bdPath)
 	}
 
 	// Setup remote and 3 clones
@@ -141,7 +141,7 @@ func TestHashIDs_IdenticalContentDedup(t *testing.T) {
 
 	bdPath := getBDPath()
 	if _, err := os.Stat(bdPath); err != nil {
-		t.Fatalf("bd binary not found at %s", bdPath)
+		t.Fatalf("binds binary not found at %s", bdPath)
 	}
 
 	// Setup remote and 2 clones

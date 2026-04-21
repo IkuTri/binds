@@ -9,7 +9,7 @@ import (
 func TestLastTouchedBasic(t *testing.T) {
 	// Create a temp directory to simulate .beads
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -66,7 +66,7 @@ func TestLastTouchedBasic(t *testing.T) {
 func TestSetLastTouchedIDIgnoresEmpty(t *testing.T) {
 	// Create a temp directory
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}

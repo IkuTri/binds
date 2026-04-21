@@ -22,7 +22,7 @@ func TestRemoveGitattributesEntry(t *testing.T) {
 
 		content := `*.png binary
 # Use bd merge for beads JSONL files
-.beads/issues.jsonl merge=beads
+.binds/issues.jsonl merge=beads
 *.jpg binary
 `
 		if err := os.WriteFile(".gitattributes", []byte(content), 0644); err != nil {
@@ -56,7 +56,7 @@ func TestRemoveGitattributesEntry(t *testing.T) {
 		}
 		defer func() { _ = os.Chdir(origDir) }()
 
-		content := `.beads/issues.jsonl merge=beads
+		content := `.binds/issues.jsonl merge=beads
 `
 		if err := os.WriteFile(".gitattributes", []byte(content), 0644); err != nil {
 			t.Fatalf("failed to write test file: %v", err)

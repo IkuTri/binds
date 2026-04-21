@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/ui"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/ui"
 )
 
 var (

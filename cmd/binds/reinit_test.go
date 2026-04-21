@@ -9,10 +9,10 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/git"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/git"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestDatabaseReinitialization tests all database reinitialization scenarios
@@ -50,8 +50,8 @@ func testFreshCloneAutoImport(t *testing.T) {
 	runCmd(t, dir, "git", "config", "user.email", "test@example.com")
 	runCmd(t, dir, "git", "config", "user.name", "Test User")
 
-	// Create .beads directory with issues.jsonl (canonical name)
-	beadsDir := filepath.Join(dir, ".beads")
+	// Create .binds directory with issues.jsonl (canonical name)
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -72,7 +72,7 @@ func testFreshCloneAutoImport(t *testing.T) {
 	}
 
 	// Commit to git (use forward slashes for git path)
-	runCmd(t, dir, "git", "add", ".beads/issues.jsonl")
+	runCmd(t, dir, "git", "add", ".binds/issues.jsonl")
 	runCmd(t, dir, "git", "commit", "-m", "Initial commit")
 
 	// Remove database to simulate fresh clone
@@ -104,7 +104,7 @@ func testFreshCloneAutoImport(t *testing.T) {
 		t.Errorf("Expected 1 issue in git, got %d", count)
 	}
 	// Normalize path for comparison (handle both forward and backslash)
-	expectedPath := normalizeGitPath(".beads/issues.jsonl")
+	expectedPath := normalizeGitPath(".binds/issues.jsonl")
 	if normalizeGitPath(path) != expectedPath {
 		t.Errorf("Expected path %s, got %s", expectedPath, path)
 	}
@@ -134,8 +134,8 @@ func testDatabaseRemovalScenario(t *testing.T) {
 	runCmd(t, dir, "git", "config", "user.email", "test@example.com")
 	runCmd(t, dir, "git", "config", "user.name", "Test User")
 
-	// Create .beads directory with issues.jsonl (canonical name)
-	beadsDir := filepath.Join(dir, ".beads")
+	// Create .binds directory with issues.jsonl (canonical name)
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -164,10 +164,10 @@ func testDatabaseRemovalScenario(t *testing.T) {
 	}
 
 	// Commit to git
-	runCmd(t, dir, "git", "add", ".beads/issues.jsonl")
+	runCmd(t, dir, "git", "add", ".binds/issues.jsonl")
 	runCmd(t, dir, "git", "commit", "-m", "Add issues")
 
-	// Simulate rm -rf .beads/ followed by partial bd init
+	// Simulate rm -rf .binds/ followed by partial bd init
 	// (in practice, bd init creates config.yaml before auto-import)
 	os.RemoveAll(beadsDir)
 	os.MkdirAll(beadsDir, 0755)
@@ -189,7 +189,7 @@ func testDatabaseRemovalScenario(t *testing.T) {
 	if count != 2 {
 		t.Errorf("Expected 2 issues in git, got %d", count)
 	}
-	expectedPath := normalizeGitPath(".beads/issues.jsonl")
+	expectedPath := normalizeGitPath(".binds/issues.jsonl")
 	if normalizeGitPath(path) != expectedPath {
 		t.Errorf("Expected %s, got %s", expectedPath, path)
 	}
@@ -236,8 +236,8 @@ func testLegacyFilenameSupport(t *testing.T) {
 	runCmd(t, dir, "git", "config", "user.email", "test@example.com")
 	runCmd(t, dir, "git", "config", "user.name", "Test User")
 
-	// Create .beads directory with issues.jsonl (legacy)
-	beadsDir := filepath.Join(dir, ".beads")
+	// Create .binds directory with issues.jsonl (legacy)
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -257,7 +257,7 @@ func testLegacyFilenameSupport(t *testing.T) {
 	}
 
 	// Commit to git
-	runCmd(t, dir, "git", "add", ".beads/issues.jsonl")
+	runCmd(t, dir, "git", "add", ".binds/issues.jsonl")
 	runCmd(t, dir, "git", "commit", "-m", "Add legacy issue")
 
 	// Change to test directory
@@ -273,7 +273,7 @@ func testLegacyFilenameSupport(t *testing.T) {
 	if count != 1 {
 		t.Errorf("Expected 1 issue in git, got %d", count)
 	}
-	expectedPath := normalizeGitPath(".beads/issues.jsonl")
+	expectedPath := normalizeGitPath(".binds/issues.jsonl")
 	if normalizeGitPath(path) != expectedPath {
 		t.Errorf("Expected %s, got %s", expectedPath, path)
 	}
@@ -315,8 +315,8 @@ func testPrecedenceTest(t *testing.T) {
 	runCmd(t, dir, "git", "config", "user.email", "test@example.com")
 	runCmd(t, dir, "git", "config", "user.name", "Test User")
 
-	// Create .beads directory with BOTH files
-	beadsDir := filepath.Join(dir, ".beads")
+	// Create .binds directory with BOTH files
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -339,7 +339,7 @@ func testPrecedenceTest(t *testing.T) {
 	}
 
 	// Commit both files
-	runCmd(t, dir, "git", "add", ".beads/")
+	runCmd(t, dir, "git", "add", ".binds/")
 	runCmd(t, dir, "git", "commit", "-m", "Add both files")
 
 	// Change to test directory
@@ -355,7 +355,7 @@ func testPrecedenceTest(t *testing.T) {
 	if count != 2 {
 		t.Errorf("Expected 2 issues (from issues.jsonl), got %d", count)
 	}
-	expectedPath := normalizeGitPath(".beads/issues.jsonl")
+	expectedPath := normalizeGitPath(".binds/issues.jsonl")
 	if normalizeGitPath(path) != expectedPath {
 		t.Errorf("Expected issues.jsonl to be preferred, got %s", path)
 	}
@@ -371,8 +371,8 @@ func testInitSafetyCheck(t *testing.T) {
 	runCmd(t, dir, "git", "config", "user.email", "test@example.com")
 	runCmd(t, dir, "git", "config", "user.name", "Test User")
 
-	// Create .beads directory with issues.jsonl (canonical name)
-	beadsDir := filepath.Join(dir, ".beads")
+	// Create .binds directory with issues.jsonl (canonical name)
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -391,7 +391,7 @@ func testInitSafetyCheck(t *testing.T) {
 	}
 
 	// Commit to git
-	runCmd(t, dir, "git", "add", ".beads/issues.jsonl")
+	runCmd(t, dir, "git", "add", ".binds/issues.jsonl")
 	runCmd(t, dir, "git", "commit", "-m", "Add issue")
 
 	// Change to test directory
@@ -425,7 +425,7 @@ func testInitSafetyCheck(t *testing.T) {
 		if recheck == 0 {
 			t.Error("Safety check should have detected issues in git")
 		}
-		expectedPath := normalizeGitPath(".beads/issues.jsonl")
+		expectedPath := normalizeGitPath(".binds/issues.jsonl")
 		if normalizeGitPath(recheckPath) != expectedPath {
 			t.Errorf("Safety check found wrong path: %s", recheckPath)
 		}

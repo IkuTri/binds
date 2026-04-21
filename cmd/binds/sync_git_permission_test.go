@@ -128,7 +128,7 @@ func TestIsPushPermissionDenied_ProviderSpecific(t *testing.T) {
 		{
 			name:     "GitHub HTTPS with PAT denied",
 			provider: "GitHub",
-			output:   "remote: Permission to steveyegge/beads.git denied to contributor.\nfatal: unable to access 'https://github.com/steveyegge/beads.git/': The requested URL returned error: 403",
+			output:   "remote: Permission to steveyegge/beads.git denied to contributor.\nfatal: unable to access 'https://github.com/IkuTri/binds.git/': The requested URL returned error: 403",
 		},
 		{
 			name:     "GitHub SSH key not authorized",

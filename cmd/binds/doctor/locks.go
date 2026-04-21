@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steveyegge/beads/internal/lockfile"
+	"github.com/IkuTri/binds/internal/lockfile"
 )
 
 // staleLockThresholds defines the age thresholds for each lock type.
@@ -21,7 +21,7 @@ var staleLockThresholds = map[string]time.Duration{
 // CheckStaleLockFiles detects leftover lock files from crashed processes.
 // Stale lock files can block bootstrap, sync, and daemon operations.
 func CheckStaleLockFiles(path string) DoctorCheck {
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
 		return DoctorCheck{

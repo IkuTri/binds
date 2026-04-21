@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestExportIntegrityAfterJSONLTruncation simulates the bd-160 bug scenario.
@@ -18,11 +18,11 @@ import (
 func TestExportIntegrityAfterJSONLTruncation(t *testing.T) {
 	// Setup: Create a database with multiple issues
 	tmpDir := t.TempDir()
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
-	jsonlPath := filepath.Join(tmpDir, ".beads", "issues.jsonl")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
+	jsonlPath := filepath.Join(tmpDir, ".binds", "issues.jsonl")
 	
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
-		t.Fatalf("failed to create .beads directory: %v", err)
+		t.Fatalf("failed to create .binds directory: %v", err)
 	}
 	
 	testStore, err := sqlite.New(context.Background(), dbPath)
@@ -157,11 +157,11 @@ func TestExportIntegrityAfterJSONLTruncation(t *testing.T) {
 // TestExportIntegrityAfterJSONLDeletion tests recovery when JSONL is deleted
 func TestExportIntegrityAfterJSONLDeletion(t *testing.T) {
 	tmpDir := t.TempDir()
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
-	jsonlPath := filepath.Join(tmpDir, ".beads", "issues.jsonl")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
+	jsonlPath := filepath.Join(tmpDir, ".binds", "issues.jsonl")
 	
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
-		t.Fatalf("failed to create .beads directory: %v", err)
+		t.Fatalf("failed to create .binds directory: %v", err)
 	}
 	
 	testStore, err := sqlite.New(context.Background(), dbPath)
@@ -254,11 +254,11 @@ func TestExportIntegrityAfterJSONLDeletion(t *testing.T) {
 // TestMultipleExportsStayConsistent tests that repeated exports maintain integrity
 func TestMultipleExportsStayConsistent(t *testing.T) {
 	tmpDir := t.TempDir()
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
-	jsonlPath := filepath.Join(tmpDir, ".beads", "issues.jsonl")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
+	jsonlPath := filepath.Join(tmpDir, ".binds", "issues.jsonl")
 	
 	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
-		t.Fatalf("failed to create .beads directory: %v", err)
+		t.Fatalf("failed to create .binds directory: %v", err)
 	}
 	
 	testStore, err := sqlite.New(context.Background(), dbPath)

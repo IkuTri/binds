@@ -10,10 +10,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/git"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/git"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
 )
 
 func TestInitCommand(t *testing.T) {
@@ -28,7 +28,7 @@ func TestInitCommand(t *testing.T) {
 			name:           "init with default prefix",
 			prefix:         "",
 			quiet:          false,
-			wantOutputText: "bd initialized successfully",
+			wantOutputText: "binds initialized successfully",
 		},
 		{
 			name:           "init with custom prefix",
@@ -110,10 +110,10 @@ func TestInitCommand(t *testing.T) {
 				}
 			}
 
-			// Verify .beads directory was created
-			beadsDir := filepath.Join(tmpDir, ".beads")
+			// Verify .binds directory was created
+			beadsDir := filepath.Join(tmpDir, ".binds")
 			if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
-				t.Error(".beads directory was not created")
+				t.Error(".binds directory was not created")
 			}
 
 			// Verify .gitignore was created with proper content
@@ -219,7 +219,7 @@ func TestInitWithSyncBranch(t *testing.T) {
 	}
 
 	// Verify database was created
-	dbFilePath := filepath.Join(tmpDir, ".beads", "beads.db")
+	dbFilePath := filepath.Join(tmpDir, ".binds", "beads.db")
 	store, err := openExistingTestDB(t, dbFilePath)
 	if err != nil {
 		t.Fatalf("Failed to open database: %v", err)
@@ -239,7 +239,7 @@ func TestInitWithSyncBranch(t *testing.T) {
 
 // TestInitWithSyncBranchSetsGitExclude verifies that init with --branch sets up
 // .git/info/exclude to hide untracked JSONL files from git status.
-// This fixes the issue where fresh clones show .beads/issues.jsonl as modified.
+// This fixes the issue where fresh clones show .binds/issues.jsonl as modified.
 func TestInitWithSyncBranchSetsGitExclude(t *testing.T) {
 	// Reset global state
 	origDBPath := dbPath
@@ -276,8 +276,8 @@ func TestInitWithSyncBranchSetsGitExclude(t *testing.T) {
 	}
 
 	excludeContent := string(content)
-	if !strings.Contains(excludeContent, ".beads/interactions.jsonl") {
-		t.Errorf("Expected .git/info/exclude to contain '.beads/interactions.jsonl', got:\n%s", excludeContent)
+	if !strings.Contains(excludeContent, ".binds/interactions.jsonl") {
+		t.Errorf("Expected .git/info/exclude to contain '.binds/interactions.jsonl', got:\n%s", excludeContent)
 	}
 }
 
@@ -303,8 +303,8 @@ func TestInitWithExistingSyncBranchConfig(t *testing.T) {
 	_ = runCommandInDir(tmpDir, "git", "config", "user.email", "test@test.com")
 	_ = runCommandInDir(tmpDir, "git", "config", "user.name", "Test")
 
-	// Create .beads directory with config.yaml containing sync-branch (simulating a clone)
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory with config.yaml containing sync-branch (simulating a clone)
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -332,8 +332,8 @@ func TestInitWithExistingSyncBranchConfig(t *testing.T) {
 	}
 
 	excludeContent := string(content)
-	if !strings.Contains(excludeContent, ".beads/interactions.jsonl") {
-		t.Errorf("Expected .git/info/exclude to contain '.beads/interactions.jsonl' when sync-branch is in config.yaml, got:\n%s", excludeContent)
+	if !strings.Contains(excludeContent, ".binds/interactions.jsonl") {
+		t.Errorf("Expected .git/info/exclude to contain '.binds/interactions.jsonl' when sync-branch is in config.yaml, got:\n%s", excludeContent)
 	}
 }
 
@@ -363,7 +363,7 @@ func TestInitWithoutBranchFlag(t *testing.T) {
 	}
 
 	// Verify database was created
-	dbFilePath := filepath.Join(tmpDir, ".beads", "beads.db")
+	dbFilePath := filepath.Join(tmpDir, ".binds", "beads.db")
 	store, err := openExistingTestDB(t, dbFilePath)
 	if err != nil {
 		t.Fatalf("Failed to open database: %v", err)
@@ -406,7 +406,7 @@ func TestInitAlreadyInitialized(t *testing.T) {
 	}
 
 	// Verify database still works (always beads.db now)
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
 	store, err := openExistingTestDB(t, dbPath)
 	if err != nil {
 		t.Fatalf("Failed to open database: %v", err)
@@ -476,9 +476,9 @@ func TestInitWithCustomDBPath(t *testing.T) {
 			t.Errorf("Expected prefix 'custom', got %q", prefix)
 		}
 
-		// Verify .beads/ directory was NOT created in work directory
-		if _, err := os.Stat(filepath.Join(workDir, ".beads")); err == nil {
-			t.Error(".beads/ directory should not be created when using BEADS_DB env var")
+		// Verify .binds/ directory was NOT created in work directory
+		if _, err := os.Stat(filepath.Join(workDir, ".binds")); err == nil {
+			t.Error(".binds/ directory should not be created when using BEADS_DB env var")
 		}
 	})
 
@@ -518,10 +518,10 @@ func TestInitWithCustomDBPath(t *testing.T) {
 		}
 	})
 
-	// Test that BEADS_DB path containing ".beads" doesn't create CWD/.beads
-	t.Run("init with BEADS_DB path containing .beads", func(t *testing.T) {
+	// Test that BEADS_DB path containing ".binds" doesn't create CWD/.beads
+	t.Run("init with BEADS_DB path containing .binds", func(t *testing.T) {
 		dbPath = "" // Reset global
-		// Path contains ".beads" but is outside work directory
+		// Path contains ".binds" but is outside work directory
 		customPath := filepath.Join(tmpDir, "storage", ".beads-backup", "test.db")
 		os.Setenv("BEADS_DB", customPath)
 		defer os.Unsetenv("BEADS_DB")
@@ -537,9 +537,9 @@ func TestInitWithCustomDBPath(t *testing.T) {
 			t.Errorf("Database was not created at custom path %s", customPath)
 		}
 
-		// Verify .beads/ directory was NOT created in work directory
-		if _, err := os.Stat(filepath.Join(workDir, ".beads")); err == nil {
-			t.Error(".beads/ directory should not be created in CWD when BEADS_DB path contains .beads")
+		// Verify .binds/ directory was NOT created in work directory
+		if _, err := os.Stat(filepath.Join(workDir, ".binds")); err == nil {
+			t.Error(".binds/ directory should not be created in CWD when BEADS_DB path contains .binds")
 		}
 	})
 
@@ -562,9 +562,9 @@ func TestInitWithCustomDBPath(t *testing.T) {
 			t.Errorf("Database was not created at BEADS_DB path %s", envPath)
 		}
 
-		// Verify .beads/ directory was NOT created in work directory
-		if _, err := os.Stat(filepath.Join(workDir, ".beads")); err == nil {
-			t.Error(".beads/ directory should not be created in CWD when BEADS_DB is set")
+		// Verify .binds/ directory was NOT created in work directory
+		if _, err := os.Stat(filepath.Join(workDir, ".binds")); err == nil {
+			t.Error(".binds/ directory should not be created in CWD when BEADS_DB is set")
 		}
 	})
 }
@@ -588,7 +588,7 @@ func TestInitNoDbMode(t *testing.T) {
 
 	// Set BEADS_DIR to prevent git repo detection from finding project's .beads
 	origBeadsDir := os.Getenv("BEADS_DIR")
-	os.Setenv("BEADS_DIR", filepath.Join(tmpDir, ".beads"))
+	os.Setenv("BEADS_DIR", filepath.Join(tmpDir, ".binds"))
 	// Reset caches so RepoContext picks up new BEADS_DIR and CWD
 	beads.ResetCaches()
 	git.ResetCaches()
@@ -629,7 +629,7 @@ func TestInitNoDbMode(t *testing.T) {
 	}
 
 	// Verify issues.jsonl was created
-	jsonlPath := filepath.Join(tmpDir, ".beads", "issues.jsonl")
+	jsonlPath := filepath.Join(tmpDir, ".binds", "issues.jsonl")
 	if _, err := os.Stat(jsonlPath); os.IsNotExist(err) {
 		// Also check at BEADS_DIR directly
 		beadsDirJsonlPath := filepath.Join(beadsDirEnv, "issues.jsonl")
@@ -640,7 +640,7 @@ func TestInitNoDbMode(t *testing.T) {
 	}
 
 	// Verify config.yaml was created with no-db: true
-	configPath := filepath.Join(tmpDir, ".beads", "config.yaml")
+	configPath := filepath.Join(tmpDir, ".binds", "config.yaml")
 	configContent, err := os.ReadFile(configPath)
 	if err != nil {
 		t.Fatalf("Failed to read config.yaml: %v", err)
@@ -672,7 +672,7 @@ func TestInitNoDbMode(t *testing.T) {
 	// Real-world usage works correctly since each command is a fresh process.
 
 	// Verify no SQLite database was created
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
 	if _, err := os.Stat(dbPath); err == nil {
 		t.Error("SQLite database should not be created in --no-db mode")
 	}
@@ -704,7 +704,7 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Failed to get git config: %v", err)
 		}
-		if !strings.Contains(output, "bd merge") {
+		if !strings.Contains(output, "binds merge") {
 			t.Errorf("Expected merge driver to contain 'bd merge', got: %s", output)
 		}
 
@@ -714,7 +714,7 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Failed to read .gitattributes: %v", err)
 		}
-		if !strings.Contains(string(content), ".beads/issues.jsonl merge=beads") {
+		if !strings.Contains(string(content), ".binds/issues.jsonl merge=beads") {
 			t.Error(".gitattributes should contain merge driver configuration")
 		}
 	})
@@ -770,9 +770,9 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 		}
 
 		// Verify .beads was still created
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
-			t.Error(".beads directory should be created even without git")
+			t.Error(".binds directory should be created even without git")
 		}
 	})
 
@@ -791,13 +791,13 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 		}
 
 		// Pre-configure merge driver manually
-		if err := runCommandInDir(tmpDir, "git", "config", "merge.beads.driver", "bd merge %A %O %A %B"); err != nil {
+		if err := runCommandInDir(tmpDir, "git", "config", "merge.beads.driver", "binds merge %A %O %A %B"); err != nil {
 			t.Fatalf("Failed to set git config: %v", err)
 		}
 
 		// Create .gitattributes with merge driver
 		gitattrsPath := filepath.Join(tmpDir, ".gitattributes")
-		initialContent := "# Existing config\n.beads/issues.jsonl merge=beads\n"
+		initialContent := "# Existing config\n.binds/issues.jsonl merge=beads\n"
 		if err := os.WriteFile(gitattrsPath, []byte(initialContent), 0644); err != nil {
 			t.Fatalf("Failed to create .gitattributes: %v", err)
 		}
@@ -813,7 +813,7 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Git config should still be set: %v", err)
 		}
-		if !strings.Contains(output, "bd merge") {
+		if !strings.Contains(output, "binds merge") {
 			t.Errorf("Expected merge driver to contain 'bd merge', got: %s", output)
 		}
 
@@ -825,7 +825,7 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 
 		contentStr := string(content)
 		// Count occurrences - should only appear once
-		count := strings.Count(contentStr, ".beads/issues.jsonl merge=beads")
+		count := strings.Count(contentStr, ".binds/issues.jsonl merge=beads")
 		if count != 1 {
 			t.Errorf("Expected .gitattributes to contain merge config exactly once, found %d times", count)
 		}
@@ -883,13 +883,13 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 		}
 
 		// Should contain beads config
-		if !strings.Contains(contentStr, ".beads/issues.jsonl merge=beads") {
+		if !strings.Contains(contentStr, ".binds/issues.jsonl merge=beads") {
 			t.Error(".gitattributes should contain beads merge config")
 		}
 
 		// Beads config should come after existing content
 		txtIdx := strings.Index(contentStr, "*.txt")
-		beadsIdx := strings.Index(contentStr, ".beads/issues.jsonl")
+		beadsIdx := strings.Index(contentStr, ".binds/issues.jsonl")
 		if txtIdx >= beadsIdx {
 			t.Error("Beads config should be appended after existing content")
 		}
@@ -924,7 +924,7 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 			t.Fatalf("Failed to get merge.beads.driver: %v", err)
 		}
 		driver = strings.TrimSpace(driver)
-		expected := "bd merge %A %O %A %B"
+		expected := "binds merge %A %O %A %B"
 		if driver != expected {
 			t.Errorf("Expected merge.beads.driver to be %q, got %q", expected, driver)
 		}
@@ -956,13 +956,13 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 
 		// Configure stale merge driver with old invalid placeholders (%L/%R)
 		// This simulates a user who initialized with bd version <0.24.0
-		if err := runCommandInDir(tmpDir, "git", "config", "merge.beads.driver", "bd merge %L %R"); err != nil {
+		if err := runCommandInDir(tmpDir, "git", "config", "merge.beads.driver", "binds merge %L %R"); err != nil {
 			t.Fatalf("Failed to set stale git config: %v", err)
 		}
 
 		// Create .gitattributes with merge driver
 		gitattrsPath := filepath.Join(tmpDir, ".gitattributes")
-		if err := os.WriteFile(gitattrsPath, []byte(".beads/beads.jsonl merge=beads\n"), 0644); err != nil {
+		if err := os.WriteFile(gitattrsPath, []byte(".binds/beads.jsonl merge=beads\n"), 0644); err != nil {
 			t.Fatalf("Failed to create .gitattributes: %v", err)
 		}
 
@@ -978,7 +978,7 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 			t.Fatalf("Failed to get merge.beads.driver: %v", err)
 		}
 		driver = strings.TrimSpace(driver)
-		expected := "bd merge %A %O %A %B"
+		expected := "binds merge %A %O %A %B"
 		if driver != expected {
 			t.Errorf("Expected merge driver to be repaired to %q, got %q", expected, driver)
 		}
@@ -1004,13 +1004,13 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 		}
 
 		// Pre-configure correct merge driver and canonical filename in .gitattributes
-		if err := runCommandInDir(tmpDir, "git", "config", "merge.beads.driver", "bd merge %A %O %A %B"); err != nil {
+		if err := runCommandInDir(tmpDir, "git", "config", "merge.beads.driver", "binds merge %A %O %A %B"); err != nil {
 			t.Fatalf("Failed to set git config: %v", err)
 		}
 
 		// Create .gitattributes with canonical filename (issues.jsonl, not beads.jsonl)
 		gitattrsPath := filepath.Join(tmpDir, ".gitattributes")
-		if err := os.WriteFile(gitattrsPath, []byte(".beads/issues.jsonl merge=beads\n"), 0644); err != nil {
+		if err := os.WriteFile(gitattrsPath, []byte(".binds/issues.jsonl merge=beads\n"), 0644); err != nil {
 			t.Fatalf("Failed to create .gitattributes: %v", err)
 		}
 
@@ -1026,7 +1026,7 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 			t.Fatalf("Failed to get merge.beads.driver: %v", err)
 		}
 		driver = strings.TrimSpace(driver)
-		expected := "bd merge %A %O %A %B"
+		expected := "binds merge %A %O %A %B"
 		if driver != expected {
 			t.Errorf("Expected merge driver to remain %q, got %q", expected, driver)
 		}
@@ -1036,7 +1036,7 @@ func TestInitMergeDriverAutoConfiguration(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Failed to read .gitattributes: %v", err)
 		}
-		if !strings.Contains(string(content), ".beads/issues.jsonl merge=beads") {
+		if !strings.Contains(string(content), ".binds/issues.jsonl merge=beads") {
 			t.Errorf(".gitattributes should still contain canonical filename pattern")
 		}
 	})
@@ -1181,7 +1181,7 @@ func TestSetupClaudeSettings_InvalidJSON(t *testing.T) {
 		t.Error("Original file content should be preserved")
 	}
 
-	if strings.Contains(string(content), "bd onboard") {
+	if strings.Contains(string(content), "binds onboard") {
 		t.Error("File should NOT contain bd onboard prompt after error")
 	}
 }
@@ -1229,7 +1229,7 @@ func TestSetupClaudeSettings_ValidJSON(t *testing.T) {
 	contentStr := string(content)
 
 	// Should contain the new prompt
-	if !strings.Contains(contentStr, "bd onboard") {
+	if !strings.Contains(contentStr, "binds onboard") {
 		t.Error("File should contain bd onboard prompt")
 	}
 
@@ -1269,7 +1269,7 @@ func TestSetupClaudeSettings_NoExistingFile(t *testing.T) {
 		t.Fatalf("Failed to read settings file: %v", err)
 	}
 
-	if !strings.Contains(string(content), "bd onboard") {
+	if !strings.Contains(string(content), "binds onboard") {
 		t.Error("File should contain bd onboard prompt")
 	}
 }
@@ -1302,7 +1302,7 @@ func TestInitBranchPersistsToConfigYaml(t *testing.T) {
 	}
 
 	// Read config.yaml and verify sync-branch is uncommented
-	configPath := filepath.Join(tmpDir, ".beads", "config.yaml")
+	configPath := filepath.Join(tmpDir, ".binds", "config.yaml")
 	content, err := os.ReadFile(configPath)
 	if err != nil {
 		t.Fatalf("Failed to read config.yaml: %v", err)
@@ -1351,7 +1351,7 @@ func TestInitReinitWithBranch(t *testing.T) {
 	}
 
 	// Verify config.yaml has commented sync-branch initially
-	configPath := filepath.Join(tmpDir, ".beads", "config.yaml")
+	configPath := filepath.Join(tmpDir, ".binds", "config.yaml")
 	content, err := os.ReadFile(configPath)
 	if err != nil {
 		t.Fatalf("Failed to read config.yaml: %v", err)
@@ -1424,7 +1424,7 @@ func TestSetupGlobalGitIgnore_ReadOnly(t *testing.T) {
 		if !strings.Contains(output, "Unable to write") {
 			t.Error("expected instructions for manual addition")
 		}
-		if !strings.Contains(output, "/test/project/.beads/") {
+		if !strings.Contains(output, "/test/project/.binds/") {
 			t.Error("expected .beads pattern in output")
 		}
 	})
@@ -1466,7 +1466,7 @@ func TestSetupGlobalGitIgnore_ReadOnly(t *testing.T) {
 		if !strings.Contains(output, "Unable to write") {
 			t.Error("expected instructions for manual addition")
 		}
-		if !strings.Contains(output, "/test/project/.beads/") {
+		if !strings.Contains(output, "/test/project/.binds/") {
 			t.Error("expected .beads pattern in output")
 		}
 	})
@@ -1681,9 +1681,9 @@ func TestInitPromptNonGitRepo(t *testing.T) {
 	}
 
 	// Verify .beads was created
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
-		t.Error(".beads directory should be created even without git")
+		t.Error(".binds directory should be created even without git")
 	}
 }
 
@@ -1757,7 +1757,7 @@ func TestInitPromptExistingRole(t *testing.T) {
 }
 
 // TestInitWithRedirect verifies that bd init creates the database in the redirect target,
-// not in the local .beads directory. (GH#bd-0qel)
+// not in the local .binds directory. (GH#bd-0qel)
 func TestInitWithRedirect(t *testing.T) {
 	// Reset global state
 	origDBPath := dbPath
@@ -1786,13 +1786,13 @@ func TestInitWithRedirect(t *testing.T) {
 	}
 
 	// Create local .beads with redirect file pointing to target
-	localBeadsDir := filepath.Join(projectDir, ".beads")
+	localBeadsDir := filepath.Join(projectDir, ".binds")
 	if err := os.MkdirAll(localBeadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
 
-	// Create target .beads directory (the redirect destination)
-	targetBeadsDir := filepath.Join(tmpDir, "canonical", ".beads")
+	// Create target .binds directory (the redirect destination)
+	targetBeadsDir := filepath.Join(tmpDir, "canonical", ".binds")
 	if err := os.MkdirAll(targetBeadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -1866,9 +1866,9 @@ func TestInitWithRedirectToExistingDatabase(t *testing.T) {
 
 	tmpDir := t.TempDir()
 
-	// Create canonical .beads directory with EXISTING database
+	// Create canonical .binds directory with EXISTING database
 	canonicalDir := filepath.Join(tmpDir, "canonical")
-	canonicalBeadsDir := filepath.Join(canonicalDir, ".beads")
+	canonicalBeadsDir := filepath.Join(canonicalDir, ".binds")
 	if err := os.MkdirAll(canonicalBeadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -1886,7 +1886,7 @@ func TestInitWithRedirectToExistingDatabase(t *testing.T) {
 
 	// Create project directory with redirect to canonical
 	projectDir := filepath.Join(tmpDir, "project")
-	projectBeadsDir := filepath.Join(projectDir, ".beads")
+	projectBeadsDir := filepath.Join(projectDir, ".binds")
 	if err := os.MkdirAll(projectBeadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -1959,7 +1959,7 @@ func TestCheckExistingBeadsData_WithBEADS_DIR(t *testing.T) {
 		tmpDir := t.TempDir()
 
 		// Create BEADS_DIR location (no database)
-		beadsDirPath := filepath.Join(tmpDir, "external", ".beads")
+		beadsDirPath := filepath.Join(tmpDir, "external", ".binds")
 		os.MkdirAll(beadsDirPath, 0755)
 
 		os.Setenv("BEADS_DIR", beadsDirPath)
@@ -1976,7 +1976,7 @@ func TestCheckExistingBeadsData_WithBEADS_DIR(t *testing.T) {
 		tmpDir := t.TempDir()
 
 		// Create CWD with existing database (should be ignored)
-		cwdBeadsDir := filepath.Join(tmpDir, "cwd", ".beads")
+		cwdBeadsDir := filepath.Join(tmpDir, "cwd", ".binds")
 		os.MkdirAll(cwdBeadsDir, 0755)
 		cwdDBPath := filepath.Join(cwdBeadsDir, beads.CanonicalDatabaseName)
 		store, err := sqlite.New(context.Background(), cwdDBPath)
@@ -1986,7 +1986,7 @@ func TestCheckExistingBeadsData_WithBEADS_DIR(t *testing.T) {
 		store.Close()
 
 		// Create BEADS_DIR location (no database)
-		beadsDirPath := filepath.Join(tmpDir, "external", ".beads")
+		beadsDirPath := filepath.Join(tmpDir, "external", ".binds")
 		os.MkdirAll(beadsDirPath, 0755)
 
 		// Set BEADS_DIR - should check external, not CWD
@@ -2009,7 +2009,7 @@ func TestCheckExistingBeadsData_WithBEADS_DIR(t *testing.T) {
 		tmpDir := t.TempDir()
 
 		// Create BEADS_DIR with existing database
-		beadsDirPath := filepath.Join(tmpDir, "external", ".beads")
+		beadsDirPath := filepath.Join(tmpDir, "external", ".binds")
 		os.MkdirAll(beadsDirPath, 0755)
 		dbPath := filepath.Join(beadsDirPath, beads.CanonicalDatabaseName)
 		store, err := sqlite.New(context.Background(), dbPath)
@@ -2067,7 +2067,7 @@ func TestInit_WithBEADS_DIR(t *testing.T) {
 	tmpDir := t.TempDir()
 
 	// Create external BEADS_DIR location
-	beadsDirPath := filepath.Join(tmpDir, "external", ".beads")
+	beadsDirPath := filepath.Join(tmpDir, "external", ".binds")
 	os.MkdirAll(filepath.Dir(beadsDirPath), 0755) // Create parent, not .beads itself
 
 	os.Setenv("BEADS_DIR", beadsDirPath)
@@ -2092,7 +2092,7 @@ func TestInit_WithBEADS_DIR(t *testing.T) {
 	}
 
 	// Verify database was NOT created at CWD
-	cwdDBPath := filepath.Join(cwdPath, ".beads", beads.CanonicalDatabaseName)
+	cwdDBPath := filepath.Join(cwdPath, ".binds", beads.CanonicalDatabaseName)
 	if _, err := os.Stat(cwdDBPath); err == nil {
 		t.Errorf("Database should NOT have been created at CWD: %s", cwdDBPath)
 	}
@@ -2153,7 +2153,7 @@ func TestInit_WithBEADS_DIR_DoltBackend(t *testing.T) {
 	tmpDir := t.TempDir()
 
 	// Create external BEADS_DIR location
-	beadsDirPath := filepath.Join(tmpDir, "external", ".beads")
+	beadsDirPath := filepath.Join(tmpDir, "external", ".binds")
 	os.MkdirAll(filepath.Dir(beadsDirPath), 0755)
 
 	os.Setenv("BEADS_DIR", beadsDirPath)
@@ -2180,7 +2180,7 @@ func TestInit_WithBEADS_DIR_DoltBackend(t *testing.T) {
 	}
 
 	// Verify database was NOT created at CWD
-	cwdDoltPath := filepath.Join(cwdPath, ".beads", "dolt")
+	cwdDoltPath := filepath.Join(cwdPath, ".binds", "dolt")
 	if _, err := os.Stat(cwdDoltPath); err == nil {
 		t.Errorf("Dolt database should NOT have been created at CWD: %s", cwdDoltPath)
 	}
@@ -2224,7 +2224,7 @@ func TestInit_WithoutBEADS_DIR_NoBehaviorChange(t *testing.T) {
 	}
 
 	// Verify database was created at CWD/.beads (default behavior)
-	expectedDBPath := filepath.Join(tmpDir, ".beads", beads.CanonicalDatabaseName)
+	expectedDBPath := filepath.Join(tmpDir, ".binds", beads.CanonicalDatabaseName)
 	if _, err := os.Stat(expectedDBPath); os.IsNotExist(err) {
 		t.Errorf("Database was not created at default CWD/.beads path: %s", expectedDBPath)
 	}
@@ -2266,7 +2266,7 @@ func TestInit_BEADS_DB_OverridesBEADS_DIR(t *testing.T) {
 	beadsDirTarget := t.TempDir() // Where BEADS_DIR points (should be ignored)
 	beadsDBTarget := t.TempDir()  // Where BEADS_DB points (should be used)
 
-	beadsDirBeads := filepath.Join(beadsDirTarget, ".beads")
+	beadsDirBeads := filepath.Join(beadsDirTarget, ".binds")
 	if err := os.MkdirAll(beadsDirBeads, 0750); err != nil {
 		t.Fatal(err)
 	}

@@ -14,8 +14,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 var cliCoverageMutex sync.Mutex
@@ -68,8 +68,8 @@ func runBDForCoverage(t *testing.T, dir string, args ...string) (stdout string, 
 	}()
 
 	// Ensure all commands (including init) operate on the temp workspace DB.
-	db := filepath.Join(dir, ".beads", "beads.db")
-	beadsDir := filepath.Join(dir, ".beads")
+	db := filepath.Join(dir, ".binds", "beads.db")
+	beadsDir := filepath.Join(dir, ".binds")
 	oldBeadsDir, beadsDirWasSet := os.LookupEnv("BEADS_DIR")
 	os.Setenv("BEADS_DIR", beadsDir)
 	defer func() {
@@ -175,7 +175,7 @@ func runBDForCoverage(t *testing.T, dir string, args ...string) (stdout string, 
 	stderr = errBuf.String()
 
 	if err != nil {
-		t.Fatalf("bd %v failed: %v\nStdout: %s\nStderr: %s", args, err, stdout, stderr)
+		t.Fatalf("binds %v failed: %v\nStdout: %s\nStderr: %s", args, err, stdout, stderr)
 	}
 
 	return stdout, stderr
@@ -308,7 +308,7 @@ func TestCoverage_TemplateAndPinnedProtections(t *testing.T) {
 	}
 
 	// Insert a template issue directly and verify update/close protect it.
-	dbFile := filepath.Join(dir, ".beads", "beads.db")
+	dbFile := filepath.Join(dir, ".binds", "beads.db")
 	s, err := sqlite.New(context.Background(), dbFile)
 	if err != nil {
 		t.Fatalf("sqlite.New: %v", err)
@@ -384,7 +384,7 @@ func TestCoverage_ShowThread(t *testing.T) {
 	dir := t.TempDir()
 	runBDForCoverage(t, dir, "init", "--prefix", "test", "--quiet")
 
-	dbFile := filepath.Join(dir, ".beads", "beads.db")
+	dbFile := filepath.Join(dir, ".binds", "beads.db")
 	s, err := sqlite.New(context.Background(), dbFile)
 	if err != nil {
 		t.Fatalf("sqlite.New: %v", err)

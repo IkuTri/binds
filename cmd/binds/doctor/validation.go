@@ -9,16 +9,16 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/storage/factory"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/storage/factory"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // CheckMergeArtifacts detects temporary git merge files in .beads directory.
 // These are created during git merges and should be cleaned up.
 func CheckMergeArtifacts(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
 		return DoctorCheck{
@@ -111,7 +111,7 @@ func readMergeArtifactPatterns(beadsDir string) ([]string, error) {
 // CheckOrphanedDependencies detects dependencies pointing to non-existent issues.
 func CheckOrphanedDependencies(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	dbPath := filepath.Join(beadsDir, beads.CanonicalDatabaseName)
 
 	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
@@ -185,7 +185,7 @@ func CheckOrphanedDependencies(path string) DoctorCheck {
 // are acceptable before warning (default 1000 for gastown's ephemeral wisps).
 func CheckDuplicateIssues(path string, gastownMode bool, gastownThreshold int) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 
 	// Open store using factory in read-only mode to avoid creating new database.
 	// ReadOnly mode fails if database doesn't exist.
@@ -270,7 +270,7 @@ func CheckDuplicateIssues(path string, gastownMode bool, gastownThreshold int) D
 // CheckTestPollution detects test issues that may have leaked into the database.
 func CheckTestPollution(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	dbPath := filepath.Join(beadsDir, beads.CanonicalDatabaseName)
 
 	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
@@ -333,7 +333,7 @@ func CheckTestPollution(path string) DoctorCheck {
 // However, they may be intentional in some workflows, so removal requires explicit opt-in.
 func CheckChildParentDependencies(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	dbPath := filepath.Join(beadsDir, beads.CanonicalDatabaseName)
 
 	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
@@ -410,7 +410,7 @@ func CheckChildParentDependencies(path string) DoctorCheck {
 // while sync-branch means "I own my database and sync it myself". These are mutually exclusive.
 // bd-wayc3: Added to detect incompatible configuration before sync fails.
 func CheckRedirectSyncBranchConflict(path string) DoctorCheck {
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 
 	// Check if redirect file exists
 	redirectFile := filepath.Join(beadsDir, beads.RedirectFileName)
@@ -481,7 +481,7 @@ func CheckRedirectSyncBranchConflict(path string) DoctorCheck {
 // CheckGitConflicts detects git conflict markers in JSONL file.
 func CheckGitConflicts(path string) DoctorCheck {
 	// Follow redirect to resolve actual beads directory (bd-tvus fix)
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
 
 	if _, err := os.Stat(jsonlPath); os.IsNotExist(err) {

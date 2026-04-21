@@ -21,17 +21,17 @@ func TestDoctorRepair_CorruptDatabase_NotADatabase_RebuildFromJSONL(t *testing.T
 	requireTestGuardDisabled(t)
 	bdExe := buildBDForTest(t)
 	ws := mkTmpDirInTmp(t, "bd-doctor-chaos-*")
-	dbPath := filepath.Join(ws, ".beads", "beads.db")
-	jsonlPath := filepath.Join(ws, ".beads", "issues.jsonl")
+	dbPath := filepath.Join(ws, ".binds", "beads.db")
+	jsonlPath := filepath.Join(ws, ".binds", "issues.jsonl")
 
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "init", "--prefix", "chaos", "--quiet"); err != nil {
-		t.Fatalf("bd init failed: %v", err)
+		t.Fatalf("binds init failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "create", "Chaos issue", "-p", "1"); err != nil {
-		t.Fatalf("bd create failed: %v", err)
+		t.Fatalf("binds create failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "export", "-o", jsonlPath, "--force"); err != nil {
-		t.Fatalf("bd export failed: %v", err)
+		t.Fatalf("binds export failed: %v", err)
 	}
 
 	// Make the DB unreadable.
@@ -40,11 +40,11 @@ func TestDoctorRepair_CorruptDatabase_NotADatabase_RebuildFromJSONL(t *testing.T
 	}
 
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "doctor", "--fix", "--yes"); err != nil {
-		t.Fatalf("bd doctor --fix failed: %v", err)
+		t.Fatalf("binds doctor --fix failed: %v", err)
 	}
 
 	if out, err := runBDSideDB(t, bdExe, ws, dbPath, "doctor"); err != nil {
-		t.Fatalf("bd doctor after fix failed: %v\n%s", err, out)
+		t.Fatalf("binds doctor after fix failed: %v\n%s", err, out)
 	}
 }
 
@@ -52,18 +52,18 @@ func TestDoctorRepair_CorruptDatabase_NoJSONL_FixFails(t *testing.T) {
 	requireTestGuardDisabled(t)
 	bdExe := buildBDForTest(t)
 	ws := mkTmpDirInTmp(t, "bd-doctor-chaos-nojsonl-*")
-	dbPath := filepath.Join(ws, ".beads", "beads.db")
+	dbPath := filepath.Join(ws, ".binds", "beads.db")
 
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "init", "--prefix", "chaos", "--quiet"); err != nil {
-		t.Fatalf("bd init failed: %v", err)
+		t.Fatalf("binds init failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "create", "Chaos issue", "-p", "1"); err != nil {
-		t.Fatalf("bd create failed: %v", err)
+		t.Fatalf("binds create failed: %v", err)
 	}
 
 	// Some workflows keep JSONL in sync automatically; force it to be missing.
-	_ = os.Remove(filepath.Join(ws, ".beads", "issues.jsonl"))
-	_ = os.Remove(filepath.Join(ws, ".beads", "beads.jsonl"))
+	_ = os.Remove(filepath.Join(ws, ".binds", "issues.jsonl"))
+	_ = os.Remove(filepath.Join(ws, ".binds", "beads.jsonl"))
 
 	// Corrupt without providing JSONL source-of-truth.
 	if err := os.Truncate(dbPath, 64); err != nil {
@@ -79,7 +79,7 @@ func TestDoctorRepair_CorruptDatabase_NoJSONL_FixFails(t *testing.T) {
 	}
 
 	// Ensure we don't mis-configure jsonl_export to a system file during failure.
-	metadata, readErr := os.ReadFile(filepath.Join(ws, ".beads", "metadata.json"))
+	metadata, readErr := os.ReadFile(filepath.Join(ws, ".binds", "metadata.json"))
 	if readErr == nil {
 		if strings.Contains(string(metadata), "interactions.jsonl") {
 			t.Fatalf("unexpected metadata.json jsonl_export set to interactions.jsonl:\n%s", string(metadata))
@@ -91,17 +91,17 @@ func TestDoctorRepair_CorruptDatabase_BacksUpSidecars(t *testing.T) {
 	requireTestGuardDisabled(t)
 	bdExe := buildBDForTest(t)
 	ws := mkTmpDirInTmp(t, "bd-doctor-chaos-sidecars-*")
-	dbPath := filepath.Join(ws, ".beads", "beads.db")
-	jsonlPath := filepath.Join(ws, ".beads", "issues.jsonl")
+	dbPath := filepath.Join(ws, ".binds", "beads.db")
+	jsonlPath := filepath.Join(ws, ".binds", "issues.jsonl")
 
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "init", "--prefix", "chaos", "--quiet"); err != nil {
-		t.Fatalf("bd init failed: %v", err)
+		t.Fatalf("binds init failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "create", "Chaos issue", "-p", "1"); err != nil {
-		t.Fatalf("bd create failed: %v", err)
+		t.Fatalf("binds create failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "export", "-o", jsonlPath, "--force"); err != nil {
-		t.Fatalf("bd export failed: %v", err)
+		t.Fatalf("binds export failed: %v", err)
 	}
 
 	// Ensure sidecars exist so we can verify they get moved with the backup.
@@ -115,18 +115,18 @@ func TestDoctorRepair_CorruptDatabase_BacksUpSidecars(t *testing.T) {
 	}
 
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "doctor", "--fix", "--yes"); err != nil {
-		t.Fatalf("bd doctor --fix failed: %v", err)
+		t.Fatalf("binds doctor --fix failed: %v", err)
 	}
 
 	// Verify a backup exists, and at least one sidecar got moved.
-	entries, err := os.ReadDir(filepath.Join(ws, ".beads"))
+	entries, err := os.ReadDir(filepath.Join(ws, ".binds"))
 	if err != nil {
 		t.Fatalf("readdir: %v", err)
 	}
 	var backup string
 	for _, e := range entries {
 		if strings.Contains(e.Name(), ".corrupt.backup.db") {
-			backup = filepath.Join(ws, ".beads", e.Name())
+			backup = filepath.Join(ws, ".binds", e.Name())
 			break
 		}
 	}
@@ -147,17 +147,17 @@ func TestDoctorRepair_CorruptDatabase_WithRunningDaemon_FixSucceeds(t *testing.T
 	requireTestGuardDisabled(t)
 	bdExe := buildBDForTest(t)
 	ws := mkTmpDirInTmp(t, "bd-doctor-chaos-daemon-*")
-	dbPath := filepath.Join(ws, ".beads", "beads.db")
-	jsonlPath := filepath.Join(ws, ".beads", "issues.jsonl")
+	dbPath := filepath.Join(ws, ".binds", "beads.db")
+	jsonlPath := filepath.Join(ws, ".binds", "issues.jsonl")
 
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "init", "--prefix", "chaos", "--quiet"); err != nil {
-		t.Fatalf("bd init failed: %v", err)
+		t.Fatalf("binds init failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "create", "Chaos issue", "-p", "1"); err != nil {
-		t.Fatalf("bd create failed: %v", err)
+		t.Fatalf("binds create failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "export", "-o", jsonlPath, "--force"); err != nil {
-		t.Fatalf("bd export failed: %v", err)
+		t.Fatalf("binds export failed: %v", err)
 	}
 
 	cmd := startDaemonForChaosTest(t, bdExe, ws, dbPath)
@@ -174,7 +174,7 @@ func TestDoctorRepair_CorruptDatabase_WithRunningDaemon_FixSucceeds(t *testing.T
 	}
 
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "doctor", "--fix", "--yes"); err != nil {
-		t.Fatalf("bd doctor --fix failed: %v", err)
+		t.Fatalf("binds doctor --fix failed: %v", err)
 	}
 
 	// Ensure we can cleanly stop the daemon afterwards (repair shouldn't wedge it).
@@ -195,17 +195,17 @@ func TestDoctorRepair_JSONLIntegrity_MalformedLine_ReexportFromDB(t *testing.T) 
 	requireTestGuardDisabled(t)
 	bdExe := buildBDForTest(t)
 	ws := mkTmpDirInTmp(t, "bd-doctor-chaos-jsonl-*")
-	dbPath := filepath.Join(ws, ".beads", "beads.db")
-	jsonlPath := filepath.Join(ws, ".beads", "issues.jsonl")
+	dbPath := filepath.Join(ws, ".binds", "beads.db")
+	jsonlPath := filepath.Join(ws, ".binds", "issues.jsonl")
 
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "init", "--prefix", "chaos", "--quiet"); err != nil {
-		t.Fatalf("bd init failed: %v", err)
+		t.Fatalf("binds init failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "create", "Chaos issue", "-p", "1"); err != nil {
-		t.Fatalf("bd create failed: %v", err)
+		t.Fatalf("binds create failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "export", "-o", jsonlPath, "--force"); err != nil {
-		t.Fatalf("bd export failed: %v", err)
+		t.Fatalf("binds export failed: %v", err)
 	}
 
 	// Corrupt JSONL (leave DB intact).
@@ -220,7 +220,7 @@ func TestDoctorRepair_JSONLIntegrity_MalformedLine_ReexportFromDB(t *testing.T) 
 	_ = f.Close()
 
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "doctor", "--fix", "--yes"); err != nil {
-		t.Fatalf("bd doctor --fix failed: %v", err)
+		t.Fatalf("binds doctor --fix failed: %v", err)
 	}
 
 	data, err := os.ReadFile(jsonlPath)
@@ -236,17 +236,17 @@ func TestDoctorRepair_DatabaseIntegrity_DBWriteLocked_ImportFailsFast(t *testing
 	requireTestGuardDisabled(t)
 	bdExe := buildBDForTest(t)
 	ws := mkTmpDirInTmp(t, "bd-doctor-chaos-db-locked-*")
-	dbPath := filepath.Join(ws, ".beads", "beads.db")
-	jsonlPath := filepath.Join(ws, ".beads", "issues.jsonl")
+	dbPath := filepath.Join(ws, ".binds", "beads.db")
+	jsonlPath := filepath.Join(ws, ".binds", "issues.jsonl")
 
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "init", "--prefix", "chaos", "--quiet"); err != nil {
-		t.Fatalf("bd init failed: %v", err)
+		t.Fatalf("binds init failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "create", "Chaos issue", "-p", "1"); err != nil {
-		t.Fatalf("bd create failed: %v", err)
+		t.Fatalf("binds create failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "export", "-o", jsonlPath, "--force"); err != nil {
-		t.Fatalf("bd export failed: %v", err)
+		t.Fatalf("binds export failed: %v", err)
 	}
 
 	// Lock the DB for writes in-process.
@@ -286,18 +286,18 @@ func TestDoctorRepair_CorruptDatabase_ReadOnlyBeadsDir_PermissionsFixMakesWritab
 	requireTestGuardDisabled(t)
 	bdExe := buildBDForTest(t)
 	ws := mkTmpDirInTmp(t, "bd-doctor-chaos-readonly-*")
-	beadsDir := filepath.Join(ws, ".beads")
+	beadsDir := filepath.Join(ws, ".binds")
 	dbPath := filepath.Join(beadsDir, "beads.db")
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
 
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "init", "--prefix", "chaos", "--quiet"); err != nil {
-		t.Fatalf("bd init failed: %v", err)
+		t.Fatalf("binds init failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "create", "Chaos issue", "-p", "1"); err != nil {
-		t.Fatalf("bd create failed: %v", err)
+		t.Fatalf("binds create failed: %v", err)
 	}
 	if _, err := runBDSideDB(t, bdExe, ws, dbPath, "export", "-o", jsonlPath, "--force"); err != nil {
-		t.Fatalf("bd export failed: %v", err)
+		t.Fatalf("binds export failed: %v", err)
 	}
 
 	// Corrupt the DB.
@@ -346,7 +346,7 @@ func startDaemonForChaosTest(t *testing.T, bdExe, ws, dbPath string) *exec.Cmd {
 	}
 
 	// Wait for socket to appear.
-	sock := filepath.Join(ws, ".beads", "bd.sock")
+	sock := filepath.Join(ws, ".binds", "bd.sock")
 	deadline := time.Now().Add(8 * time.Second)
 	for time.Now().Before(deadline) {
 		if _, err := os.Stat(sock); err == nil {
@@ -375,7 +375,7 @@ func runBDWithEnv(ctx context.Context, exe, dir, dbPath string, env map[string]s
 	cmd.Dir = dir
 	cmd.Env = append(os.Environ(),
 		"BEADS_NO_DAEMON=1",
-		"BEADS_DIR="+filepath.Join(dir, ".beads"),
+		"BEADS_DIR="+filepath.Join(dir, ".binds"),
 	)
 	for k, v := range env {
 		cmd.Env = append(cmd.Env, k+"="+v)

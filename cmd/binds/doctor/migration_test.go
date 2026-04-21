@@ -23,7 +23,7 @@ func TestCheckPendingMigrations(t *testing.T) {
 		{
 			name: "empty beads directory",
 			setup: func(t *testing.T, dir string) {
-				if err := os.MkdirAll(filepath.Join(dir, ".beads"), 0755); err != nil {
+				if err := os.MkdirAll(filepath.Join(dir, ".binds"), 0755); err != nil {
 					t.Fatalf("failed to create .beads: %v", err)
 				}
 			},
@@ -33,7 +33,7 @@ func TestCheckPendingMigrations(t *testing.T) {
 		{
 			name: "deletions.jsonl exists with entries",
 			setup: func(t *testing.T, dir string) {
-				beadsDir := filepath.Join(dir, ".beads")
+				beadsDir := filepath.Join(dir, ".binds")
 				if err := os.MkdirAll(beadsDir, 0755); err != nil {
 					t.Fatalf("failed to create .beads: %v", err)
 				}
@@ -96,7 +96,7 @@ func TestDetectPendingMigrations(t *testing.T) {
 		}
 		defer os.RemoveAll(tmpDir)
 
-		if err := os.MkdirAll(filepath.Join(tmpDir, ".beads"), 0755); err != nil {
+		if err := os.MkdirAll(filepath.Join(tmpDir, ".binds"), 0755); err != nil {
 			t.Fatalf("failed to create .beads: %v", err)
 		}
 
@@ -113,7 +113,7 @@ func TestDetectPendingMigrations(t *testing.T) {
 		}
 		defer os.RemoveAll(tmpDir)
 
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("failed to create .beads: %v", err)
 		}
@@ -134,8 +134,8 @@ func TestDetectPendingMigrations(t *testing.T) {
 			t.Errorf("migration name = %q, want %q", migrations[0].Name, "tombstones")
 		}
 
-		if migrations[0].Command != "bd migrate tombstones" {
-			t.Errorf("migration command = %q, want %q", migrations[0].Command, "bd migrate tombstones")
+		if migrations[0].Command != "binds migrate tombstones" {
+			t.Errorf("migration command = %q, want %q", migrations[0].Command, "binds migrate tombstones")
 		}
 	})
 }

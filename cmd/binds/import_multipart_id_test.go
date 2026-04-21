@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestImportMultiPartIDs tests that issue IDs with hyphens in the suffix
@@ -13,7 +13,7 @@ import (
 // and not treated as having different prefixes like "vc-baseline-"
 func TestImportMultiPartIDs(t *testing.T) {
 	tmpDir := t.TempDir()
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
 	
 	// Create database with "vc" prefix
 	st := newTestStoreWithPrefix(t, dbPath, "vc")
@@ -88,7 +88,7 @@ func TestImportMultiPartIDs(t *testing.T) {
 // like "asianops-audit-" should not cause false positive prefix mismatch errors.
 func TestImportMultiHyphenPrefix(t *testing.T) {
 	tmpDir := t.TempDir()
-	dbPath := filepath.Join(tmpDir, ".beads", "beads.db")
+	dbPath := filepath.Join(tmpDir, ".binds", "beads.db")
 
 	// Create database with multi-hyphen prefix "asianops-audit"
 	st := newTestStoreWithPrefix(t, dbPath, "asianops-audit")

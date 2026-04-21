@@ -120,7 +120,7 @@ Welcome to Beads! This repository uses **Beads** for issue tracking - a modern, 
 
 Beads is issue tracking that lives in your repo, making it perfect for AI coding agents and developers who want their issues close to their code. No web UI required - everything works through the CLI and integrates seamlessly with git.
 
-**Learn more:** [github.com/steveyegge/beads](https://github.com/steveyegge/beads)
+**Learn more:** [github.com/IkuTri/binds](https://github.com/IkuTri/binds)
 
 ## Quick Start
 
@@ -186,9 +186,9 @@ binds create "Try out Beads"
 
 ## Learn More
 
-- **Documentation**: [github.com/steveyegge/beads/docs](https://github.com/steveyegge/beads/tree/main/docs)
+- **Documentation**: [github.com/IkuTri/binds/docs](https://github.com/IkuTri/binds/tree/main/docs)
 - **Quick Start Guide**: Run ` + "`binds quickstart`" + `
-- **Examples**: [github.com/steveyegge/beads/examples](https://github.com/steveyegge/beads/tree/main/examples)
+- **Examples**: [github.com/IkuTri/binds/examples](https://github.com/IkuTri/binds/tree/main/examples)
 
 ---
 

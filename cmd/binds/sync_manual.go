@@ -9,8 +9,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/ui"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/ui"
 )
 
 // InteractiveConflict represents a conflict to be resolved interactively

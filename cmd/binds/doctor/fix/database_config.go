@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // DatabaseConfig auto-detects and fixes metadata.json database/JSONL config mismatches.
@@ -16,7 +16,7 @@ func DatabaseConfig(path string) error {
 		return err
 	}
 
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 
 	// Load existing config
 	cfg, err := configfile.Load(beadsDir)
@@ -149,7 +149,7 @@ func LegacyJSONLConfig(path string) error {
 		return err
 	}
 
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 
 	// Load existing config
 	cfg, err := configfile.Load(beadsDir)

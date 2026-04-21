@@ -32,7 +32,7 @@ func TestCheckMultipleDatabases(t *testing.T) {
 
 	t.Run("single database", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.Mkdir(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -50,7 +50,7 @@ func TestCheckMultipleDatabases(t *testing.T) {
 
 	t.Run("multiple databases", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.Mkdir(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -70,7 +70,7 @@ func TestCheckMultipleDatabases(t *testing.T) {
 
 	t.Run("backup files ignored", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.Mkdir(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -103,7 +103,7 @@ func TestCheckPermissions(t *testing.T) {
 
 	t.Run("writable directory", func(t *testing.T) {
 		tmpDir := t.TempDir()
-		beadsDir := filepath.Join(tmpDir, ".beads")
+		beadsDir := filepath.Join(tmpDir, ".binds")
 		if err := os.Mkdir(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}

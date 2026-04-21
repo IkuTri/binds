@@ -10,9 +10,9 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/steveyegge/beads/cmd/binds/doctor"
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/syncbranch"
+	"github.com/IkuTri/binds/cmd/binds/doctor"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/syncbranch"
 )
 
 // gitSSHRemotePattern matches standard git SSH remote URLs (user@host:path)

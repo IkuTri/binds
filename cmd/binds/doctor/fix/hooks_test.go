@@ -193,13 +193,13 @@ pre-commit:
 			configFile: "lefthook.toml",
 			configContent: `
 [pre-commit.commands.bd]
-run = "bd hooks run pre-commit"
+run = "binds hooks run pre-commit"
 
 [post-merge.commands.bd]
-run = "bd hooks run post-merge"
+run = "binds hooks run post-merge"
 
 [pre-push.commands.bd]
-run = "bd hooks run pre-push"
+run = "binds hooks run pre-push"
 `,
 			expectConfigured:  true,
 			expectHooksWithBd: []string{"pre-commit", "post-merge", "pre-push"},
@@ -211,21 +211,21 @@ run = "bd hooks run pre-push"
   "pre-commit": {
     "commands": {
       "bd": {
-        "run": "bd hooks run pre-commit"
+        "run": "binds hooks run pre-commit"
       }
     }
   },
   "post-merge": {
     "commands": {
       "bd": {
-        "run": "bd hooks run post-merge"
+        "run": "binds hooks run post-merge"
       }
     }
   },
   "pre-push": {
     "commands": {
       "bd": {
-        "run": "bd hooks run pre-push"
+        "run": "binds hooks run pre-push"
       }
     }
   }
@@ -540,18 +540,18 @@ func TestBdHookPatternMatching(t *testing.T) {
 		content string
 		matches bool
 	}{
-		{"bd hooks run pre-commit", true},
-		{"bd  hooks  run pre-commit", true},
-		{"bd hooks run post-merge", true},
+		{"binds hooks run pre-commit", true},
+		{"binds  hooks  run pre-commit", true},
+		{"binds hooks run post-merge", true},
 		{`bd hooks run pre-push "$@"`, true},
 		{"if command -v bd; then bd hooks run pre-commit; fi", true},
 		{"# bd hooks run is recommended", true},
 		// Word boundary tests - should NOT match partial words
 		{"kbd hooks runner", false}, // 'kbd' contains 'bd' but is different word
 		{"bd_hooks_run", false},     // underscores make different tokens
-		{"bd sync", false},
-		{"bd export", false},
-		{".beads/", false},
+		{"binds sync", false},
+		{"binds export", false},
+		{".binds/", false},
 		{"eslint .", false},
 		{"echo hello", false},
 	}
@@ -683,11 +683,11 @@ func TestHasBdInCommands(t *testing.T) {
 		expected bool
 	}{
 		{
-			name: "bd hooks run in commands",
+			name: "binds hooks run in commands",
 			section: map[string]interface{}{
 				"commands": map[string]interface{}{
 					"bd": map[string]interface{}{
-						"run": "bd hooks run pre-commit",
+						"run": "binds hooks run pre-commit",
 					},
 				},
 			},
@@ -705,12 +705,12 @@ func TestHasBdInCommands(t *testing.T) {
 			expected: false,
 		},
 		{
-			name: "bd mentioned in comment not run field",
+			name: "binds mentioned in comment not run field",
 			section: map[string]interface{}{
 				"commands": map[string]interface{}{
 					"lint": map[string]interface{}{
 						"run":  "eslint .",
-						"tags": "bd hooks run should be added",
+						"tags": "binds hooks run should be added",
 					},
 				},
 			},
@@ -1019,7 +1019,7 @@ func TestCheckManagerBdIntegration(t *testing.T) {
 				if err := os.MkdirAll(huskyDir, 0755); err != nil {
 					return err
 				}
-				return os.WriteFile(filepath.Join(huskyDir, "pre-commit"), []byte("bd hooks run pre-commit"), 0755)
+				return os.WriteFile(filepath.Join(huskyDir, "pre-commit"), []byte("binds hooks run pre-commit"), 0755)
 			},
 			expectNil:     false,
 			expectManager: "husky",

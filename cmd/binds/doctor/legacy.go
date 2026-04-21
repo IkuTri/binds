@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // CheckLegacyBeadsSlashCommands detects old /beads:* slash commands in documentation
@@ -123,7 +123,7 @@ func CheckAgentDocumentation(repoPath string) DoctorCheck {
 // which can cause sync/merge issues. Ignores merge artifacts and backups.
 // When gastownMode is true, routes.jsonl is treated as a valid system file.
 func CheckLegacyJSONLFilename(repoPath string, gastownMode bool) DoctorCheck {
-	beadsDir := filepath.Join(repoPath, ".beads")
+	beadsDir := filepath.Join(repoPath, ".binds")
 
 	// Find all .jsonl files
 	entries, err := os.ReadDir(beadsDir)
@@ -204,7 +204,7 @@ func CheckLegacyJSONLFilename(repoPath string, gastownMode bool) DoctorCheck {
 // CheckLegacyJSONLConfig detects if metadata.json is configured to use the legacy
 // beads.jsonl filename and recommends migrating to the canonical issues.jsonl.
 func CheckLegacyJSONLConfig(repoPath string) DoctorCheck {
-	beadsDir := filepath.Join(repoPath, ".beads")
+	beadsDir := filepath.Join(repoPath, ".binds")
 
 	// Load config
 	cfg, err := configfile.Load(beadsDir)
@@ -270,7 +270,7 @@ func CheckLegacyJSONLConfig(repoPath string) DoctorCheck {
 // CheckDatabaseConfig verifies that the configured database and JSONL paths
 // match what actually exists on disk.
 func CheckDatabaseConfig(repoPath string) DoctorCheck {
-	beadsDir := filepath.Join(repoPath, ".beads")
+	beadsDir := filepath.Join(repoPath, ".binds")
 
 	// Load config
 	cfg, err := configfile.Load(beadsDir)

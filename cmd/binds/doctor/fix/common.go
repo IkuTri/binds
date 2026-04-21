@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/beads"
+	"github.com/IkuTri/binds/internal/beads"
 )
 
 // ErrTestBinary is returned when getBdBinary detects it's running as a test binary.
@@ -53,7 +53,7 @@ func getBdBinary() (string, error) {
 	return bdPath, nil
 }
 
-// validateBeadsWorkspace ensures the path is a valid beads workspace before
+// validateBeadsWorkspace ensures the path is a valid binds workspace before
 // attempting any fix operations. This prevents path traversal attacks.
 func validateBeadsWorkspace(path string) error {
 	// Convert to absolute path
@@ -62,10 +62,13 @@ func validateBeadsWorkspace(path string) error {
 		return fmt.Errorf("invalid path: %w", err)
 	}
 
-	// Check for .beads directory
-	beadsDir := filepath.Join(absPath, ".beads")
-	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
-		return fmt.Errorf("not a beads workspace: .binds directory not found at %s", absPath)
+	// Check for .binds directory (fall back to .beads)
+	bindsDir := filepath.Join(absPath, ".binds")
+	beadsDir := filepath.Join(absPath, ".binds")
+	if _, err := os.Stat(bindsDir); os.IsNotExist(err) {
+		if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
+			return fmt.Errorf("not a binds workspace: .binds directory not found at %s", absPath)
+		}
 	}
 
 	return nil

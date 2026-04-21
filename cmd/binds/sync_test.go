@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/gofrs/flock"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/syncbranch"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/syncbranch"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 func TestIsGitRepo_InGitRepo(t *testing.T) {
@@ -246,7 +246,7 @@ func TestMergeSyncBranch_OnSyncBranch(t *testing.T) {
 	exec.Command("git", "checkout", "-b", "beads-metadata").Run()
 
 	// Initialize bd database and set sync.branch
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	os.MkdirAll(beadsDir, 0755)
 
 	// This test will fail with store access issues, so we just verify the branch check
@@ -376,7 +376,7 @@ func TestHasJSONLConflict_OnlyJSONLConflict(t *testing.T) {
 	defer cleanup()
 
 	// Create initial commit with beads.jsonl
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	os.MkdirAll(beadsDir, 0755)
 	os.WriteFile(filepath.Join(beadsDir, "beads.jsonl"), []byte(`{"id":"bd-1","title":"original"}`), 0644)
 	exec.Command("git", "add", ".").Run()
@@ -407,7 +407,7 @@ func TestHasJSONLConflict_MultipleConflicts(t *testing.T) {
 	defer cleanup()
 
 	// Create initial commit with beads.jsonl and another file
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	os.MkdirAll(beadsDir, 0755)
 	os.WriteFile(filepath.Join(beadsDir, "beads.jsonl"), []byte(`{"id":"bd-1","title":"original"}`), 0644)
 	os.WriteFile("other.txt", []byte("line1\nline2\nline3"), 0644)
@@ -447,7 +447,7 @@ func TestHashBasedStalenessDetection_bd_f2f(t *testing.T) {
 	tmpDir := t.TempDir()
 
 	// Create test database
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create beads dir: %v", err)
 	}
@@ -539,7 +539,7 @@ func TestHashBasedStalenessDetection_bd_f2f(t *testing.T) {
 
 // TestResolveNoGitHistoryForFromMain tests that --from-main forces noGitHistory=true
 // to prevent creating incorrect deletion records for locally-created beads.
-// See: https://github.com/steveyegge/beads/issues/417
+// See: https://github.com/IkuTri/binds/issues/417
 func TestResolveNoGitHistoryForFromMain(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
@@ -658,7 +658,7 @@ func TestIsExternalBeadsDir(t *testing.T) {
 		repoDir, cleanup := setupGitRepo(t)
 		defer cleanup()
 
-		beadsDir := filepath.Join(repoDir, ".beads")
+		beadsDir := filepath.Join(repoDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0750); err != nil {
 			t.Fatalf("mkdir failed: %v", err)
 		}
@@ -682,7 +682,7 @@ func TestIsExternalBeadsDir(t *testing.T) {
 		repo2Dir, cleanup2 := setupGitRepo(t)
 		defer cleanup2()
 
-		beadsDir := filepath.Join(repo2Dir, ".beads")
+		beadsDir := filepath.Join(repo2Dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0750); err != nil {
 			t.Fatalf("mkdir failed: %v", err)
 		}
@@ -716,7 +716,7 @@ func TestIsExternalBeadsDir(t *testing.T) {
 		}
 
 		// Create beads dir in worktree
-		beadsDir := filepath.Join(worktreeDir, ".beads")
+		beadsDir := filepath.Join(worktreeDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0750); err != nil {
 			t.Fatalf("mkdir failed: %v", err)
 		}
@@ -756,7 +756,7 @@ func TestConcurrentEdit(t *testing.T) {
 	_ = exec.Command("git", "config", "user.name", "Test User").Run()
 
 	// Setup: Create beads directory with JSONL (base state)
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("mkdir failed: %v", err)
 	}
@@ -864,7 +864,7 @@ func TestConcurrentSyncBlocked(t *testing.T) {
 	_ = exec.Command("git", "config", "user.name", "Test User").Run()
 
 	// Setup: Create beads directory with JSONL
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("mkdir failed: %v", err)
 	}

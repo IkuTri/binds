@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
 )
 
 // TestSyncModeConfig verifies sync mode configuration storage and retrieval.
@@ -14,8 +14,8 @@ func TestSyncModeConfig(t *testing.T) {
 	ctx := context.Background()
 	tmpDir := t.TempDir()
 
-	// Create .beads directory
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	// Create .binds directory
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("mkdir failed: %v", err)
 	}
@@ -88,7 +88,7 @@ func TestShouldExportJSONL(t *testing.T) {
 	ctx := context.Background()
 	tmpDir := t.TempDir()
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("mkdir failed: %v", err)
 	}
@@ -129,7 +129,7 @@ func TestShouldImportJSONL(t *testing.T) {
 	ctx := context.Background()
 	tmpDir := t.TempDir()
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("mkdir failed: %v", err)
 	}
@@ -170,7 +170,7 @@ func TestShouldUseDoltRemote(t *testing.T) {
 	ctx := context.Background()
 	tmpDir := t.TempDir()
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("mkdir failed: %v", err)
 	}

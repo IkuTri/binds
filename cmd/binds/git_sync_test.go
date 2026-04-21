@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestGitPullSyncIntegration tests the full git pull sync scenario
@@ -42,7 +42,7 @@ func TestGitPullSyncIntegration(t *testing.T) {
 	configureGit(t, clone1Dir)
 
 	// Initialize beads in clone1
-	clone1BeadsDir := filepath.Join(clone1Dir, ".beads")
+	clone1BeadsDir := filepath.Join(clone1Dir, ".binds")
 	if err := os.MkdirAll(clone1BeadsDir, 0750); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -82,7 +82,7 @@ func TestGitPullSyncIntegration(t *testing.T) {
 	}
 
 	// Commit and push from clone1
-	runGitCmd(t, clone1Dir, "add", ".beads")
+	runGitCmd(t, clone1Dir, "add", ".binds")
 	runGitCmd(t, clone1Dir, "commit", "-m", "Add closed issue")
 	runGitCmd(t, clone1Dir, "push", "origin", "master")
 
@@ -92,7 +92,7 @@ func TestGitPullSyncIntegration(t *testing.T) {
 	configureGit(t, clone2Dir)
 
 	// Initialize empty database in clone2
-	clone2BeadsDir := filepath.Join(clone2Dir, ".beads")
+	clone2BeadsDir := filepath.Join(clone2Dir, ".binds")
 	clone2DBPath := filepath.Join(clone2BeadsDir, "test.db")
 	clone2Store := newTestStore(t, clone2DBPath)
 	defer clone2Store.Close()
@@ -123,7 +123,7 @@ func TestGitPullSyncIntegration(t *testing.T) {
 		t.Fatalf("Failed to export after update: %v", err)
 	}
 
-	runGitCmd(t, clone1Dir, "add", ".beads/issues.jsonl")
+	runGitCmd(t, clone1Dir, "add", ".binds/issues.jsonl")
 	runGitCmd(t, clone1Dir, "commit", "-m", "Update priority")
 	runGitCmd(t, clone1Dir, "push", "origin", "master")
 
@@ -171,7 +171,7 @@ func TestGitPullSyncIntegration(t *testing.T) {
 			t.Fatalf("Failed to export: %v", err)
 		}
 
-		runGitCmd(t, clone1Dir, "add", ".beads/issues.jsonl")
+		runGitCmd(t, clone1Dir, "add", ".binds/issues.jsonl")
 		runGitCmd(t, clone1Dir, "commit", "-m", "Update priority")
 		runGitCmd(t, clone1Dir, "push", "origin", "master")
 

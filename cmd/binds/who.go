@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/server"
+	"github.com/IkuTri/binds/internal/server"
 )
 
 var whoCmd = &cobra.Command{

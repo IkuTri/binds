@@ -63,7 +63,7 @@ func TestValidateBeadsWorkspace_EdgeCases(t *testing.T) {
 		// Create a workspace with nested .beads directories
 		dir := setupTestWorkspace(t)
 		nestedDir := filepath.Join(dir, "subdir")
-		nestedBeadsDir := filepath.Join(nestedDir, ".beads")
+		nestedBeadsDir := filepath.Join(nestedDir, ".binds")
 		if err := os.MkdirAll(nestedBeadsDir, 0755); err != nil {
 			t.Fatalf("failed to create nested .beads: %v", err)
 		}
@@ -81,7 +81,7 @@ func TestValidateBeadsWorkspace_EdgeCases(t *testing.T) {
 
 	t.Run(".beads as a file not directory", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsFile := filepath.Join(dir, ".beads")
+		beadsFile := filepath.Join(dir, ".binds")
 		// Create .beads as a file instead of directory
 		if err := os.WriteFile(beadsFile, []byte("not a directory"), 0600); err != nil {
 			t.Fatalf("failed to create .beads file: %v", err)
@@ -99,21 +99,21 @@ func TestValidateBeadsWorkspace_EdgeCases(t *testing.T) {
 
 	t.Run(".beads as symlink to directory", func(t *testing.T) {
 		dir := t.TempDir()
-		// Create actual .beads directory elsewhere
+		// Create actual .binds directory elsewhere
 		actualBeadsDir := filepath.Join(t.TempDir(), "actual_beads")
 		if err := os.MkdirAll(actualBeadsDir, 0755); err != nil {
 			t.Fatalf("failed to create actual beads dir: %v", err)
 		}
 
 		// Create symlink .beads -> actual_beads
-		symlinkPath := filepath.Join(dir, ".beads")
+		symlinkPath := filepath.Join(dir, ".binds")
 		if err := os.Symlink(actualBeadsDir, symlinkPath); err != nil {
 			t.Skipf("symlink creation failed (may not be supported): %v", err)
 		}
 
 		// Should be valid - symlink to directory is acceptable
 		if err := validateBeadsWorkspace(dir); err != nil {
-			t.Errorf("expected symlinked .beads directory to be valid, got: %v", err)
+			t.Errorf("expected symlinked .binds directory to be valid, got: %v", err)
 		}
 	})
 
@@ -126,7 +126,7 @@ func TestValidateBeadsWorkspace_EdgeCases(t *testing.T) {
 		}
 
 		// Create symlink .beads -> file
-		symlinkPath := filepath.Join(dir, ".beads")
+		symlinkPath := filepath.Join(dir, ".binds")
 		if err := os.Symlink(actualFile, symlinkPath); err != nil {
 			t.Skipf("symlink creation failed (may not be supported): %v", err)
 		}
@@ -143,7 +143,7 @@ func TestValidateBeadsWorkspace_EdgeCases(t *testing.T) {
 	t.Run(".beads as broken symlink", func(t *testing.T) {
 		dir := t.TempDir()
 		// Create symlink to non-existent target
-		symlinkPath := filepath.Join(dir, ".beads")
+		symlinkPath := filepath.Join(dir, ".binds")
 		if err := os.Symlink("/nonexistent/target", symlinkPath); err != nil {
 			t.Skipf("symlink creation failed (may not be supported): %v", err)
 		}
@@ -182,7 +182,7 @@ func TestValidateBeadsWorkspace_EdgeCases(t *testing.T) {
 func TestFindJSONLPath_EdgeCases(t *testing.T) {
 	t.Run("multiple JSONL files - issues.jsonl takes precedence", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("failed to create .beads: %v", err)
 		}
@@ -205,7 +205,7 @@ func TestFindJSONLPath_EdgeCases(t *testing.T) {
 
 	t.Run("only beads.jsonl exists", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("failed to create .beads: %v", err)
 		}
@@ -223,7 +223,7 @@ func TestFindJSONLPath_EdgeCases(t *testing.T) {
 
 	t.Run("JSONL file as symlink", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("failed to create .beads: %v", err)
 		}
@@ -248,7 +248,7 @@ func TestFindJSONLPath_EdgeCases(t *testing.T) {
 
 	t.Run("JSONL file is directory", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("failed to create .beads: %v", err)
 		}
@@ -270,7 +270,7 @@ func TestFindJSONLPath_EdgeCases(t *testing.T) {
 
 	t.Run("no JSONL files present", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("failed to create .beads: %v", err)
 		}
@@ -337,7 +337,7 @@ func TestGitHooks_EdgeCases(t *testing.T) {
 		runGit(t, mainDir, "worktree", "add", worktreeDir, "-b", "feature")
 
 		// Create .beads in worktree
-		beadsDir := filepath.Join(worktreeDir, ".beads")
+		beadsDir := filepath.Join(worktreeDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("failed to create .beads in worktree: %v", err)
 		}
@@ -405,7 +405,7 @@ func TestMergeDriver_EdgeCases(t *testing.T) {
 			t.Fatalf("failed to get git config: %v", err)
 		}
 
-		expected := "bd merge %A %O %A %B\n"
+		expected := "binds merge %A %O %A %B\n"
 		if string(output) != expected {
 			t.Errorf("expected %q, got %q", expected, string(output))
 		}
@@ -426,15 +426,15 @@ func TestUntrackedJSONL_EdgeCases(t *testing.T) {
 		runGit(t, dir, "commit", "-m", "initial")
 
 		// Create a JSONL file and stage it but don't commit
-		jsonlFile := filepath.Join(dir, ".beads", "deletions.jsonl")
+		jsonlFile := filepath.Join(dir, ".binds", "deletions.jsonl")
 		if err := os.WriteFile(jsonlFile, []byte(`{"id":"test-1","ts":"2024-01-01T00:00:00Z","by":"user"}`+"\n"), 0600); err != nil {
 			t.Fatalf("failed to create JSONL file: %v", err)
 		}
-		runGit(t, dir, "add", ".beads/deletions.jsonl")
+		runGit(t, dir, "add", ".binds/deletions.jsonl")
 
 		// Check git status - should show staged file
-		output := runGit(t, dir, "status", "--porcelain", ".beads/")
-		if !strings.Contains(output, "A  .beads/deletions.jsonl") {
+		output := runGit(t, dir, "status", "--porcelain", ".binds/")
+		if !strings.Contains(output, "A  .binds/deletions.jsonl") {
 			t.Logf("git status output: %s", output)
 			t.Error("expected file to be staged")
 		}
@@ -446,8 +446,8 @@ func TestUntrackedJSONL_EdgeCases(t *testing.T) {
 		}
 
 		// File should still be staged, not committed again
-		output = runGit(t, dir, "status", "--porcelain", ".beads/")
-		if !strings.Contains(output, "A  .beads/deletions.jsonl") {
+		output = runGit(t, dir, "status", "--porcelain", ".binds/")
+		if !strings.Contains(output, "A  .binds/deletions.jsonl") {
 			t.Error("file should still be staged after UntrackedJSONL")
 		}
 	})
@@ -456,15 +456,15 @@ func TestUntrackedJSONL_EdgeCases(t *testing.T) {
 		dir := setupTestGitRepo(t)
 
 		// Create initial commit with one JSONL file
-		trackedFile := filepath.Join(dir, ".beads", "issues.jsonl")
+		trackedFile := filepath.Join(dir, ".binds", "issues.jsonl")
 		if err := os.WriteFile(trackedFile, []byte(`{"id":"test-1"}`+"\n"), 0600); err != nil {
 			t.Fatalf("failed to create tracked JSONL: %v", err)
 		}
-		runGit(t, dir, "add", ".beads/issues.jsonl")
+		runGit(t, dir, "add", ".binds/issues.jsonl")
 		runGit(t, dir, "commit", "-m", "initial")
 
 		// Create an untracked JSONL file
-		untrackedFile := filepath.Join(dir, ".beads", "deletions.jsonl")
+		untrackedFile := filepath.Join(dir, ".binds", "deletions.jsonl")
 		if err := os.WriteFile(untrackedFile, []byte(`{"id":"test-2"}`+"\n"), 0600); err != nil {
 			t.Fatalf("failed to create untracked JSONL: %v", err)
 		}
@@ -476,19 +476,19 @@ func TestUntrackedJSONL_EdgeCases(t *testing.T) {
 		}
 
 		// Verify untracked file was committed
-		output := runGit(t, dir, "status", "--porcelain", ".beads/")
+		output := runGit(t, dir, "status", "--porcelain", ".binds/")
 		if output != "" {
 			t.Errorf("expected clean status, got: %s", output)
 		}
 
 		// Verify both files are now tracked
-		output = runGit(t, dir, "ls-files", ".beads/")
+		output = runGit(t, dir, "ls-files", ".binds/")
 		if !strings.Contains(output, "issues.jsonl") || !strings.Contains(output, "deletions.jsonl") {
 			t.Errorf("expected both files to be tracked, got: %s", output)
 		}
 	})
 
-	t.Run("JSONL file outside .beads directory is ignored", func(t *testing.T) {
+	t.Run("JSONL file outside .binds directory is ignored", func(t *testing.T) {
 		dir := setupTestGitRepo(t)
 
 		// Create initial commit
@@ -524,8 +524,8 @@ func TestMigrateTombstones_EdgeCases(t *testing.T) {
 	t.Run("malformed deletions.jsonl with corrupt JSON", func(t *testing.T) {
 		dir := setupTestWorkspace(t)
 
-		deletionsPath := filepath.Join(dir, ".beads", "deletions.jsonl")
-		jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+		deletionsPath := filepath.Join(dir, ".binds", "deletions.jsonl")
+		jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 
 		// Create deletions.jsonl with mix of valid and malformed JSON
 		content := `{"id":"valid-1","ts":"2024-01-01T00:00:00Z","by":"user1"}
@@ -578,8 +578,8 @@ func TestMigrateTombstones_EdgeCases(t *testing.T) {
 	t.Run("deletions without ID field are skipped", func(t *testing.T) {
 		dir := setupTestWorkspace(t)
 
-		deletionsPath := filepath.Join(dir, ".beads", "deletions.jsonl")
-		jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+		deletionsPath := filepath.Join(dir, ".binds", "deletions.jsonl")
+		jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 
 		// Create deletions.jsonl with records missing ID
 		content := `{"id":"valid-1","ts":"2024-01-01T00:00:00Z","by":"user"}
@@ -630,8 +630,8 @@ func TestMigrateTombstones_EdgeCases(t *testing.T) {
 	t.Run("handles missing issues.jsonl", func(t *testing.T) {
 		dir := setupTestWorkspace(t)
 
-		deletionsPath := filepath.Join(dir, ".beads", "deletions.jsonl")
-		jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+		deletionsPath := filepath.Join(dir, ".binds", "deletions.jsonl")
+		jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 
 		// Create deletions.jsonl
 		deletion := legacyDeletionRecord{
@@ -672,17 +672,17 @@ func TestPermissions_EdgeCases(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("skipping Unix permission/symlink test on Windows")
 	}
-	t.Run("symbolic link to .beads directory", func(t *testing.T) {
+	t.Run("symbolic link to .binds directory", func(t *testing.T) {
 		dir := t.TempDir()
 
-		// Create actual .beads directory elsewhere
+		// Create actual .binds directory elsewhere
 		actualBeadsDir := filepath.Join(t.TempDir(), "actual-beads")
 		if err := os.MkdirAll(actualBeadsDir, 0755); err != nil {
 			t.Fatalf("failed to create actual .beads: %v", err)
 		}
 
 		// Create symlink to it
-		symlinkPath := filepath.Join(dir, ".beads")
+		symlinkPath := filepath.Join(dir, ".binds")
 		if err := os.Symlink(actualBeadsDir, symlinkPath); err != nil {
 			t.Fatalf("failed to create symlink: %v", err)
 		}
@@ -715,7 +715,7 @@ func TestPermissions_EdgeCases(t *testing.T) {
 		}
 
 		// Create symlink to it
-		dbSymlinkPath := filepath.Join(dir, ".beads", "beads.db")
+		dbSymlinkPath := filepath.Join(dir, ".binds", "beads.db")
 		if err := os.Symlink(actualDbPath, dbSymlinkPath); err != nil {
 			t.Fatalf("failed to create symlink: %v", err)
 		}
@@ -738,10 +738,10 @@ func TestPermissions_EdgeCases(t *testing.T) {
 		}
 	})
 
-	t.Run("fixes incorrect .beads directory permissions", func(t *testing.T) {
+	t.Run("fixes incorrect .binds directory permissions", func(t *testing.T) {
 		dir := setupTestWorkspace(t)
 
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 
 		// Set incorrect permissions (too permissive)
 		if err := os.Chmod(beadsDir, 0755); err != nil {
@@ -767,7 +767,7 @@ func TestPermissions_EdgeCases(t *testing.T) {
 	t.Run("fixes incorrect database file permissions", func(t *testing.T) {
 		dir := setupTestWorkspace(t)
 
-		dbPath := filepath.Join(dir, ".beads", "beads.db")
+		dbPath := filepath.Join(dir, ".binds", "beads.db")
 		if err := os.WriteFile(dbPath, []byte("test"), 0644); err != nil {
 			t.Fatalf("failed to create db: %v", err)
 		}

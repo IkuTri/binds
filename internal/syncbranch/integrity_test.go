@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
 )
 
 func TestGetStoredRemoteSHA(t *testing.T) {

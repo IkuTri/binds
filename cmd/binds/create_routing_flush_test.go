@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestFlushRoutedRepo_DirectExport tests that routed issues are exported to JSONL
@@ -23,14 +23,14 @@ func TestFlushRoutedRepo_DirectExport(t *testing.T) {
 
 	// Create a test source repo (current repo)
 	sourceDir := t.TempDir()
-	sourceBeadsDir := filepath.Join(sourceDir, ".beads")
+	sourceBeadsDir := filepath.Join(sourceDir, ".binds")
 	if err := os.MkdirAll(sourceBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create source .beads dir: %v", err)
 	}
 
 	// Create a test target repo (routing destination)
 	targetDir := t.TempDir()
-	targetBeadsDir := filepath.Join(targetDir, ".beads")
+	targetBeadsDir := filepath.Join(targetDir, ".binds")
 	if err := os.MkdirAll(targetBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create target .beads dir: %v", err)
 	}
@@ -185,7 +185,7 @@ func TestFlushRoutedRepo_PathExpansion(t *testing.T) {
 	// We can't easily test actual home directory without affecting the real system
 
 	tmpDir := t.TempDir()
-	targetBeadsDir := filepath.Join(tmpDir, ".beads")
+	targetBeadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(targetBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create target .beads dir: %v", err)
 	}
@@ -206,13 +206,13 @@ func TestFlushRoutedRepo_PathExpansion(t *testing.T) {
 func TestRoutingWithHydrationIntegration(t *testing.T) {
 	// Setup: Create main repo and planning repo
 	mainDir := t.TempDir()
-	mainBeadsDir := filepath.Join(mainDir, ".beads")
+	mainBeadsDir := filepath.Join(mainDir, ".binds")
 	if err := os.MkdirAll(mainBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create main .beads dir: %v", err)
 	}
 
 	planningDir := t.TempDir()
-	planningBeadsDir := filepath.Join(planningDir, ".beads")
+	planningBeadsDir := filepath.Join(planningDir, ".binds")
 	if err := os.MkdirAll(planningBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create planning .beads dir: %v", err)
 	}

@@ -44,7 +44,7 @@ func TestGitHooks_E2E(t *testing.T) {
 	// Skip if bd binary not available or running as test binary
 	skipIfTestBinary(t)
 	if _, err := exec.LookPath("bd"); err != nil {
-		t.Skip("bd binary not in PATH, skipping e2e test")
+		t.Skip("binds binary not in PATH, skipping e2e test")
 	}
 
 	t.Run("installs hooks in git repo", func(t *testing.T) {
@@ -93,13 +93,13 @@ func TestUntrackedJSONL_E2E(t *testing.T) {
 		runGit(t, dir, "commit", "-m", "initial commit")
 
 		// Create untracked JSONL file in .beads
-		jsonlPath := filepath.Join(dir, ".beads", "deletions.jsonl")
+		jsonlPath := filepath.Join(dir, ".binds", "deletions.jsonl")
 		if err := os.WriteFile(jsonlPath, []byte(`{"id":"test-1"}`+"\n"), 0644); err != nil {
 			t.Fatalf("failed to create JSONL: %v", err)
 		}
 
 		// Verify it's untracked
-		output := runGit(t, dir, "status", "--porcelain", ".beads/")
+		output := runGit(t, dir, "status", "--porcelain", ".binds/")
 		if !strings.Contains(output, "??") {
 			t.Fatalf("expected untracked file, got: %s", output)
 		}
@@ -111,7 +111,7 @@ func TestUntrackedJSONL_E2E(t *testing.T) {
 		}
 
 		// Verify file was committed
-		output = runGit(t, dir, "status", "--porcelain", ".beads/")
+		output = runGit(t, dir, "status", "--porcelain", ".binds/")
 		if strings.Contains(output, "??") {
 			t.Error("JSONL file still untracked after fix")
 		}
@@ -147,7 +147,7 @@ func TestMergeDriver_E2E(t *testing.T) {
 
 		// Verify config was set
 		output := runGit(t, dir, "config", "--get", "merge.beads.driver")
-		expected := "bd merge %A %O %A %B"
+		expected := "binds merge %A %O %A %B"
 		if strings.TrimSpace(output) != expected {
 			t.Errorf("expected merge driver %q, got %q", expected, output)
 		}
@@ -157,7 +157,7 @@ func TestMergeDriver_E2E(t *testing.T) {
 		dir := setupTestGitRepo(t)
 
 		// Set incorrect config first
-		runGit(t, dir, "config", "merge.beads.driver", "bd merge %L %O %A %R")
+		runGit(t, dir, "config", "merge.beads.driver", "binds merge %L %O %A %R")
 
 		// Run fix
 		err := MergeDriver(dir)
@@ -167,7 +167,7 @@ func TestMergeDriver_E2E(t *testing.T) {
 
 		// Verify config was corrected
 		output := runGit(t, dir, "config", "--get", "merge.beads.driver")
-		expected := "bd merge %A %O %A %B"
+		expected := "binds merge %A %O %A %B"
 		if strings.TrimSpace(output) != expected {
 			t.Errorf("expected corrected merge driver %q, got %q", expected, output)
 		}
@@ -498,7 +498,7 @@ func TestGetBdBinary_Errors(t *testing.T) {
 func TestGitCommandFailures(t *testing.T) {
 	t.Run("SyncBranchConfig fails without git", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -544,7 +544,7 @@ func TestFilePermissionErrors(t *testing.T) {
 
 	t.Run("Permissions handles read-only directory", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -582,18 +582,18 @@ func TestFixGitignore_PartialPatterns(t *testing.T) {
 	// These tests would go in gitignore_test.go in the doctor package
 	// Here we test the common validation used by fixes
 
-	t.Run("validateBeadsWorkspace requires .beads directory", func(t *testing.T) {
+	t.Run("validateBeadsWorkspace requires .binds directory", func(t *testing.T) {
 		dir := t.TempDir()
 
 		err := validateBeadsWorkspace(dir)
 		if err == nil {
-			t.Error("expected error for missing .beads directory")
+			t.Error("expected error for missing .binds directory")
 		}
 	})
 
 	t.Run("validateBeadsWorkspace accepts valid workspace", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -614,7 +614,7 @@ func TestGitHooksWithExistingHooks_E2E(t *testing.T) {
 	// Skip if bd binary not available or running as test binary
 	skipIfTestBinary(t)
 	if _, err := exec.LookPath("bd"); err != nil {
-		t.Skip("bd binary not in PATH, skipping e2e test")
+		t.Skip("binds binary not in PATH, skipping e2e test")
 	}
 
 	t.Run("preserves existing non-bd hooks", func(t *testing.T) {
@@ -678,7 +678,7 @@ func TestUntrackedJSONLWithUncommittedChanges_E2E(t *testing.T) {
 		runGit(t, dir, "commit", "-m", "initial commit")
 
 		// Create untracked JSONL file
-		jsonlPath := filepath.Join(dir, ".beads", "deletions.jsonl")
+		jsonlPath := filepath.Join(dir, ".binds", "deletions.jsonl")
 		if err := os.WriteFile(jsonlPath, []byte(`{"id":"test-1"}`+"\n"), 0644); err != nil {
 			t.Fatalf("failed to create JSONL: %v", err)
 		}
@@ -697,7 +697,7 @@ func TestUntrackedJSONLWithUncommittedChanges_E2E(t *testing.T) {
 		}
 
 		// Verify JSONL was committed
-		output := runGit(t, dir, "status", "--porcelain", ".beads/")
+		output := runGit(t, dir, "status", "--porcelain", ".binds/")
 		if strings.Contains(output, "??") && strings.Contains(output, "deletions.jsonl") {
 			t.Error("JSONL file still untracked after fix")
 		}
@@ -721,7 +721,7 @@ func TestUntrackedJSONLWithUncommittedChanges_E2E(t *testing.T) {
 		runGit(t, dir, "commit", "-m", "initial commit")
 
 		// Create untracked JSONL file
-		jsonlPath := filepath.Join(dir, ".beads", "issues.jsonl")
+		jsonlPath := filepath.Join(dir, ".binds", "issues.jsonl")
 		if err := os.WriteFile(jsonlPath, []byte(`{"id":"test-2"}`+"\n"), 0644); err != nil {
 			t.Fatalf("failed to create JSONL: %v", err)
 		}
@@ -744,7 +744,7 @@ func TestUntrackedJSONLWithUncommittedChanges_E2E(t *testing.T) {
 		}
 
 		// Verify JSONL was committed
-		output := runGit(t, dir, "status", "--porcelain", ".beads/")
+		output := runGit(t, dir, "status", "--porcelain", ".binds/")
 		if strings.Contains(output, "??") && strings.Contains(output, "issues.jsonl") {
 			t.Error("JSONL file still untracked after fix")
 		}
@@ -831,7 +831,7 @@ func TestMergeDriverWithLockedConfig_E2E(t *testing.T) {
 
 		// Verify config was set
 		output := runGit(t, dir, "config", "--get", "merge.beads.driver")
-		expected := "bd merge %A %O %A %B"
+		expected := "binds merge %A %O %A %B"
 		if strings.TrimSpace(output) != expected {
 			t.Errorf("expected merge driver %q, got %q", expected, output)
 		}
@@ -847,9 +847,9 @@ func TestPermissionsWithWrongPermissions_E2E(t *testing.T) {
 		t.Skip("skipping permission tests when running as root")
 	}
 
-	t.Run("fixes .beads directory with wrong permissions", func(t *testing.T) {
+	t.Run("fixes .binds directory with wrong permissions", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatal(err)
 		}
@@ -886,7 +886,7 @@ func TestPermissionsWithWrongPermissions_E2E(t *testing.T) {
 
 	t.Run("fixes database file with wrong permissions", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0700); err != nil {
 			t.Fatal(err)
 		}
@@ -920,7 +920,7 @@ func TestPermissionsWithWrongPermissions_E2E(t *testing.T) {
 
 	t.Run("fixes database file without read permission", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0700); err != nil {
 			t.Fatal(err)
 		}
@@ -951,9 +951,9 @@ func TestPermissionsWithWrongPermissions_E2E(t *testing.T) {
 		}
 	})
 
-	t.Run("handles .beads directory without write permission", func(t *testing.T) {
+	t.Run("handles .binds directory without write permission", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0700); err != nil {
 			t.Fatal(err)
 		}
@@ -992,7 +992,7 @@ func TestPermissionsWithWrongPermissions_E2E(t *testing.T) {
 
 	t.Run("handles multiple files with wrong permissions", func(t *testing.T) {
 		dir := t.TempDir()
-		beadsDir := filepath.Join(dir, ".beads")
+		beadsDir := filepath.Join(dir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0777); err != nil {
 			t.Fatal(err)
 		}

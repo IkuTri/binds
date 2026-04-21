@@ -1,4 +1,4 @@
-module github.com/steveyegge/beads
+module github.com/IkuTri/binds
 
 go 1.25.6
 

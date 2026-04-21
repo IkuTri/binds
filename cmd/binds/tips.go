@@ -14,8 +14,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/storage"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/storage"
 )
 
 // Tip represents a contextual hint that can be shown to users after successful commands

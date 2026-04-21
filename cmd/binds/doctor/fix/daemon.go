@@ -14,7 +14,7 @@ func Daemon(path string) error {
 		return err
 	}
 
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 	socketPath := filepath.Join(beadsDir, "bd.sock")
 
 	// Check if there's actually a socket or daemon issue to fix

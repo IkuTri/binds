@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/git"
+	"github.com/IkuTri/binds/internal/git"
 )
 
 // TestExternalBeadsDirE2E tests the full external BEADS_DIR flow.
@@ -44,8 +44,8 @@ func TestExternalBeadsDirE2E(t *testing.T) {
 		t.Fatalf("failed to setup external repo: %v", err)
 	}
 
-	// Create .beads directory in external repo
-	externalBeadsDir := filepath.Join(externalDir, ".beads")
+	// Create .binds directory in external repo
+	externalBeadsDir := filepath.Join(externalDir, ".binds")
 	if err := os.MkdirAll(externalBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create external .beads dir: %v", err)
 	}
@@ -58,7 +58,7 @@ func TestExternalBeadsDirE2E(t *testing.T) {
 	}
 
 	// Commit initial beads files in external repo
-	runGitInDir(t, externalDir, "add", ".beads")
+	runGitInDir(t, externalDir, "add", ".binds")
 	runGitInDir(t, externalDir, "commit", "-m", "initial beads setup")
 	t.Log("✓ External beads repo initialized with issue ext-1")
 
@@ -159,7 +159,7 @@ func TestExternalBeadsDirDetection(t *testing.T) {
 			t.Fatalf("setup failed: %v", err)
 		}
 
-		beadsDir := filepath.Join(repoDir, ".beads")
+		beadsDir := filepath.Join(repoDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("mkdir failed: %v", err)
 		}
@@ -192,7 +192,7 @@ func TestExternalBeadsDirDetection(t *testing.T) {
 			t.Fatalf("setup external failed: %v", err)
 		}
 
-		beadsDir := filepath.Join(externalDir, ".beads")
+		beadsDir := filepath.Join(externalDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("mkdir failed: %v", err)
 		}
@@ -219,7 +219,7 @@ func TestExternalBeadsDirDetection(t *testing.T) {
 
 		// Non-git beads dir
 		nonGitDir := t.TempDir()
-		beadsDir := filepath.Join(nonGitDir, ".beads")
+		beadsDir := filepath.Join(nonGitDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("mkdir failed: %v", err)
 		}
@@ -252,7 +252,7 @@ func TestCommitToExternalBeadsRepo(t *testing.T) {
 			t.Fatalf("setup failed: %v", err)
 		}
 
-		beadsDir := filepath.Join(externalDir, ".beads")
+		beadsDir := filepath.Join(externalDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("mkdir failed: %v", err)
 		}
@@ -289,7 +289,7 @@ func TestCommitToExternalBeadsRepo(t *testing.T) {
 			t.Fatalf("setup failed: %v", err)
 		}
 
-		beadsDir := filepath.Join(externalDir, ".beads")
+		beadsDir := filepath.Join(externalDir, ".binds")
 		if err := os.MkdirAll(beadsDir, 0755); err != nil {
 			t.Fatalf("mkdir failed: %v", err)
 		}
@@ -299,7 +299,7 @@ func TestCommitToExternalBeadsRepo(t *testing.T) {
 		if err := os.WriteFile(jsonlPath, []byte(`{"id":"test-1"}`+"\n"), 0644); err != nil {
 			t.Fatalf("write failed: %v", err)
 		}
-		runGitInDir(t, externalDir, "add", ".beads")
+		runGitInDir(t, externalDir, "add", ".binds")
 		runGitInDir(t, externalDir, "commit", "-m", "initial")
 
 		// Try to commit again with no changes

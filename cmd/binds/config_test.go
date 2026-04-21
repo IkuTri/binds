@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
 )
 
 func TestConfigCommands(t *testing.T) {
@@ -162,7 +162,7 @@ func TestYamlOnlyConfigWithoutDatabase(t *testing.T) {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -266,7 +266,7 @@ func TestIsValidRemoteURL(t *testing.T) {
 func TestValidateSyncConfig(t *testing.T) {
 	// Create a temp directory for testing
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -420,7 +420,7 @@ federation:
 func TestFindBeadsRepoRoot(t *testing.T) {
 	// Create a temp directory structure
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	subDir := filepath.Join(tmpDir, "sub", "dir")
 
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {

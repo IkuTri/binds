@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/rpc"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/rpc"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestCreateWithNotes verifies that the --notes flag works correctly
 // during issue creation in both direct mode and RPC mode.
 func TestCreateWithNotes(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 
@@ -141,7 +141,7 @@ func TestCreateWithNotes(t *testing.T) {
 // TestCreateWithNotesRPC verifies notes field works via RPC protocol
 func TestCreateWithNotesRPC(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 

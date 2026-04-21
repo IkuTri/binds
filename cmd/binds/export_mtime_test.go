@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestExportUpdatesDatabaseMtime verifies that export updates database mtime
@@ -22,7 +22,7 @@ func TestExportUpdatesDatabaseMtime(t *testing.T) {
 	}
 
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -120,7 +120,7 @@ func TestDaemonExportScenario(t *testing.T) {
 	}
 
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -197,7 +197,7 @@ func TestMultipleExportCycles(t *testing.T) {
 	}
 
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.Mkdir(beadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
@@ -260,7 +260,7 @@ func TestMultipleExportCycles(t *testing.T) {
 // worktree, the mtime update targets the actual database path (via store.Path()),
 // not a non-existent database in the worktree directory.
 // This fixes the bug where bd sync would warn:
-//   "Warning: failed to update database mtime: chtimes .../beads-worktrees/beads-sync/.beads/beads.db: no such file or directory"
+//   "Warning: failed to update database mtime: chtimes .../beads-worktrees/beads-sync/.binds/beads.db: no such file or directory"
 func TestWorktreeExportUsesCorrectDBPath(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping slow test in short mode")
@@ -268,14 +268,14 @@ func TestWorktreeExportUsesCorrectDBPath(t *testing.T) {
 
 	// Create "main repo" directory with database
 	mainRepoDir := t.TempDir()
-	mainBeadsDir := filepath.Join(mainRepoDir, ".beads")
+	mainBeadsDir := filepath.Join(mainRepoDir, ".binds")
 	if err := os.Mkdir(mainBeadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}
 
-	// Create "worktree" directory (simulates .git/beads-worktrees/beads-sync/.beads/)
+	// Create "worktree" directory (simulates .git/beads-worktrees/beads-sync/.binds/)
 	worktreeDir := t.TempDir()
-	worktreeBeadsDir := filepath.Join(worktreeDir, ".beads")
+	worktreeBeadsDir := filepath.Join(worktreeDir, ".binds")
 	if err := os.Mkdir(worktreeBeadsDir, 0750); err != nil {
 		t.Fatal(err)
 	}

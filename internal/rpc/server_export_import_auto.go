@@ -11,14 +11,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steveyegge/beads/internal/autoimport"
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/debug"
-	"github.com/steveyegge/beads/internal/export"
-	"github.com/steveyegge/beads/internal/importer"
-	"github.com/steveyegge/beads/internal/storage"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/utils"
+	"github.com/IkuTri/binds/internal/autoimport"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/debug"
+	"github.com/IkuTri/binds/internal/export"
+	"github.com/IkuTri/binds/internal/importer"
+	"github.com/IkuTri/binds/internal/storage"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/utils"
 )
 
 // handleExport handles the export operation

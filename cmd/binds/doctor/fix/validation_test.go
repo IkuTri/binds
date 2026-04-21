@@ -10,8 +10,8 @@ import (
 )
 
 // TestFixFunctions_RequireBeadsDir verifies all fix functions properly validate
-// that a .beads directory exists before attempting fixes.
-// This replaces 10+ individual "missing .beads directory" subtests.
+// that a .binds directory exists before attempting fixes.
+// This replaces 10+ individual "missing .binds directory" subtests.
 func TestFixFunctions_RequireBeadsDir(t *testing.T) {
 	funcs := []struct {
 		name string
@@ -37,7 +37,7 @@ func TestFixFunctions_RequireBeadsDir(t *testing.T) {
 			dir := t.TempDir()
 			err := tc.fn(dir)
 			if err == nil {
-				t.Errorf("%s should return error for missing .beads directory", tc.name)
+				t.Errorf("%s should return error for missing .binds directory", tc.name)
 			}
 		})
 	}
@@ -46,7 +46,7 @@ func TestFixFunctions_RequireBeadsDir(t *testing.T) {
 func TestChildParentDependencies_NoBadDeps(t *testing.T) {
 	// Set up test database with no child→parent deps
 	dir := t.TempDir()
-	beadsDir := filepath.Join(dir, ".beads")
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -89,7 +89,7 @@ func TestChildParentDependencies_NoBadDeps(t *testing.T) {
 func TestChildParentDependencies_FixesBadDeps(t *testing.T) {
 	// Set up test database with child→parent deps
 	dir := t.TempDir()
-	beadsDir := filepath.Join(dir, ".beads")
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -146,7 +146,7 @@ func TestChildParentDependencies_FixesBadDeps(t *testing.T) {
 func TestChildParentDependencies_PreservesParentChildType(t *testing.T) {
 	// Set up test database with both 'blocks' and 'parent-child' type deps
 	dir := t.TempDir()
-	beadsDir := filepath.Join(dir, ".beads")
+	beadsDir := filepath.Join(dir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatal(err)
 	}

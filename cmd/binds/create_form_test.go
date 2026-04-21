@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 func TestParseFormInput(t *testing.T) {
@@ -157,7 +157,7 @@ func TestParseFormInput(t *testing.T) {
 
 func TestCreateIssueFromFormValues(t *testing.T) {
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 
@@ -533,7 +533,7 @@ func TestCreateIssueFromFormValues(t *testing.T) {
 func TestFormValuesIntegration(t *testing.T) {
 	// Test the full flow: parseCreateFormInput -> CreateIssueFromFormValues
 	tmpDir := t.TempDir()
-	testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+	testDB := filepath.Join(tmpDir, ".binds", "beads.db")
 	s := newTestStore(t, testDB)
 	ctx := context.Background()
 

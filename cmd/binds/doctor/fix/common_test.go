@@ -16,12 +16,12 @@ func TestSafeWorkspacePath(t *testing.T) {
 	}{
 		{
 			name:    "normal relative path",
-			relPath: ".beads/issues.jsonl",
+			relPath: ".binds/issues.jsonl",
 			wantErr: false,
 		},
 		{
 			name:    "nested relative path",
-			relPath: filepath.Join(".beads", "nested", "file.txt"),
+			relPath: filepath.Join(".binds", "nested", "file.txt"),
 			wantErr: false,
 		},
 		{

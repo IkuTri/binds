@@ -28,7 +28,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/steveyegge/beads/internal/git"
+	"github.com/IkuTri/binds/internal/git"
 )
 
 // UserRole represents the user's relationship to a repository.
@@ -47,7 +47,7 @@ const (
 
 // ErrRoleNotConfigured is returned when beads.role is not set in git config.
 // This signals that the init prompt should be shown to configure the role.
-var ErrRoleNotConfigured = errors.New("beads.role not configured in git config")
+var ErrRoleNotConfigured = errors.New("binds.role not configured in git config")
 
 // RepoContext holds resolved repository paths for beads operations.
 //
@@ -90,7 +90,7 @@ var (
 // 2. BEADS_DIR doesn't change during command execution
 // 3. Repeated filesystem access would be wasteful
 //
-// Returns an error if no .beads directory can be found.
+// Returns an error if no .binds directory can be found.
 func GetRepoContext() (*RepoContext, error) {
 	repoCtxOnce.Do(func() {
 		repoCtx, repoCtxErr = buildRepoContext()
@@ -104,12 +104,12 @@ func buildRepoContext() (*RepoContext, error) {
 	// 1. Find .beads directory (respects BEADS_DIR env var)
 	beadsDir := FindBeadsDir()
 	if beadsDir == "" {
-		return nil, fmt.Errorf("no .beads directory found")
+		return nil, fmt.Errorf("no .binds directory found")
 	}
 
 	// 2. Security: Validate path boundary (SEC-003)
 	if !isPathInSafeBoundary(beadsDir) {
-		return nil, fmt.Errorf("BEADS_DIR points to unsafe location: %s", beadsDir)
+		return nil, fmt.Errorf("BINDS_DIR points to unsafe location: %s", beadsDir)
 	}
 
 	// 3. Check for redirect
@@ -332,7 +332,7 @@ func buildRepoContextForWorkspace(workspacePath string) (*RepoContext, error) {
 
 	// Check if .beads exists
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
-		return nil, fmt.Errorf("no .beads directory found at %s", beadsDir)
+		return nil, fmt.Errorf("no .binds directory found at %s", beadsDir)
 	}
 
 	// 3. Follow redirect if present
@@ -340,12 +340,12 @@ func buildRepoContextForWorkspace(workspacePath string) (*RepoContext, error) {
 
 	// 4. Security: Validate path boundary (SEC-003)
 	if !isPathInSafeBoundary(beadsDir) {
-		return nil, fmt.Errorf("beads directory in unsafe location: %s", beadsDir)
+		return nil, fmt.Errorf("binds directory in unsafe location: %s", beadsDir)
 	}
 
 	// 5. Validate directory contains actual project files
 	if !hasBeadsProjectFiles(beadsDir) {
-		return nil, fmt.Errorf("beads directory missing required files: %s", beadsDir)
+		return nil, fmt.Errorf("binds directory missing required files: %s", beadsDir)
 	}
 
 	// 6. Get CWD's repo root (same as workspace in this case)

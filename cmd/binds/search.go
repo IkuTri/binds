@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/steveyegge/beads/internal/types"
-	"github.com/steveyegge/beads/internal/util"
-	"github.com/steveyegge/beads/internal/validation"
+	"github.com/IkuTri/binds/internal/types"
+	"github.com/IkuTri/binds/internal/util"
+	"github.com/IkuTri/binds/internal/validation"
 )
 
 var searchCmd = &cobra.Command{

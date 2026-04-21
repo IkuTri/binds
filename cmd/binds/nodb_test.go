@@ -5,9 +5,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/storage/memory"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/storage/memory"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 func TestExtractIssuePrefix(t *testing.T) {
@@ -97,7 +97,7 @@ func TestLoadIssuesFromJSONL_NonExistent(t *testing.T) {
 
 func TestDetectPrefix(t *testing.T) {
 	tempDir := t.TempDir()
-	beadsDir := filepath.Join(tempDir, ".beads")
+	beadsDir := filepath.Join(tempDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0o755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -223,7 +223,7 @@ func TestInitializeNoDbMode_SetsStoreActive(t *testing.T) {
 	ensureCleanGlobalState(t)
 
 	tempDir := t.TempDir()
-	beadsDir := filepath.Join(tempDir, ".beads")
+	beadsDir := filepath.Join(tempDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0o755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -307,7 +307,7 @@ func TestInitializeNoDbMode_SetsCmdCtxStoreActive(t *testing.T) {
 	ensureCleanGlobalState(t)
 
 	tempDir := t.TempDir()
-	beadsDir := filepath.Join(tempDir, ".beads")
+	beadsDir := filepath.Join(tempDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0o755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}
@@ -368,7 +368,7 @@ func TestInitializeNoDbMode_SetsCmdCtxStoreActive(t *testing.T) {
 
 func TestWriteIssuesToJSONL(t *testing.T) {
 	tempDir := t.TempDir()
-	beadsDir := filepath.Join(tempDir, ".beads")
+	beadsDir := filepath.Join(tempDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0o755); err != nil {
 		t.Fatalf("Failed to create .beads dir: %v", err)
 	}

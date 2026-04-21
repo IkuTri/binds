@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/steveyegge/beads/internal/idgen"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/idgen"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // isValidBase36 checks if a string contains only base36 characters

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/gofrs/flock"
-	"github.com/steveyegge/beads/internal/debug"
+	"github.com/IkuTri/binds/internal/debug"
 )
 
 const (

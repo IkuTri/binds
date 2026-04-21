@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/merge"
-	"github.com/steveyegge/beads/internal/storage"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/merge"
+	"github.com/IkuTri/binds/internal/storage"
 )
 
 // isIssueNotFoundError checks if the error indicates the issue doesn't exist in the database.

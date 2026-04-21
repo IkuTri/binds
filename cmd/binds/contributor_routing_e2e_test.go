@@ -15,9 +15,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/routing"
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/routing"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestContributorRoutingTracer is the Phase 1 tracer bullet test.
@@ -83,14 +83,14 @@ func TestContributorRoutingTracer(t *testing.T) {
 		projectDir := filepath.Join(tmpDir, "project")
 		planningDir := filepath.Join(tmpDir, "planning")
 
-		// Create project .beads directory
-		projectBeadsDir := filepath.Join(projectDir, ".beads")
+		// Create project .binds directory
+		projectBeadsDir := filepath.Join(projectDir, ".binds")
 		if err := os.MkdirAll(projectBeadsDir, 0755); err != nil {
 			t.Fatalf("failed to create project .beads dir: %v", err)
 		}
 
-		// Create planning .beads directory
-		planningBeadsDir := filepath.Join(planningDir, ".beads")
+		// Create planning .binds directory
+		planningBeadsDir := filepath.Join(planningDir, ".binds")
 		if err := os.MkdirAll(planningBeadsDir, 0755); err != nil {
 			t.Fatalf("failed to create planning .beads dir: %v", err)
 		}
@@ -195,7 +195,7 @@ func TestContributorRoutingTracer(t *testing.T) {
 func TestBackwardCompatContributorConfig(t *testing.T) {
 	// Set up temporary directory
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}
@@ -277,13 +277,13 @@ func setupContributorRoutingEnv(t *testing.T) *contributorRoutingEnv {
 	planningDir := filepath.Join(tmpDir, "planning")
 
 	// Create project directory with git init
-	projectBeadsDir := filepath.Join(projectDir, ".beads")
+	projectBeadsDir := filepath.Join(projectDir, ".binds")
 	if err := os.MkdirAll(projectBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create project .beads dir: %v", err)
 	}
 
 	// Create planning directory with git init
-	planningBeadsDir := filepath.Join(planningDir, ".beads")
+	planningBeadsDir := filepath.Join(planningDir, ".binds")
 	if err := os.MkdirAll(planningBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create planning .beads dir: %v", err)
 	}
@@ -308,7 +308,7 @@ func (env *contributorRoutingEnv) cleanup() {
 // initProjectStore initializes the project store with routing config
 func (env *contributorRoutingEnv) initProjectStore(syncMode string) *sqlite.SQLiteStorage {
 	env.t.Helper()
-	projectDBPath := filepath.Join(env.projectDir, ".beads", "beads.db")
+	projectDBPath := filepath.Join(env.projectDir, ".binds", "beads.db")
 	store, err := sqlite.New(env.ctx, projectDBPath)
 	if err != nil {
 		env.t.Fatalf("failed to create project store: %v", err)
@@ -349,7 +349,7 @@ func (env *contributorRoutingEnv) initProjectStore(syncMode string) *sqlite.SQLi
 // initPlanningStore initializes the planning store
 func (env *contributorRoutingEnv) initPlanningStore() *sqlite.SQLiteStorage {
 	env.t.Helper()
-	planningDBPath := filepath.Join(env.planningDir, ".beads", "beads.db")
+	planningDBPath := filepath.Join(env.planningDir, ".binds", "beads.db")
 	store, err := sqlite.New(env.ctx, planningDBPath)
 	if err != nil {
 		env.t.Fatalf("failed to create planning store: %v", err)
@@ -657,7 +657,7 @@ func TestExplicitRepoOverride(t *testing.T) {
 
 	// Create a third "override" directory
 	overrideDir := filepath.Join(env.tmpDir, "override")
-	overrideBeadsDir := filepath.Join(overrideDir, ".beads")
+	overrideBeadsDir := filepath.Join(overrideDir, ".binds")
 	if err := os.MkdirAll(overrideBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create override .beads dir: %v", err)
 	}
@@ -732,7 +732,7 @@ func TestBEADS_DIRPrecedence(t *testing.T) {
 
 	// Create an external beads directory (simulating BEADS_DIR target)
 	externalDir := filepath.Join(env.tmpDir, "external")
-	externalBeadsDir := filepath.Join(externalDir, ".beads")
+	externalBeadsDir := filepath.Join(externalDir, ".binds")
 	if err := os.MkdirAll(externalBeadsDir, 0755); err != nil {
 		t.Fatalf("failed to create external .beads dir: %v", err)
 	}
@@ -756,7 +756,7 @@ func TestBEADS_DIRPrecedence(t *testing.T) {
 	// 1. BEADS_DIR environment variable (highest precedence)
 	// 2. --repo flag (explicit override)
 	// 3. Auto-routing based on user role
-	// 4. Current directory's .beads/ (default)
+	// 4. Current directory's .binds/ (default)
 
 	// When BEADS_DIR is set, all operations should use that directory,
 	// regardless of routing config.

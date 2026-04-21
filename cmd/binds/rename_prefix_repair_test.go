@@ -7,16 +7,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 func TestRepairMultiplePrefixes(t *testing.T) {
-	// Create a temporary database with .beads directory structure
+	// Create a temporary database with .binds directory structure
 	tempDir := t.TempDir()
-	testDBPath := filepath.Join(tempDir, ".beads", "beads.db")
+	testDBPath := filepath.Join(tempDir, ".binds", "beads.db")
 
-	// Create .beads directory
+	// Create .binds directory
 	if err := os.MkdirAll(filepath.Dir(testDBPath), 0750); err != nil {
 		t.Fatalf("failed to create .beads dir: %v", err)
 	}

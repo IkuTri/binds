@@ -12,9 +12,9 @@ import (
 
 	_ "github.com/ncruces/go-sqlite3/driver"
 	_ "github.com/ncruces/go-sqlite3/embed"
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/config"
-	"github.com/steveyegge/beads/internal/configfile"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/config"
+	"github.com/IkuTri/binds/internal/configfile"
 )
 
 // SyncDivergenceIssue represents a specific type of sync divergence detected.
@@ -45,7 +45,7 @@ func CheckSyncDivergence(path string) DoctorCheck {
 	}
 
 	// Follow redirect to resolve actual beads directory
-	beadsDir := resolveBeadsDir(filepath.Join(path, ".beads"))
+	beadsDir := resolveBeadsDir(filepath.Join(path, ".binds"))
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
 		return DoctorCheck{
 			Name:     "Sync Divergence",
@@ -249,7 +249,7 @@ func checkUncommittedBeadsChanges(path, beadsDir string) *SyncDivergenceIssue {
 	// Get relative path of beads dir
 	relBeadsDir, err := filepath.Rel(path, beadsDir)
 	if err != nil {
-		relBeadsDir = ".beads"
+		relBeadsDir = ".binds"
 	}
 
 	// Check for uncommitted changes in .beads/

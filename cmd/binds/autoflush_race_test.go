@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/steveyegge/beads/internal/storage/sqlite"
-	"github.com/steveyegge/beads/internal/types"
+	"github.com/IkuTri/binds/internal/storage/sqlite"
+	"github.com/IkuTri/binds/internal/types"
 )
 
 // TestExportImportRace_ConcurrentOperations tests concurrent export and import
@@ -21,7 +21,7 @@ import (
 // Run with: go test -race -run TestExportImportRace_ConcurrentOperations
 func TestExportImportRace_ConcurrentOperations(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create beads dir: %v", err)
 	}
@@ -133,7 +133,7 @@ func TestExportImportRace_ConcurrentOperations(t *testing.T) {
 // while flushToJSONLWithState is writing it.
 func TestExportImportRace_ExportWhileReading(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create beads dir: %v", err)
 	}
@@ -247,7 +247,7 @@ func TestExportImportRace_ExportWhileReading(t *testing.T) {
 // This validates that concurrent modifications during import don't cause data loss.
 func TestExportImportRace_ImportWithDirtyDB(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create beads dir: %v", err)
 	}
@@ -365,7 +365,7 @@ func TestExportImportRace_ImportWithDirtyDB(t *testing.T) {
 // Validates that readers don't see partial files during the rename.
 func TestExportImportRace_AtomicRename(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create beads dir: %v", err)
 	}
@@ -453,7 +453,7 @@ func TestExportImportRace_AtomicRename(t *testing.T) {
 // This is a more targeted test for the atomic rename race condition.
 func TestExportImportRace_PartialFileRead(t *testing.T) {
 	tmpDir := t.TempDir()
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create beads dir: %v", err)
 	}

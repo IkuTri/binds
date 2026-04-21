@@ -163,7 +163,7 @@ func SyncBranchGitignore(path string) error {
 	}
 
 	// Find the .beads directory
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 	if _, err := os.Stat(beadsDir); os.IsNotExist(err) {
 		return fmt.Errorf(".binds directory not found at %s", beadsDir)
 	}
@@ -242,7 +242,7 @@ func setGitIndexFlags(repoPath, filePath, excludePattern string) (bool, error) {
 // ClearSyncBranchGitignore removes git index flags from .beads/*.jsonl files.
 // Called when sync.branch is disabled to restore normal git tracking.
 func ClearSyncBranchGitignore(path string) error {
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 	filesToClear := []string{"issues.jsonl", "interactions.jsonl"}
 
 	for _, filename := range filesToClear {
@@ -291,7 +291,7 @@ func parseGitLsFilesFlag(flag byte) (hasAnyFlag bool, hasSkipWorktree bool) {
 // Note: When both assume-unchanged and skip-worktree are set, git shows 'S' (skip-worktree
 // takes precedence). So hasAnyFlag being true means the file is hidden from git status.
 func HasSyncBranchGitignoreFlags(path string) (bool, bool, error) {
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 	jsonlPath := filepath.Join(beadsDir, "issues.jsonl")
 
 	if _, err := os.Stat(jsonlPath); os.IsNotExist(err) {

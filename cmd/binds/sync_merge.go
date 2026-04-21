@@ -9,8 +9,8 @@ import (
 	"sort"
 	"time"
 
-	"github.com/steveyegge/beads/internal/beads"
-	"github.com/steveyegge/beads/internal/config"
+	"github.com/IkuTri/binds/internal/beads"
+	"github.com/IkuTri/binds/internal/config"
 )
 
 // MergeResult contains the outcome of a 3-way merge

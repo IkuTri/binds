@@ -151,7 +151,7 @@ func TestInstallGemini_Stealth(t *testing.T) {
 	cmds := hook["hooks"].([]interface{})
 	cmd := cmds[0].(map[string]interface{})
 
-	if cmd["command"] != "bd prime --stealth" {
+	if cmd["command"] != "binds prime --stealth" {
 		t.Errorf("expected stealth command, got: %v", cmd["command"])
 	}
 }
@@ -325,7 +325,7 @@ func TestRemoveGemini_PreservesOtherHooks(t *testing.T) {
 				map[string]interface{}{
 					"matcher": "",
 					"hooks": []interface{}{
-						map[string]interface{}{"type": "command", "command": "bd prime"},
+						map[string]interface{}{"type": "command", "command": "binds prime"},
 					},
 				},
 				map[string]interface{}{
@@ -357,8 +357,8 @@ func TestRemoveGemini_PreservesOtherHooks(t *testing.T) {
 	hook := sessionStart[0].(map[string]interface{})
 	cmds := hook["hooks"].([]interface{})
 	cmd := cmds[0].(map[string]interface{})
-	if cmd["command"] == "bd prime" || cmd["command"] == "bd prime --stealth" {
-		t.Error("bd prime hook should have been removed")
+	if cmd["command"] == "binds prime" || cmd["command"] == "binds prime --stealth" {
+		t.Error("binds prime hook should have been removed")
 	}
 }
 
@@ -386,7 +386,7 @@ func TestHasGeminiBeadsHooks(t *testing.T) {
 				map[string]interface{}{
 					"matcher": "",
 					"hooks": []interface{}{
-						map[string]interface{}{"type": "command", "command": "bd prime"},
+						map[string]interface{}{"type": "command", "command": "binds prime"},
 					},
 				},
 			},
@@ -405,7 +405,7 @@ func TestHasGeminiBeadsHooks(t *testing.T) {
 		map[string]interface{}{
 			"matcher": "",
 			"hooks": []interface{}{
-				map[string]interface{}{"type": "command", "command": "bd prime --stealth"},
+				map[string]interface{}{"type": "command", "command": "binds prime --stealth"},
 			},
 		},
 	}

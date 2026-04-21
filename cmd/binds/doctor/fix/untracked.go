@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/config"
+	"github.com/IkuTri/binds/internal/config"
 )
 
 // UntrackedJSONL stages and commits untracked .beads/*.jsonl files.
@@ -18,7 +18,7 @@ func UntrackedJSONL(path string) error {
 		return err
 	}
 
-	beadsDir := filepath.Join(path, ".beads")
+	beadsDir := filepath.Join(path, ".binds")
 
 	// Find untracked JSONL files
 	// Use --untracked-files=all to show individual files, not just the directory

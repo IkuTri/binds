@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/steveyegge/beads/internal/debug"
-	"github.com/steveyegge/beads/internal/git"
+	"github.com/IkuTri/binds/internal/debug"
+	"github.com/IkuTri/binds/internal/git"
 )
 
 // ensureForkProtection prevents contributors from accidentally committing
@@ -79,7 +79,7 @@ func isUpstreamRepo(gitRoot string) bool {
 	upstreamPatterns := []string{
 		"steveyegge/beads",
 		"git@github.com:steveyegge/beads",
-		"https://github.com/steveyegge/beads",
+		"https://github.com/IkuTri/binds",
 	}
 
 	for _, pattern := range upstreamPatterns {

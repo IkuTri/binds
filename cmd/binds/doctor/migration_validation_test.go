@@ -108,7 +108,7 @@ func TestGetSQLiteDBPath(t *testing.T) {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads: %v", err)
 	}
@@ -135,7 +135,7 @@ func TestCheckMigrationReadinessResult_NoBeadsDir(t *testing.T) {
 	}
 
 	if result.Ready {
-		t.Error("expected result.Ready = false for missing .beads")
+		t.Error("expected result.Ready = false for missing .binds")
 	}
 
 	if len(result.Errors) == 0 {
@@ -150,7 +150,7 @@ func TestCheckMigrationReadinessResult_NoJSONL(t *testing.T) {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads: %v", err)
 	}
@@ -173,7 +173,7 @@ func TestCheckMigrationReadinessResult_ValidJSONL(t *testing.T) {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads: %v", err)
 	}
@@ -229,7 +229,7 @@ func TestCheckMigrationCompletionResult_NotDoltBackend(t *testing.T) {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads: %v", err)
 	}
@@ -262,7 +262,7 @@ func TestCheckDoltLocks_NotDoltBackend(t *testing.T) {
 	}
 	defer os.RemoveAll(tmpDir)
 
-	beadsDir := filepath.Join(tmpDir, ".beads")
+	beadsDir := filepath.Join(tmpDir, ".binds")
 	if err := os.MkdirAll(beadsDir, 0755); err != nil {
 		t.Fatalf("failed to create .beads: %v", err)
 	}
