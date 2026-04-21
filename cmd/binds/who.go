@@ -151,9 +151,16 @@ func serverClient() (*http.Client, string, error) {
 }
 
 func addAuth(req *http.Request) {
+	if tok := os.Getenv("BINDS_TOKEN"); tok != "" {
+		req.Header.Set("Authorization", "Bearer "+strings.TrimSpace(tok))
+		return
+	}
 	home, _ := os.UserHomeDir()
-	tokenPath := home + "/.config/binds/.local-token"
-	if data, err := os.ReadFile(tokenPath); err == nil {
-		req.Header.Set("Authorization", "Bearer "+strings.TrimSpace(string(data)))
+	for _, name := range []string{".agent-token", ".local-token"} {
+		path := filepath.Join(home, ".config", "binds", name)
+		if data, err := os.ReadFile(path); err == nil {
+			req.Header.Set("Authorization", "Bearer "+strings.TrimSpace(string(data)))
+			return
+		}
 	}
 }
