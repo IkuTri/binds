@@ -48,7 +48,7 @@ Upstream remote: `https://github.com/steveyegge/beads`
 ## Install
 
 ```bash
-cd ~/Soft-Serve/beads
+cd ~/Soft-Serve/binds
 go build -o binds ./cmd/binds/
 cp binds ~/.local/bin/binds
 ```
