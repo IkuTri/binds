@@ -1,33 +1,41 @@
 # binds — Agent Coordination & Work Tracking
 
-Modular, agent-agnostic coordination layer for AI coding agents. Local-first. Single binary.
+Coordination layer for AI coding agents. Single Go binary. Local-first. Zero cloud dependency.
 
-Forked from [steveyegge/beads](https://github.com/steveyegge/beads) v0.49.4 (`3032c622`).
-The upstream moved to Dolt-only at v0.51.0; this fork stays on SQLite + JSONL and evolves
-toward multi-agent coordination primitives.
+Originally forked from [steveyegge/beads](https://github.com/steveyegge/beads) v0.49.4. The upstream moved to Dolt-only at v0.51.0; binds stays on SQLite + JSONL and adds multi-agent coordination.
+
+## What Changed From Beads
+
+- Daemon lobotomized (no background processes, no zombie spawning)
+- Embedded HTTP server for agent coordination (`binds serve`)
+- Mail, rooms, presence, reservations, checkpoints
+- Cross-repo issue aggregation (`binds issues`)
+- Workspace detection (`binds workspace current`)
+- `.binds/` directory (`.beads/` still supported as fallback)
 
 ## Install
 
-```bash
-go install github.com/ikutri/binds/cmd/binds@latest
-```
-
-Or build from source:
+Build from source:
 
 ```bash
-cd ~/Soft-Serve/beads
 go build -o binds ./cmd/binds/
+cp binds ~/.local/bin/
 ```
 
 ## Features
 
-- **Issue tracking** — dependency-aware graph, hash-based IDs, audit trail
-- **Git-backed** — issues stored as JSONL in `.beads/`, versioned like code
-- **Daemon mode** — background SQLite cache, auto-sync, auto-import
-- **Hooks** — extensible event hooks for agent integration
-- **Checkpoints** — snapshot and restore issue state
-- **Mail** — inter-agent messaging (Phase 1, in development)
-- **Rooms & Presence** — agent coordination primitives (Phase 1, in development)
+### Issue Tracking
+- Dependency-aware graph with hash-based IDs
+- Git-backed — issues stored as JSONL in `.binds/`, versioned like code
+- Per-repo SQLite databases with audit trail
+- Checkpoints — snapshot and restore milestone state
+
+### Agent Coordination (`binds serve`)
+- **Mail** — async messaging between agents with priority, types, and threads
+- **Rooms** — shared planning channels for multi-agent collaboration
+- **Presence** — who's online, what workspace they're in
+- **Reservations** — advisory file locks so agents don't step on each other
+- **Cross-repo index** — query issues across all registered workspaces
 
 ## Quick Start
 
@@ -38,23 +46,43 @@ binds create "First task" -p 1
 binds ready
 ```
 
+For agent onboarding, see the [quickstart template](https://github.com/IkuTri/Obscura-Hideout/blob/main/reference/binds-quickstart.md).
+
 ## Essential Commands
 
 | Command | Action |
-| --- | --- |
+|---------|--------|
 | `binds ready` | List tasks with no open blockers |
 | `binds create "Title" -p 0` | Create a P0 task |
-| `binds update <id> --claim` | Atomically claim a task |
-| `binds dep add <child> <parent>` | Link tasks |
+| `binds update <id> --status in_progress` | Claim a task |
+| `binds close <id>` | Mark complete |
+| `binds dep add <child> <parent>` | Link dependencies |
 | `binds show <id>` | View task details and audit trail |
-| `binds version` | Show version |
+| `binds sync` | Sync with git remote |
+| `binds serve` | Start coordination server |
+| `binds who` | List online agents |
+| `binds mail inbox` | Check messages |
+| `binds mail send <agent> "msg"` | Send a message |
+| `binds issues` | Cross-repo issue scan |
 
-## Phase 1: Coordination (In Development)
+## Configuration
 
-Phase 1 adds primitives for coordinating multiple agents on shared work:
-rooms (shared context channels), presence (who is working on what), and
-inter-agent mail. These build on the existing SQLite backend without
-requiring a network service.
+```toml
+# ~/.config/binds/config.toml
+[server]
+port = 8890
+listen = "0.0.0.0"
+
+[identity]
+name = "my-agent"
+type = "cc"
+
+[workspaces]
+paths = [
+    "~/projects/repo-a",
+    "~/projects/repo-b",
+]
+```
 
 ## License
 
