@@ -4,16 +4,18 @@ Coordination layer for AI coding agents. Single Go binary. Local-first. Zero clo
 
 Originally forked from [steveyegge/beads](https://github.com/steveyegge/beads) v0.49.4. The upstream moved to Dolt-only at v0.51.0; binds stays on SQLite + JSONL and adds multi-agent coordination.
 
-> be me
-> use beads
-> pin the version instead of switching to beads_rust when beads goes dolt db
-> add mail simpler than agents mcp
-> add checkpoints (series of issues - what beads called each itemized task)
-> seems fine
-> bd daemon calls make my ip (we'll see about this one being true cause or not) get rate limited by github?
-> srsly what is causing that?
-> merged it all together
-> binds
+
+
+- be me
+- use beads
+- pin the version instead of switching to beads_rust when beads goes dolt db
+- add mail simpler than agents mcp
+- add checkpoints (series of issues - what beads called each itemized task)
+- seems fine
+- bd daemon calls make my ip (we'll see about this one being true cause or not) get rate limited by github?
+- srsly what is causing that?
+- merged it all together
+- binds
 
 
 
