@@ -141,6 +141,11 @@ func (s *Server) registerRoutes() {
 	// Identity
 	s.mux.HandleFunc("GET /api/whoami", s.authed(s.handleWhoami))
 
+	// Aliases
+	s.mux.HandleFunc("POST /api/mail/aliases", s.authed(s.handleAliasCreate))
+	s.mux.HandleFunc("GET /api/mail/aliases", s.authed(s.handleAliasList))
+	s.mux.HandleFunc("DELETE /api/mail/aliases/{alias}", s.authed(s.handleAliasDelete))
+
 	// Presence
 	s.mux.HandleFunc("POST /api/presence/heartbeat", s.authed(s.handleHeartbeat))
 	s.mux.HandleFunc("GET /api/presence", s.authed(s.handlePresence))
@@ -440,6 +445,56 @@ func (s *Server) handleWhoami(w http.ResponseWriter, r *http.Request) {
 		resp["token_source"] = "registered agent token"
 	}
 	jsonResp(w, resp)
+}
+
+// --- Handlers: Aliases ---
+
+func (s *Server) handleAliasCreate(w http.ResponseWriter, r *http.Request) {
+	agent := agentFromCtx(r.Context())
+	var req struct {
+		Alias  string `json:"alias"`
+		Target string `json:"target"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		jsonError(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+	if req.Alias == "" || req.Target == "" {
+		jsonError(w, "alias and target required", http.StatusBadRequest)
+		return
+	}
+	if err := s.store.CreateAlias(r.Context(), req.Alias, req.Target, agent); err != nil {
+		jsonError(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	jsonResp(w, map[string]string{"alias": req.Alias, "target": req.Target, "status": "created"})
+}
+
+func (s *Server) handleAliasList(w http.ResponseWriter, r *http.Request) {
+	aliases, err := s.store.ListAliases(r.Context())
+	if err != nil {
+		jsonError(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	result := make([]map[string]string, 0, len(aliases))
+	for _, a := range aliases {
+		result = append(result, map[string]string{
+			"alias":      a.AliasName,
+			"target":     a.Target,
+			"created_by": a.CreatedBy,
+			"created_at": a.CreatedAt,
+		})
+	}
+	jsonResp(w, map[string]interface{}{"aliases": result})
+}
+
+func (s *Server) handleAliasDelete(w http.ResponseWriter, r *http.Request) {
+	alias := r.PathValue("alias")
+	if err := s.store.DeleteAlias(r.Context(), alias); err != nil {
+		jsonError(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	jsonResp(w, map[string]string{"alias": alias, "status": "deleted"})
 }
 
 // --- Handlers: Presence ---

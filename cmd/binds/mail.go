@@ -228,6 +228,78 @@ var mailStatusCmd = &cobra.Command{
 	},
 }
 
+var mailAliasCmd = &cobra.Command{
+	Use:   "alias",
+	Short: "Manage mail aliases (route one name to another)",
+}
+
+var mailAliasAddCmd = &cobra.Command{
+	Use:   "add <alias> <target>",
+	Short: "Create an alias (mail to <alias> delivers to <target>)",
+	Args:  cobra.ExactArgs(2),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		payload := map[string]string{"alias": args[0], "target": args[1]}
+		resp, err := serverPost("/api/mail/aliases", payload)
+		if err != nil {
+			return err
+		}
+		if jsonOutput {
+			fmt.Println(string(resp))
+			return nil
+		}
+		fmt.Printf("Alias created: %s → %s\n", args[0], args[1])
+		return nil
+	},
+}
+
+var mailAliasListCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List all mail aliases",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		resp, err := serverGet("/api/mail/aliases")
+		if err != nil {
+			return err
+		}
+		if jsonOutput {
+			fmt.Println(string(resp))
+			return nil
+		}
+		var data struct {
+			Aliases []struct {
+				Alias  string `json:"alias"`
+				Target string `json:"target"`
+			} `json:"aliases"`
+		}
+		json.Unmarshal(resp, &data)
+		if len(data.Aliases) == 0 {
+			fmt.Println("No aliases configured")
+			return nil
+		}
+		for _, a := range data.Aliases {
+			fmt.Printf("  %s → %s\n", a.Alias, a.Target)
+		}
+		return nil
+	},
+}
+
+var mailAliasRmCmd = &cobra.Command{
+	Use:   "rm <alias>",
+	Short: "Remove a mail alias",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		resp, err := serverDelete("/api/mail/aliases/" + args[0])
+		if err != nil {
+			return err
+		}
+		if jsonOutput {
+			fmt.Println(string(resp))
+			return nil
+		}
+		fmt.Printf("Alias removed: %s\n", args[0])
+		return nil
+	},
+}
+
 var mailWhoamiCmd = &cobra.Command{
 	Use:   "whoami",
 	Short: "Show authenticated identity, server URL, and token source",
@@ -262,6 +334,10 @@ func init() {
 	mailHistoryCmd.Flags().String("with", "", "Agent to show history with")
 	mailHistoryCmd.Flags().Int("limit", 20, "Maximum messages to show")
 
+	mailAliasCmd.AddCommand(mailAliasAddCmd)
+	mailAliasCmd.AddCommand(mailAliasListCmd)
+	mailAliasCmd.AddCommand(mailAliasRmCmd)
+
 	mailCmd.AddCommand(mailSendCmd)
 	mailCmd.AddCommand(mailInboxCmd)
 	mailCmd.AddCommand(mailReadCmd)
@@ -270,6 +346,7 @@ func init() {
 	mailCmd.AddCommand(mailThreadsCmd)
 	mailCmd.AddCommand(mailStatusCmd)
 	mailCmd.AddCommand(mailWhoamiCmd)
+	mailCmd.AddCommand(mailAliasCmd)
 
 	rootCmd.AddCommand(mailCmd)
 }

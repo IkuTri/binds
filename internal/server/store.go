@@ -108,6 +108,15 @@ CREATE TABLE IF NOT EXISTS reservations (
 CREATE INDEX IF NOT EXISTS idx_reservations_holder ON reservations(holder);
 CREATE INDEX IF NOT EXISTS idx_reservations_expires_at ON reservations(expires_at);
 
+CREATE TABLE IF NOT EXISTS aliases (
+    alias      TEXT NOT NULL UNIQUE,
+    target     TEXT NOT NULL,
+    created_by TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_aliases_target ON aliases(target);
+
 CREATE TABLE IF NOT EXISTS issues (
     workspace      TEXT NOT NULL,
     workspace_path TEXT NOT NULL,
@@ -259,6 +268,61 @@ func (s *Store) ReapOfflineAgents(ctx context.Context, timeout time.Duration) (i
 	return int(n), nil
 }
 
+// --- Aliases ---
+
+type Alias struct {
+	AliasName string
+	Target    string
+	CreatedBy string
+	CreatedAt string
+}
+
+func (s *Store) ResolveAlias(ctx context.Context, name string) string {
+	var target string
+	err := s.db.QueryRowContext(ctx, `SELECT target FROM aliases WHERE alias = ?`, name).Scan(&target)
+	if err != nil {
+		return name
+	}
+	return target
+}
+
+func (s *Store) CreateAlias(ctx context.Context, alias, target, createdBy string) error {
+	now := time.Now().UTC().Format(time.RFC3339)
+	_, err := s.db.ExecContext(ctx,
+		`INSERT OR REPLACE INTO aliases (alias, target, created_by, created_at) VALUES (?, ?, ?, ?)`,
+		alias, target, createdBy, now)
+	return err
+}
+
+func (s *Store) DeleteAlias(ctx context.Context, alias string) error {
+	res, err := s.db.ExecContext(ctx, `DELETE FROM aliases WHERE alias = ?`, alias)
+	if err != nil {
+		return err
+	}
+	n, _ := res.RowsAffected()
+	if n == 0 {
+		return fmt.Errorf("alias %q not found", alias)
+	}
+	return nil
+}
+
+func (s *Store) ListAliases(ctx context.Context) ([]Alias, error) {
+	rows, err := s.db.QueryContext(ctx, `SELECT alias, target, created_by, created_at FROM aliases ORDER BY alias`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []Alias
+	for rows.Next() {
+		var a Alias
+		if err := rows.Scan(&a.AliasName, &a.Target, &a.CreatedBy, &a.CreatedAt); err != nil {
+			return nil, err
+		}
+		out = append(out, a)
+	}
+	return out, rows.Err()
+}
+
 type scanner interface {
 	Scan(dest ...interface{}) error
 }
@@ -310,6 +374,7 @@ type Message struct {
 }
 
 func (s *Store) SendMessage(ctx context.Context, sender, recipient, body, subject, msgType, priority string, replyTo *int64) (*Message, error) {
+	recipient = s.ResolveAlias(ctx, recipient)
 	now := time.Now().UTC().Format(time.RFC3339)
 	if msgType == "" {
 		msgType = "text"
