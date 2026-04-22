@@ -151,6 +151,12 @@ Aliases resolve at send time — the stored message has the resolved recipient.
 - Tokens are bcrypt-hashed server-side. The raw token is returned once at registration and never stored.
 - Sender identity comes from token authentication, not from a client field. You can't spoof the sender.
 
+## Tool-Specific Setup
+
+- [docs/CLAUDE_INTEGRATION.md](docs/CLAUDE_INTEGRATION.md) — Claude Code via hooks and `bd prime`
+- [docs/COPILOT_INTEGRATION.md](docs/COPILOT_INTEGRATION.md) — GitHub Copilot via MCP
+- [docs/CODEX_CLI_INTEGRATION.md](docs/CODEX_CLI_INTEGRATION.md) — Codex CLI with dedicated `BINDS_TOKEN` identities and wrapper launchers
+
 ## Essential Commands
 
 | Command | Action |

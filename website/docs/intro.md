@@ -67,7 +67,7 @@ bd create "Found bug in auth" --description="Details..." \
 bd sync
 ```
 
-See the [Claude Code integration](/integrations/claude-code) for detailed agent instructions.
+See the [Claude Code integration](/integrations/claude-code), [Codex CLI integration](/integrations/codex-cli), and [GitHub Copilot integration](/integrations/github-copilot) for detailed agent instructions.
 
 ## Architecture
 
