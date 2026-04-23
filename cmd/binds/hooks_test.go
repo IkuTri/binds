@@ -249,11 +249,11 @@ func TestInstallHooksShared(t *testing.T) {
 			t.Fatalf("installHooks() with shared=true failed: %v", err)
 		}
 
-		sharedHooksDir := ".beads-hooks"
+		sharedHooksDir := ".binds-hooks"
 		for hookName := range hooks {
 			hookPath := filepath.Join(sharedHooksDir, hookName)
 			if _, err := os.Stat(hookPath); os.IsNotExist(err) {
-				t.Errorf("Hook %s was not installed to .beads-hooks/", hookName)
+				t.Errorf("Hook %s was not installed to .binds-hooks/", hookName)
 			}
 			if runtime.GOOS == "windows" {
 				continue

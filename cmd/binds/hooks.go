@@ -196,7 +196,7 @@ var hooksInstallCmd = &cobra.Command{
 
 By default, hooks are installed to .git/hooks/ in the current repository.
 Use --beads to install to .beads/hooks/ (recommended for Dolt backend).
-Use --shared to install to a versioned directory (.beads-hooks/) that can be
+Use --shared to install to a versioned directory (.binds-hooks/) that can be
 committed to git and shared with team members.
 
 Use --chain to preserve existing hooks and run them before binds hooks. This is
@@ -354,7 +354,7 @@ func installHooksWithOptions(embeddedHooks map[string]string, force bool, shared
 		hooksDir = filepath.Join(beadsDir, "hooks")
 	} else if shared {
 		// Use versioned directory for shared hooks
-		hooksDir = ".beads-hooks"
+		hooksDir = ".binds-hooks"
 	} else {
 		// Use common git directory for hooks (shared across worktrees)
 		var err error
@@ -429,13 +429,13 @@ func installHooksWithOptions(embeddedHooks map[string]string, force bool, shared
 }
 
 func configureSharedHooksPath() error {
-	// Set git config core.hooksPath to .beads-hooks
+	// Set git config core.hooksPath to .binds-hooks
 	// Note: This may run before .beads exists, so it uses git.GetRepoRoot() directly
 	repoRoot := git.GetRepoRoot()
 	if repoRoot == "" {
 		return fmt.Errorf("not in a git repository")
 	}
-	cmd := exec.Command("git", "config", "core.hooksPath", ".beads-hooks")
+	cmd := exec.Command("git", "config", "core.hooksPath", ".binds-hooks")
 	cmd.Dir = repoRoot
 	if output, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("git config failed: %w (output: %s)", err, string(output))
@@ -1137,7 +1137,7 @@ installed bd version - upgrading bd automatically updates hook behavior.`,
 
 func init() {
 	hooksInstallCmd.Flags().Bool("force", false, "Overwrite existing hooks without backup")
-	hooksInstallCmd.Flags().Bool("shared", false, "Install hooks to .beads-hooks/ (versioned) instead of .git/hooks/")
+	hooksInstallCmd.Flags().Bool("shared", false, "Install hooks to .binds-hooks/ (versioned) instead of .git/hooks/")
 	hooksInstallCmd.Flags().Bool("chain", false, "Chain with existing hooks (run them before binds hooks)")
 	hooksInstallCmd.Flags().Bool("beads", false, "Install hooks to .beads/hooks/ (recommended for Dolt backend)")
 
