@@ -133,7 +133,7 @@ func TestValidateBeadsWorkspace(t *testing.T) {
         setup   func(t *testing.T) string
         wantErr string
     }{
-        {"missing .beads dir", setupNoBeadsDir, "not a beads workspace"},
+        {"missing .binds dir", setupNoBeadsDir, "not a beads workspace"},
         {"corrupted db", setupCorruptDB, "database is corrupted"},
         {"permission denied", setupNoReadAccess, "permission denied"},
     }

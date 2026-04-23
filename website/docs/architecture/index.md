@@ -15,7 +15,7 @@ Beads uses a layered architecture where each layer serves a specific purpose:
 ```mermaid
 flowchart TD
     subgraph GIT["🗂️ Layer 1: Git Repository"]
-        G[(".beads/*.jsonl<br/><i>Historical Source of Truth</i>")]
+        G[(".binds/*.jsonl<br/><i>Historical Source of Truth</i>")]
     end
 
     subgraph JSONL["📄 Layer 2: JSONL Files"]
@@ -61,7 +61,7 @@ Git is the *historical* source of truth. All issue data lives in the repository 
 
 JSONL (JSON Lines) files store issue data in an append-only format. This is the *operational* source of truth—SQLite databases are rebuilt from JSONL.
 
-**Location:** `.beads/*.jsonl`
+**Location:** `.binds/*.jsonl`
 
 **Why JSONL?**
 - Human-readable and inspectable
@@ -74,13 +74,13 @@ JSONL (JSON Lines) files store issue data in an append-only format. This is the 
 
 SQLite provides fast local queries without network latency. This is *derived state*—it can always be rebuilt from JSONL.
 
-**Location:** `.beads/beads.db`
+**Location:** `.binds/beads.db`
 
 **Why SQLite?**
 - Instant queries (no network)
 - Complex filtering and sorting
 - Derived from JSONL (always rebuildable)
-- Safe to delete and rebuild: `rm .beads/beads.db* && bd sync --import-only`
+- Safe to delete and rebuild: `rm .binds/beads.db* && bd sync --import-only`
 
 ## Data Flow
 
@@ -207,7 +207,7 @@ See [Sync Failures Recovery](/recovery/sync-failures) for daemon race condition 
 The three-layer architecture makes recovery straightforward because each layer can rebuild from the one above it:
 
 1. **Lost SQLite?** → Rebuild from JSONL: `bd sync --import-only`
-2. **Lost JSONL?** → Recover from Git history: `git checkout HEAD~1 -- .beads/issues.jsonl`
+2. **Lost JSONL?** → Recover from Git history: `git checkout HEAD~1 -- .binds/issues.jsonl`
 3. **Conflicts?** → Git merge, then rebuild
 
 ### Universal Recovery Sequence
@@ -219,7 +219,7 @@ This sequence resolves the majority of reported issues:
 ```bash
 bd daemons killall           # Stop daemons (prevents race conditions)
 git worktree prune           # Clean orphaned worktrees
-rm .beads/beads.db*          # Remove potentially corrupted database
+rm .binds/beads.db*          # Remove potentially corrupted database
 bd sync --import-only        # Rebuild from JSONL source of truth
 ```
 

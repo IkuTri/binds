@@ -56,7 +56,7 @@ func getUpgradeCommand() string {
 	// Get the executable path
 	execPath, err := os.Executable()
 	if err != nil {
-		return "curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash"
+		return "curl -fsSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash"
 	}
 
 	// Resolve symlinks to get the real path
@@ -77,7 +77,7 @@ func getUpgradeCommand() string {
 	}
 
 	// Default to install script (works on all platforms including Windows via WSL/Git Bash)
-	return "curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash"
+	return "curl -fsSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash"
 }
 
 // localVersionFile is the gitignored file that stores the last bd version used locally.
@@ -114,7 +114,7 @@ func CheckMetadataVersionTracking(path string, currentVersion string) DoctorChec
 			Status:  StatusError,
 			Message: "Unable to read .local_version file",
 			Detail:  err.Error(),
-			Fix:     "Check file permissions on .beads/.local_version",
+			Fix:     "Check file permissions on .binds/.local_version",
 		}
 	}
 
@@ -181,7 +181,7 @@ func CheckMetadataVersionTracking(path string, currentVersion string) DoctorChec
 
 // fetchLatestGitHubRelease fetches the latest release version from GitHub API.
 func fetchLatestGitHubRelease() (string, error) {
-	url := "https://api.github.com/repos/steveyegge/beads/releases/latest"
+	url := "https://api.github.com/repos/IkuTri/binds/releases/latest"
 
 	client := &http.Client{
 		Timeout: 5 * time.Second,
@@ -193,7 +193,7 @@ func fetchLatestGitHubRelease() (string, error) {
 	}
 
 	// Set User-Agent as required by GitHub API
-	req.Header.Set("User-Agent", "beads-cli-doctor")
+	req.Header.Set("User-Agent", "binds-cli-doctor")
 
 	resp, err := client.Do(req)
 	if err != nil {

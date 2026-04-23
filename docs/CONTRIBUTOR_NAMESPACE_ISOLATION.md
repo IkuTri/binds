@@ -8,7 +8,7 @@
 ## Problem Statement
 
 When contributors work on beads-the-project using beads-the-tool, their personal
-work-tracking issues leak into PRs. The `.beads/issues.jsonl` file is intentionally
+work-tracking issues leak into PRs. The `.binds/issues.jsonl` file is intentionally
 git-tracked (it's the project's canonical issue database), but contributors' local
 issues pollute the diff.
 
@@ -18,13 +18,13 @@ This is a **recursion problem unique to self-hosting projects**.
 
 ```
 beads-the-project/
-├── .beads/
+├── .binds/
 │   └── issues.jsonl    ← Project bugs, features, tasks (SHOULD be in PRs)
 └── src/
     └── ...
 
 contributor-working-on-beads/
-├── .beads/
+├── .binds/
 │   └── issues.jsonl    ← Project issues PLUS personal tracking (POLLUTES PRs)
 └── src/
     └── ...
@@ -35,7 +35,7 @@ When a contributor:
 2. Uses `bd create "My TODO: fix tests before lunch"` to track their work
 3. Creates a PR
 
-The PR diff includes their personal issues in `.beads/issues.jsonl`.
+The PR diff includes their personal issues in `.binds/issues.jsonl`.
 
 ### Why This Matters
 
@@ -97,8 +97,8 @@ Mark issues as "local-only" vs "project" with a flag.
 
 Automatically detect if user is maintainer or contributor and route new issues
 accordingly:
-- **Maintainer** (SSH access): Issues go to `./.beads/` (project database)
-- **Contributor** (HTTPS fork): Issues go to `~/.beads-planning/` (personal database)
+- **Maintainer** (SSH access): Issues go to `./.binds/` (project database)
+- **Contributor** (HTTPS fork): Issues go to `~/.binds-planning/` (personal database)
 
 **Pros:**
 - Zero-friction for contributors
@@ -128,7 +128,7 @@ accordingly:
    ```go
    v.SetDefault("routing.mode", "")  // Empty = disabled by default
    v.SetDefault("routing.default", ".")
-   v.SetDefault("routing.contributor", "~/.beads-planning")
+   v.SetDefault("routing.contributor", "~/.binds-planning")
    ```
 
 3. **Target Repo Calculation** (`internal/routing/routing.go`):
@@ -140,7 +140,7 @@ accordingly:
    ```bash
    bd init --contributor
    ```
-   Creates `~/.beads-planning/` and configures routing.
+   Creates `~/.binds-planning/` and configures routing.
 
 5. **Documentation**:
    - `docs/ROUTING.md` - Auto-routing mechanics
@@ -157,7 +157,7 @@ accordingly:
        debug.Logf("DEBUG: Target repo: %s\n", repoPath)
    }
    ```
-   The routing is calculated but NOT used. Issues still go to `./.beads/`.
+   The routing is calculated but NOT used. Issues still go to `./.binds/`.
 
 2. **Pollution Detection for Preflight** (bd-lfak):
    No way to detect if personal issues are in the PR diff.
@@ -197,10 +197,10 @@ When a contributor runs `bd create` without routing configured:
 
 Options:
   1. Configure auto-routing (recommended)
-     Creates ~/.beads-planning for personal tracking
+     Creates ~/.binds-planning for personal tracking
 
   2. Continue to current repo
-     Issue will appear in .beads/issues.jsonl (affects PRs)
+     Issue will appear in .binds/issues.jsonl (affects PRs)
 
 Choice [1]:
 ```
@@ -211,8 +211,8 @@ Add check in `bd preflight --check`:
 
 ```go
 func checkBeadsPollution(ctx context.Context) (CheckResult, error) {
-    // Get git diff of .beads/issues.jsonl
-    diff, err := gitDiff(".beads/issues.jsonl")
+    // Get git diff of .binds/issues.jsonl
+    diff, err := gitDiff(".binds/issues.jsonl")
     if err != nil {
         return CheckResult{}, err
     }
@@ -262,7 +262,7 @@ Contributor routing works independently of the project repo's sync configuration
 
 | Sync Mode | Project Repo | Planning Repo | Notes |
 |-----------|--------------|---------------|-------|
-| **Direct** | Uses `.beads/` directly | Uses `~/.beads-planning/.beads/` | Both use direct storage, no interaction |
+| **Direct** | Uses `.binds/` directly | Uses `~/.binds-planning/.binds/` | Both use direct storage, no interaction |
 | **Sync-branch** | Uses separate branch for beads | Uses direct storage | Planning repo does NOT inherit `sync.branch` config |
 | **No-db mode** | JSONL-only operations | Routes JSONL operations to planning repo | Planning repo still uses database |
 | **Daemon mode** | Background auto-sync | Daemon bypassed for routed issues | Planning repo operations are synchronous |
@@ -271,7 +271,7 @@ Contributor routing works independently of the project repo's sync configuration
 
 ### Key Principles
 
-1. **Separate databases**: Planning repo is completely independent - it has its own `.beads/` directory
+1. **Separate databases**: Planning repo is completely independent - it has its own `.binds/` directory
 2. **No config inheritance**: Planning repo does not inherit project's `sync.branch`, `no-db`, or daemon settings
 3. **BEADS_DIR precedence**: If `BEADS_DIR` environment variable is set, it overrides routing configuration
 4. **Daemon bypass**: Issues routed to planning repo bypass daemon mode to avoid connection staleness
@@ -285,13 +285,13 @@ Contributor routing works independently of the project repo's sync configuration
 bd init --contributor
 
 # This configures:
-# - Creates ~/.beads-planning/ with its own database
+# - Creates ~/.binds-planning/ with its own database
 # - Sets routing.mode=auto
-# - Sets routing.contributor=~/.beads-planning
+# - Sets routing.contributor=~/.binds-planning
 
 # Verify
 bd config get routing.mode        # → auto
-bd config get routing.contributor # → ~/.beads-planning
+bd config get routing.contributor # → ~/.binds-planning
 ```
 
 ### Explicit Role Override
@@ -308,10 +308,10 @@ git config beads.role contributor
 
 ```bash
 # Per-command override
-BEADS_DIR=~/.beads-planning bd create "My task" -p 1
+BEADS_DIR=~/.binds-planning bd create "My task" -p 1
 
 # Or per-shell session
-export BEADS_DIR=~/.beads-planning
+export BEADS_DIR=~/.binds-planning
 bd create "My task" -p 1
 ```
 
@@ -319,8 +319,8 @@ bd create "My task" -p 1
 
 ```bash
 # Initialize directly at BEADS_DIR location (no need to cd)
-mkdir -p ~/.beads-planning/.beads
-export BEADS_DIR=~/.beads-planning/.beads
+mkdir -p ~/.binds-planning/.binds
+export BEADS_DIR=~/.binds-planning/.binds
 bd init --prefix planning    # Creates database at $BEADS_DIR
 
 # Doctor checks BEADS_DIR location (not CWD)
@@ -331,7 +331,7 @@ bd doctor                    # Diagnoses database at $BEADS_DIR
 
 ### Routing Not Working
 
-**Symptom**: Issues appear in `./.beads/issues.jsonl` instead of planning repo
+**Symptom**: Issues appear in `./.binds/issues.jsonl` instead of planning repo
 
 **Diagnosis**:
 ```bash
@@ -367,7 +367,7 @@ git remote get-url --push origin  # Should show HTTPS for contributors
 
 **Diagnosis**:
 ```bash
-ls -la ~/.beads-planning/.beads/  # Should exist
+ls -la ~/.binds-planning/.binds/  # Should exist
 ```
 
 **Solution**:
@@ -385,7 +385,7 @@ bd init --contributor  # Wizard will recreate if missing
 **Solution**:
 ```bash
 # Configure planning repo prefix
-cd ~/.beads-planning
+cd ~/.binds-planning
 bd config set db.prefix plan  # Use "plan-" prefix for planning issues
 cd -  # Return to project repo
 ```
@@ -403,18 +403,18 @@ cd -  # Return to project repo
 ```bash
 # Old (deprecated but still works)
 bd config set contributor.auto_route true
-bd config set contributor.planning_repo ~/.beads-planning
+bd config set contributor.planning_repo ~/.binds-planning
 
 # New (preferred)
 bd config set routing.mode auto
-bd config set routing.contributor ~/.beads-planning
+bd config set routing.contributor ~/.binds-planning
 ```
 
 ## Pollution Detection Heuristics
 
 For `bd preflight`, we can detect pollution by checking:
 
-1. **Source Repo Mismatch**: Issue has `source_repo != "."` but is in `./.beads/`
+1. **Source Repo Mismatch**: Issue has `source_repo != "."` but is in `./.binds/`
 2. **Creator Check**: Issue `created_by` doesn't match known maintainers
 3. **Prefix Mismatch**: Issue prefix doesn't match project prefix
 4. **Timing Heuristic**: Issue created recently on contributor's branch

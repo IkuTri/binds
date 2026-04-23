@@ -13,9 +13,9 @@ How beads synchronizes issues across git.
 Beads uses a dual-storage architecture:
 
 ```
-SQLite DB (.beads/beads.db, gitignored)
+SQLite DB (.binds/beads.db, gitignored)
     ↕ auto-sync (5s debounce)
-JSONL (.beads/issues.jsonl, git-tracked)
+JSONL (.binds/issues.jsonl, git-tracked)
     ↕ git push/pull
 Remote JSONL (shared across machines)
 ```
@@ -51,10 +51,10 @@ Triggers:
 
 ```bash
 # Force import
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 
 # Preview import
-bd import -i .beads/issues.jsonl --dry-run
+bd import -i .binds/issues.jsonl --dry-run
 ```
 
 ## Git Hooks
@@ -80,7 +80,7 @@ bd sync
 bd export
 
 # Just import
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 ```
 
 ## Conflict Resolution
@@ -107,8 +107,8 @@ Manual resolution:
 
 ```bash
 # After merge conflict
-git checkout --ours .beads/issues.jsonl   # or --theirs
-bd import -i .beads/issues.jsonl
+git checkout --ours .binds/issues.jsonl   # or --theirs
+bd import -i .binds/issues.jsonl
 bd sync
 ```
 
@@ -132,7 +132,7 @@ bd import -i issues.jsonl --orphan-handling resurrect
 
 ## Deletion Tracking
 
-Deleted issues are tracked in `.beads/deletions.jsonl`:
+Deleted issues are tracked in `.binds/deletions.jsonl`:
 
 ```bash
 # Delete issue (records to manifest)
@@ -162,10 +162,10 @@ bd info
 
 ```bash
 # Check import status
-bd import -i .beads/issues.jsonl --dry-run
+bd import -i .binds/issues.jsonl --dry-run
 
 # Allow orphans if needed
-bd import -i .beads/issues.jsonl --orphan-handling allow
+bd import -i .binds/issues.jsonl --orphan-handling allow
 ```
 
 ### Duplicate detection

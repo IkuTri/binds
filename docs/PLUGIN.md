@@ -16,7 +16,7 @@ Beads (`bd`) is an issue tracker designed specifically for AI-supervised coding 
 
 1. Install beads CLI:
 ```bash
-curl -sSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash
 ```
 
 2. Install Python and uv (for MCP server):
@@ -33,7 +33,7 @@ There are two ways to install the beads plugin:
 
 ```bash
 # In Claude Code
-/plugin marketplace add steveyegge/beads
+/plugin marketplace add IkuTri/binds
 /plugin install beads
 ```
 
@@ -41,7 +41,7 @@ There are two ways to install the beads plugin:
 
 ```bash
 # Clone the repository (shell command)
-git clone https://github.com/steveyegge/beads
+git clone https://github.com/IkuTri/binds
 cd beads
 ```
 
@@ -272,7 +272,7 @@ To customize, edit your Claude Code MCP settings or the plugin configuration.
 
 ## Auto-Sync with Git
 
-Beads automatically syncs issues to `.beads/issues.jsonl`:
+Beads automatically syncs issues to `.binds/issues.jsonl`:
 - **Export**: After any CRUD operation (5-second debounce)
 - **Import**: When JSONL is newer than DB (e.g., after `git pull`)
 
@@ -283,7 +283,7 @@ bd create "Add feature" -p 1
 
 # Changes auto-export after 5 seconds
 # Commit when ready
-git add .beads/issues.jsonl
+git add .binds/issues.jsonl
 git commit -m "Add feature tracking"
 
 # After pull, JSONL auto-imports
@@ -310,10 +310,10 @@ The plugin requires the `bd` CLI to be installed. Update it separately:
 
 ```bash
 # Quick update
-curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash
 
 # Or with go
-go install github.com/steveyegge/beads/cmd/bd@latest
+go install github.com/IkuTri/binds/cmd/bd@latest
 ```
 
 ### 3. Version Compatibility
@@ -364,7 +364,7 @@ Beads follows semantic versioning. The plugin version tracks the bd CLI version:
 ### Commands not working
 
 1. Make sure you're in a project with beads initialized: `/beads:init`
-2. Check if database exists: `ls -la .beads/`
+2. Check if database exists: `ls -la .binds/`
 3. Try direct MCP tool access instead of slash commands
 4. Check the beads CLI works: `bd --help`
 
@@ -377,7 +377,7 @@ Beads follows semantic versioning. The plugin version tracks the bd CLI version:
 
 ## Learn More
 
-- **GitHub**: https://github.com/steveyegge/beads
+- **GitHub**: https://github.com/IkuTri/binds
 - **Documentation**: See README.md in the repository
 - **Examples**: Check `examples/` directory for integration patterns
 - **MCP Server**: See `integrations/beads-mcp/` for server details

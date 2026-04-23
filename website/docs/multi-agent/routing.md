@@ -17,7 +17,7 @@ Routing enables:
 
 ## Configuration
 
-Create `.beads/routes.jsonl`:
+Create `.binds/routes.jsonl`:
 
 ```jsonl
 {"pattern": "frontend/**", "target": "frontend-repo", "priority": 10}

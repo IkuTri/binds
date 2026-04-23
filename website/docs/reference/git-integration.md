@@ -11,15 +11,15 @@ How beads integrates with git.
 ## Overview
 
 Beads uses git for:
-- **JSONL sync** - Issues stored in `.beads/issues.jsonl`
-- **Deletion tracking** - `.beads/deletions.jsonl`
+- **JSONL sync** - Issues stored in `.binds/issues.jsonl`
+- **Deletion tracking** - `.binds/deletions.jsonl`
 - **Conflict resolution** - Custom merge driver
 - **Hooks** - Auto-sync on git operations
 
 ## File Structure
 
 ```
-.beads/
+.binds/
 ├── beads.db           # SQLite database (gitignored)
 ├── issues.jsonl       # Issue data (git-tracked)
 ├── deletions.jsonl    # Deletion manifest (git-tracked)
@@ -70,8 +70,8 @@ bd init  # Prompts for merge driver setup
 Or manually add to `.gitattributes`:
 
 ```gitattributes
-.beads/issues.jsonl merge=beads
-.beads/deletions.jsonl merge=beads
+.binds/issues.jsonl merge=beads
+.binds/deletions.jsonl merge=beads
 ```
 
 And `.git/config`:
@@ -105,7 +105,7 @@ bd --no-daemon create "Task"
 bd --no-daemon list
 ```
 
-Why: Daemon uses `.beads/bd.sock` which conflicts across worktrees.
+Why: Daemon uses `.binds/bd.sock` which conflicts across worktrees.
 
 ## Branch Workflows
 
@@ -146,10 +146,10 @@ Automatic - driver handles most conflicts.
 
 ```bash
 # After conflict
-git checkout --ours .beads/issues.jsonl
-bd import -i .beads/issues.jsonl
+git checkout --ours .binds/issues.jsonl
+bd import -i .binds/issues.jsonl
 bd sync
-git add .beads/
+git add .binds/
 git commit
 ```
 

@@ -8,9 +8,9 @@ bd v0.34.0 introduces a chemistry-inspired workflow system:
 
 | Phase | Name | Storage | Synced? | Use Case |
 |-------|------|---------|---------|----------|
-| **Solid** | Proto | `.beads/` | Yes | Reusable template (epic with `template` label) |
-| **Liquid** | Mol | `.beads/` | Yes | Persistent instance (real issues from template) |
-| **Vapor** | Wisp | `.beads-wisp/` | No | Ephemeral instance (operational work, no audit trail) |
+| **Solid** | Proto | `.binds/` | Yes | Reusable template (epic with `template` label) |
+| **Liquid** | Mol | `.binds/` | Yes | Persistent instance (real issues from template) |
+| **Vapor** | Wisp | `.binds-wisp/` | No | Ephemeral instance (operational work, no audit trail) |
 
 **Phase transitions:**
 - `spawn` / `pour`: Solid (proto) → Liquid (mol)
@@ -346,7 +346,7 @@ bd mol distill bd-release-epic --as "Release Process" --var version=X.Y.Z
 - Check proto for `{{key}}` placeholders with `bd mol show`
 
 **"Wisp commands fail"**
-- Wisps stored in `.beads-wisp/` (separate from `.beads/`)
+- Wisps stored in `.binds-wisp/` (separate from `.binds/`)
 - Check `bd mol wisp list` for active wisps
 
 **"External dependency not satisfied"**

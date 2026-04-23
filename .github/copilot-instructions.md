@@ -35,7 +35,7 @@
 - Update docs when changing behavior
 
 ### Git Workflow
-- Always commit `.beads/issues.jsonl` with code changes
+- Always commit `.binds/issues.jsonl` with code changes
 - Run `bd sync` at end of work sessions
 - Install git hooks: `bd hooks install` (ensures DB ↔ JSONL consistency)
 
@@ -95,7 +95,7 @@ beads/
 │   └── beads-mcp/       # MCP server (Python)
 ├── examples/            # Integration examples
 ├── docs/                # Documentation
-└── .beads/
+└── .binds/
     ├── beads.db         # SQLite database (DO NOT COMMIT)
     └── issues.jsonl     # Git-synced issue storage
 ```
@@ -127,7 +127,7 @@ Use the beads MCP server for native function calls instead of shell commands:
 - ✅ Test with `BEADS_DB=/tmp/test.db`
 - ❌ Do NOT create markdown TODO lists
 - ❌ Do NOT create test issues in production DB
-- ❌ Do NOT commit `.beads/beads.db` (JSONL only)
+- ❌ Do NOT commit `.binds/beads.db` (JSONL only)
 
 ---
 

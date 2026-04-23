@@ -12,7 +12,7 @@ The exclusive lock protocol allows external tools to claim exclusive management 
 
 ### Lock File Format
 
-The lock file is located at `.beads/.exclusive-lock` and contains JSON:
+The lock file is located at `.binds/.exclusive-lock` and contains JSON:
 
 ```json
 {
@@ -61,7 +61,7 @@ import (
     "encoding/json"
     "os"
     "path/filepath"
-    "github.com/steveyegge/beads/internal/types"
+    "github.com/IkuTri/binds/internal/types"
 )
 
 func acquireLock(beadsDir, holder, version string) error {
@@ -93,7 +93,7 @@ func releaseLock(beadsDir string) error {
 
 ```bash
 #!/bin/bash
-BEADS_DIR=".beads"
+BEADS_DIR=".binds"
 LOCK_FILE="$BEADS_DIR/.exclusive-lock"
 
 # Create lock
@@ -121,7 +121,7 @@ Always use cleanup handlers to ensure locks are released:
 
 ```go
 func main() {
-    beadsDir := ".beads"
+    beadsDir := ".binds"
     
     // Acquire lock
     if err := acquireLock(beadsDir, "my-tool", "1.0.0"); err != nil {
@@ -174,16 +174,16 @@ Removed stale lock (vc-executor), proceeding with sync
 Skipping database (lock check failed: malformed lock file: unexpected EOF)
 ```
 
-Check daemon logs (default: `.beads/daemon.log`) to troubleshoot lock issues.
+Check daemon logs (default: `.binds/daemon.log`) to troubleshoot lock issues.
 
 **Note:** The daemon checks for locks at the start of each sync cycle. If a lock is created during a sync cycle, that cycle will complete, but subsequent cycles will skip the database.
 
 ## Testing Your Integration
 
 1. **Start the daemon**: `bd daemon start --interval 1m`
-2. **Create a lock**: Use your tool to create `.beads/.exclusive-lock`
+2. **Create a lock**: Use your tool to create `.binds/.exclusive-lock`
 3. **Verify daemon skips**: Check daemon logs for "Skipping database" message
-4. **Release lock**: Remove `.beads/.exclusive-lock`
+4. **Release lock**: Remove `.binds/.exclusive-lock`
 5. **Verify daemon resumes**: Check daemon logs for normal sync cycle
 
 ## Security Considerations
@@ -226,4 +226,4 @@ For integration help, see:
 - **README.md** - Daemon configuration
 - **examples/** - Sample integrations
 
-File issues at: https://github.com/steveyegge/beads/issues
+File issues at: https://github.com/IkuTri/binds/issues

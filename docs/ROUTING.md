@@ -37,7 +37,7 @@ bd create "Fix bug" -p 1
 git remote add origin https://github.com/fork/repo.git
 git remote add upstream https://github.com/owner/repo.git
 bd create "Fix bug" -p 1
-# → Creates in planning repo (~/.beads-planning by default)
+# → Creates in planning repo (~/.binds-planning by default)
 ```
 
 ## Configuration
@@ -52,13 +52,13 @@ bd init --contributor
 bd config set routing.mode auto
 
 # Set default planning repo
-bd config set routing.default "~/.beads-planning"
+bd config set routing.default "~/.binds-planning"
 
 # Set repo for maintainers (in auto mode)
 bd config set routing.maintainer "."
 
 # Set repo for contributors (in auto mode)
-bd config set routing.contributor "~/.beads-planning"
+bd config set routing.contributor "~/.binds-planning"
 ```
 
 ## CLI Usage
@@ -70,7 +70,7 @@ bd config set routing.contributor "~/.beads-planning"
 bd create "Fix authentication bug" -p 1
 
 # Maintainer: creates in current repo (.)
-# Contributor: creates in ~/.beads-planning
+# Contributor: creates in ~/.binds-planning
 ```
 
 ### Explicit Override
@@ -103,7 +103,7 @@ This ensures discovered work stays in the same repository as the parent task.
 
 ### The Problem
 
-Auto-routing writes issues to a separate repository (e.g., `~/.beads-planning`), but by default, `bd list` only shows issues from the current repository's database. Without hydration, routed issues are "invisible" even though they exist.
+Auto-routing writes issues to a separate repository (e.g., `~/.binds-planning`), but by default, `bd list` only shows issues from the current repository's database. Without hydration, routed issues are "invisible" even though they exist.
 
 ### The Solution
 
@@ -112,11 +112,11 @@ Add routing targets to `repos.additional` in `config.yaml`:
 ```yaml
 routing:
   mode: auto
-  contributor: ~/.beads-planning
+  contributor: ~/.binds-planning
 repos:
   primary: "."
   additional:
-    - ~/.beads-planning
+    - ~/.binds-planning
 ```
 
 ### Automatic Setup
@@ -129,8 +129,8 @@ bd init --contributor
 
 # This sets up:
 # 1. routing.mode=auto
-# 2. routing.contributor=~/.beads-planning
-# 3. repos.additional=[~/.beads-planning]
+# 2. routing.contributor=~/.binds-planning
+# 3. repos.additional=[~/.binds-planning]
 ```
 
 ### Manual Setup (Advanced)
@@ -139,7 +139,7 @@ If you configured routing before this feature, add hydration manually:
 
 ```bash
 # Add planning repo to hydration list
-bd repo add ~/.beads-planning
+bd repo add ~/.binds-planning
 
 # Verify configuration
 bd repo list
@@ -163,7 +163,7 @@ Multi-repo hydration imports issues from all configured repos into the current d
 bd daemon start
 
 # In planning repo
-cd ~/.beads-planning
+cd ~/.binds-planning
 bd daemon start --local
 ```
 
@@ -236,7 +236,7 @@ go test -v -run TestRouting
 
 ## Future Enhancements
 
-See [bd-k58](https://github.com/steveyegge/beads/issues/k58) for proposal workflow:
+See [bd-k58](https://github.com/IkuTri/binds/issues/k58) for proposal workflow:
 - `bd propose <id>` - Move issue from planning to upstream
 - `bd withdraw <id>` - Un-propose
 - `bd accept <id>` - Maintainer accepts proposal

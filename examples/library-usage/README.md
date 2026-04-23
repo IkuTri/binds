@@ -17,7 +17,7 @@ Instead of spawning `bd` CLI processes:
 In your Go project:
 
 ```bash
-go get github.com/steveyegge/beads@latest
+go get github.com/IkuTri/binds@latest
 ```
 
 ## Basic Usage
@@ -29,7 +29,7 @@ import (
     "context"
     "log"
     
-    "github.com/steveyegge/beads"
+    "github.com/IkuTri/binds"
 )
 
 func main() {
@@ -156,7 +156,7 @@ func NewVCStorage(dbPath string) (*VCStorage, error) {
 
 // Claim ready work for executor
 func (s *VCStorage) ClaimWork(ctx context.Context, executorID string) (*beads.Issue, error) {
-    ready, err := s.beads.GetReadyWork(ctx, beads.WorkFilter{
+    ready, err := s.binds.GetReadyWork(ctx, beads.WorkFilter{
         Status: beads.StatusOpen,
         Limit: 1,
     })
@@ -176,7 +176,7 @@ func (s *VCStorage) ClaimWork(ctx context.Context, executorID string) (*beads.Is
         "assignee": executorID,
     }
     
-    if err := s.beads.UpdateIssue(ctx, issue.ID, updates, executorID); err != nil {
+    if err := s.binds.UpdateIssue(ctx, issue.ID, updates, executorID); err != nil {
         return nil, err
     }
     

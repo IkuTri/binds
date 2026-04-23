@@ -147,7 +147,7 @@ Just need a checklist to show progress to user.
 | **Discoverability** | `bd ready` surfaces work | Scroll conversation for todos |
 | **Complexity** | Handles nested epics, blockers | Flat list only |
 | **Visibility** | Background structure, not in conversation | Visible to user in chat |
-| **Setup** | Requires `.beads/` directory in project | Always available |
+| **Setup** | Requires `.binds/` directory in project | Always available |
 | **Best for** | Complex, multi-session, explorative | Simple, single-session, linear |
 | **Context capture** | Design notes, acceptance criteria, links | Just task description |
 | **Evolution** | Issues can be updated, refined over time | Static once written |

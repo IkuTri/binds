@@ -11,7 +11,7 @@ Wisps are ephemeral workflows that don't sync to git.
 ## What are Wisps?
 
 Wisps are "vapor phase" molecules:
-- Stored in `.beads-wisp/` (gitignored)
+- Stored in `.binds-wisp/` (gitignored)
 - Don't sync with git
 - Auto-expire after completion
 - Perfect for temporary operations
@@ -56,7 +56,7 @@ bd wisp cleanup
 
 | Aspect | Molecule | Wisp |
 |--------|----------|------|
-| Storage | `.beads/` | `.beads-wisp/` |
+| Storage | `.binds/` | `.binds-wisp/` |
 | Git sync | Yes | No |
 | Persistence | Permanent | Ephemeral |
 | Use case | Tracked work | Temporary ops |
@@ -78,7 +78,7 @@ bd mol bond <formula> <target> --wisp
 Create a wisp for running checks:
 
 ```toml
-# .beads/formulas/quick-check.formula.toml
+# .binds/formulas/quick-check.formula.toml
 formula = "quick-check"
 description = "Quick local checks"
 

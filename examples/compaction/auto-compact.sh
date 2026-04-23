@@ -76,4 +76,4 @@ bd admin compact --stats
 
 echo
 echo "✅ Auto-compaction complete"
-echo "Remember to commit: git add .beads/issues.jsonl issues.db && git commit -m 'Auto-compact'"
+echo "Remember to commit: git add .binds/issues.jsonl issues.db && git commit -m 'Auto-compact'"

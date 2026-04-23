@@ -27,7 +27,7 @@ func createConfigYaml(beadsDir string, noDbMode bool, prefix string) error {
 		prefixLine = fmt.Sprintf("issue-prefix: %q", prefix)
 	}
 
-	configYamlTemplate := fmt.Sprintf(`# Beads Configuration File
+	configYamlTemplate := fmt.Sprintf(`# Binds Configuration File
 # This file configures default behavior for all bd commands in this repository
 # All settings can also be set via environment variables (BD_* prefix)
 # or overridden with command-line flags
@@ -38,7 +38,7 @@ func createConfigYaml(beadsDir string, noDbMode bool, prefix string) error {
 %s
 
 # Use no-db mode: load from JSONL, no SQLite, write back after each command
-# When true, bd will use .beads/issues.jsonl as the source of truth
+# When true, bd will use .binds/issues.jsonl as the source of truth
 # instead of SQLite database
 %s
 
@@ -66,24 +66,24 @@ func createConfigYaml(beadsDir string, noDbMode bool, prefix string) error {
 # Debounce interval for auto-flush (can also use BINDS_FLUSH_DEBOUNCE)
 # flush-debounce: "5s"
 
-# Export events (audit trail) to .beads/events.jsonl on each flush/sync
+# Export events (audit trail) to .binds/events.jsonl on each flush/sync
 # When enabled, new events are appended incrementally using a high-water mark.
 # Use 'binds export --events' to trigger manually regardless of this setting.
 # events-export: false
 
-# Git branch for beads commits (bd sync will commit to this branch)
+# Git branch for binds commits (bd sync will commit to this branch)
 # IMPORTANT: Set this for team projects so all clones use the same sync branch.
 # This setting persists across clones (unlike database config which is gitignored).
 # Can also use BINDS_SYNC_BRANCH env var for local override.
 # If not set, bd sync will require you to run 'binds config set sync.branch <branch>'.
-# sync-branch: "beads-sync"
+# sync-branch: "binds-sync"
 
 # Multi-repo configuration (experimental - bd-307)
 # Allows hydrating from multiple repositories and routing writes to the correct JSONL
 # repos:
 #   primary: "."  # Primary repo (where this database lives)
 #   additional:   # Additional repos to hydrate from (read-only)
-#     - ~/beads-planning  # Personal planning repo
+#     - ~/binds-planning  # Personal planning repo
 #     - ~/work-planning   # Work planning repo
 
 # Integration settings (access with 'binds config get/set')
@@ -103,7 +103,7 @@ func createConfigYaml(beadsDir string, noDbMode bool, prefix string) error {
 	return nil
 }
 
-// createReadme creates the README.md file in the .beads directory
+// createReadme creates the README.md file in the .binds directory
 func createReadme(beadsDir string) error {
 	readmePath := filepath.Join(beadsDir, "README.md")
 
@@ -112,13 +112,13 @@ func createReadme(beadsDir string) error {
 		return nil
 	}
 
-	readmeTemplate := `# Beads - AI-Native Issue Tracking
+	readmeTemplate := `# Binds - AI-Native Issue Tracking
 
-Welcome to Beads! This repository uses **Beads** for issue tracking - a modern, AI-native tool designed to live directly in your codebase alongside your code.
+Welcome to Binds! This repository uses **Binds** for issue tracking - a modern, AI-native tool designed to live directly in your codebase alongside your code.
 
-## What is Beads?
+## What is Binds?
 
-Beads is issue tracking that lives in your repo, making it perfect for AI coding agents and developers who want their issues close to their code. No web UI required - everything works through the CLI and integrates seamlessly with git.
+Binds is issue tracking that lives in your repo, making it perfect for AI coding agents and developers who want their issues close to their code. No web UI required - everything works through the CLI and integrates seamlessly with git.
 
 **Learn more:** [github.com/IkuTri/binds](https://github.com/IkuTri/binds)
 
@@ -146,13 +146,13 @@ bd sync
 
 ### Working with Issues
 
-Issues in Beads are:
-- **Git-native**: Stored in ` + "`.beads/issues.jsonl`" + ` and synced like code
+Issues in Binds are:
+- **Git-native**: Stored in ` + "`.binds/issues.jsonl`" + ` and synced like code
 - **AI-friendly**: CLI-first design works perfectly with AI coding agents
 - **Branch-aware**: Issues can follow your branch workflow
 - **Always in sync**: Auto-syncs with your commits
 
-## Why Beads?
+## Why Binds?
 
 ✨ **AI-Native Design**
 - Built specifically for AI-assisted development workflows
@@ -169,19 +169,19 @@ Issues in Beads are:
 - Branch-aware issue tracking
 - Intelligent JSONL merge resolution
 
-## Get Started with Beads
+## Get Started with Binds
 
-Try Beads in your own projects:
+Try Binds in your own projects:
 
 ` + "```bash" + `
-# Install Beads
-curl -sSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
+# Install Binds
+curl -sSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash
 
 # Initialize in your repo
 bd init
 
 # Create your first issue
-binds create "Try out Beads"
+binds create "Try out Binds"
 ` + "```" + `
 
 ## Learn More
@@ -192,7 +192,7 @@ binds create "Try out Beads"
 
 ---
 
-*Beads: Issue tracking that moves at the speed of thought* ⚡
+*Binds: Issue tracking that moves at the speed of thought* ⚡
 `
 
 	// Write README.md (0644 is standard for markdown files)

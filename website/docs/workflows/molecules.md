@@ -12,7 +12,7 @@ Molecules are work graphs created from formulas.
 
 A molecule is a persistent instance of a formula:
 - Contains steps with dependencies
-- Tracked in `.beads/` (syncs with git)
+- Tracked in `.binds/` (syncs with git)
 - Steps map to issues with parent-child relationships
 
 ## Creating Molecules

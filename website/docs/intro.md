@@ -26,7 +26,7 @@ Traditional issue trackers (Jira, GitHub Issues) weren't designed for AI agents.
 brew install beads
 
 # Or quick install (macOS/Linux/FreeBSD)
-curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash
 
 # Initialize in your project
 cd your-project
@@ -72,9 +72,9 @@ See the [Claude Code integration](/integrations/claude-code), [Codex CLI integra
 ## Architecture
 
 ```
-SQLite DB (.beads/beads.db, gitignored)
+SQLite DB (.binds/beads.db, gitignored)
     ↕ auto-sync (5s debounce)
-JSONL (.beads/issues.jsonl, git-tracked)
+JSONL (.binds/issues.jsonl, git-tracked)
     ↕ git push/pull
 Remote JSONL (shared across machines)
 ```

@@ -4433,7 +4433,7 @@ No breaking changes. All changes are backward compatible:
 
 Simply pull the latest version and rebuild:
 ```bash
-go install github.com/steveyegge/beads/cmd/bd@latest
+go install github.com/IkuTri/binds/cmd/bd@latest
 # or
 git pull && go build -o bd ./cmd/bd
 ```
@@ -4450,7 +4450,7 @@ No breaking changes. All changes are backward compatible:
 
 Simply pull the latest version and rebuild:
 ```bash
-go install github.com/steveyegge/beads/cmd/bd@latest
+go install github.com/IkuTri/binds/cmd/bd@latest
 # or
 git pull && go build -o bd ./cmd/bd
 ```

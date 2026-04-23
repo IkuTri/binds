@@ -71,7 +71,7 @@ SQLite Databases (complete isolation)
 ```
 
 Each workspace gets its own daemon:
-- Socket at `.beads/bd.sock` (`.beads/bd.pipe` on Windows)
+- Socket at `.binds/bd.sock` (`.binds/bd.pipe` on Windows)
 - Auto-starts on first command (unless disabled)
 - Handles auto-sync, batching, background operations
 - Complete database isolation (no cross-project pollution)
@@ -89,7 +89,7 @@ bd daemons list --json
 #   {
 #     "workspace": "/Users/alice/projects/webapp",
 #     "pid": 12345,
-#     "socket": "/Users/alice/projects/webapp/.beads/bd.sock",
+#     "socket": "/Users/alice/projects/webapp/.binds/bd.sock",
 #     "version": "0.21.0",
 #     "uptime_seconds": 3600
 #   }
@@ -182,7 +182,7 @@ bd ready
 
 **Troubleshooting version mismatches:**
 - Daemon won't stop: `bd daemons killall --force`
-- Socket file stale: `rm .beads/bd.sock` (auto-cleans on next start)
+- Socket file stale: `rm .binds/bd.sock` (auto-cleans on next start)
 - Multiple bd versions installed: `which bd` and `bd version`
 
 ## Event-Driven Daemon Mode (Default)
@@ -209,7 +209,7 @@ bd ready
 │  │  EXPORT FLOW (Mutation-Triggered)                         │   │
 │  │                                                           │   │
 │  │  FileWatcher (platform-native)                            │   │
-│  │      ├─ .beads/issues.jsonl (file changes)                │   │
+│  │      ├─ .binds/issues.jsonl (file changes)                │   │
 │  │      └─ RPC mutations (create, update, close)             │   │
 │  │           ↓                                               │   │
 │  │      Debouncer (500ms batch window)                       │   │
@@ -269,7 +269,7 @@ BEADS_DAEMON_MODE=events bd daemon start
 **config.yaml settings:**
 
 ```yaml
-# .beads/config.yaml
+# .binds/config.yaml
 
 # Interval for daemon to pull remote sync branch updates
 # Accepts Go duration strings: "30s", "1m", "5m", etc.
@@ -280,7 +280,7 @@ remote-sync-interval: "30s"
 
 **Configuration precedence:**
 1. `BEADS_REMOTE_SYNC_INTERVAL` environment variable (highest)
-2. `remote-sync-interval` in `.beads/config.yaml`
+2. `remote-sync-interval` in `.binds/config.yaml`
 3. Default: 30 seconds
 
 ### Remote Sync Interval
@@ -420,7 +420,7 @@ export BEADS_AUTO_START_DAEMON=false
 **⚠️ Important Limitation:** Daemon mode does NOT work correctly with `git worktree`.
 
 **The Problem:**
-- Git worktrees share the same `.git` directory and `.beads` database
+- Git worktrees share the same `.git` directory and `.binds` database
 - Daemon doesn't know which branch each worktree has checked out
 - Can commit/push to wrong branch
 
@@ -451,7 +451,7 @@ See [GIT_INTEGRATION.md](GIT_INTEGRATION.md) for more details.
 
 **For external tools that need full database control** (e.g., CI/CD, deterministic execution).
 
-When `.beads/.exclusive-lock` file exists:
+When `.binds/.exclusive-lock` file exists:
 - Daemon skips all operations for the locked database
 - External tool has complete control over git sync and database
 - Stale locks (dead process) auto-cleaned
@@ -470,13 +470,13 @@ When `.beads/.exclusive-lock` file exists:
 **Quick example:**
 ```bash
 # Create lock
-echo '{"holder":"my-tool","pid":'$$',"hostname":"'$(hostname)'","started_at":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'","version":"1.0.0"}' > .beads/.exclusive-lock
+echo '{"holder":"my-tool","pid":'$$',"hostname":"'$(hostname)'","started_at":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'","version":"1.0.0"}' > .binds/.exclusive-lock
 
 # Do work (daemon won't interfere)
 bd create "My issue" -p 1
 
 # Release lock
-rm .beads/.exclusive-lock
+rm .binds/.exclusive-lock
 ```
 
 **Use cases:**
@@ -498,7 +498,7 @@ See [EXCLUSIVE_LOCK.md](EXCLUSIVE_LOCK.md) for complete documentation.
 bd daemons list  # Removes stale sockets
 
 # Manual cleanup
-rm .beads/bd.sock
+rm .binds/bd.sock
 bd ready  # Auto-starts fresh daemon
 ```
 
@@ -530,7 +530,7 @@ bd daemons killall --force
 pkill -9 bd
 
 # Clean up socket
-rm .beads/bd.sock
+rm .binds/bd.sock
 ```
 
 ### Memory Leaks
@@ -572,7 +572,7 @@ Database file was replaced externally (e.g., by `git pull`, `git merge`, or manu
 
 ```bash
 # 1. Check if database file was replaced
-ls -li .beads/beads.db
+ls -li .binds/beads.db
 
 # 2. Enable debug logging
 BD_DEBUG_FRESHNESS=1 bd daemon restart
@@ -600,7 +600,7 @@ bd daemons logs . -n 100 | grep freshness
 
 **Prevention:**
 - Daemon automatically detects file replacement and reconnects (v0.48+)
-- If issue persists, check `.beads/daemon.log` for reconnection errors
+- If issue persists, check `.binds/daemon.log` for reconnection errors
 - Report persistent issues with debug logs
 
 ### Common Causes

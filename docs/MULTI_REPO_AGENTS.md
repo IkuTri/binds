@@ -21,7 +21,7 @@ AI agents should use **one MCP server instance** that automatically routes to pe
 
 The MCP server automatically:
 - Detects current workspace from working directory
-- Routes to correct per-project daemon (`.beads/bd.sock`)
+- Routes to correct per-project daemon (`.binds/bd.sock`)
 - Auto-starts daemon if not running
 - Maintains complete database isolation
 
@@ -42,7 +42,7 @@ Agents can configure multi-repo behavior via `bd config`:
 # Auto-routing (detects role: maintainer vs contributor)
 bd config set routing.mode auto
 bd config set routing.maintainer "."
-bd config set routing.contributor "~/.beads-planning"
+bd config set routing.contributor "~/.binds-planning"
 
 # Explicit routing (always use default)
 bd config set routing.mode explicit
@@ -77,7 +77,7 @@ bd create "Fix bug" -p 1
 ```bash
 # Git remote: https://github.com/fork/repo.git
 bd create "Fix bug" -p 1
-# → Creates in planning repo (source_repo = "~/.beads-planning")
+# → Creates in planning repo (source_repo = "~/.binds-planning")
 ```
 
 **Role detection priority:**
@@ -125,7 +125,7 @@ bd list --json
 
 # Filter by source repository
 bd list --json | jq '.[] | select(.source_repo == ".")'
-bd list --json | jq '.[] | select(.source_repo == "~/.beads-planning")'
+bd list --json | jq '.[] | select(.source_repo == "~/.binds-planning")'
 ```
 
 **How it works:**
@@ -145,7 +145,7 @@ bd list --json | jq '.[] | select(.source_repo == "~/.beads-planning")'
 # All planning issues auto-route to separate repo
 bd create "Investigate implementation" -p 1
 bd create "Draft RFC" -p 2
-# → Created in ~/.beads-planning (never appears in PRs)
+# → Created in ~/.binds-planning (never appears in PRs)
 
 # View all work (upstream + planning)
 bd ready
@@ -154,7 +154,7 @@ bd list --json
 # Complete work
 bd close plan-42 --reason "Done"
 
-# Git commit/push - no .beads/ pollution in PR ✅
+# Git commit/push - no .binds/ pollution in PR ✅
 ```
 
 ### Team Workflow
@@ -168,7 +168,7 @@ bd create "Implement feature X" -p 1
 # → Created in current repo (visible to team)
 
 # Optional: Personal experiments in separate repo
-bd create "Try alternative" -p 2 --repo ~/.beads-planning-personal
+bd create "Try alternative" -p 2 --repo ~/.binds-planning-personal
 # → Created in personal repo (private)
 
 # View all
@@ -248,20 +248,20 @@ bd create "Issue" -p 1 --deps discovered-from:bd-42 --repo /different/repo
 
 ### Planning repo polluting PRs
 
-**Symptom:** `~/.beads-planning` changes appear in upstream PRs
+**Symptom:** `~/.binds-planning` changes appear in upstream PRs
 
 **Verify:**
 ```bash
 # Planning repo should be separate
-ls -la ~/.beads-planning/.git  # Should exist
+ls -la ~/.binds-planning/.git  # Should exist
 
 # Fork should NOT contain planning issues
 cd ~/projects/fork
-bd list --json | jq '.[] | select(.source_repo == "~/.beads-planning")'
+bd list --json | jq '.[] | select(.source_repo == "~/.binds-planning")'
 # Should be empty
 
 # Check routing
-bd config get routing.contributor  # Should be ~/.beads-planning
+bd config get routing.contributor  # Should be ~/.binds-planning
 ```
 
 ### Daemon routing to wrong database
@@ -297,16 +297,16 @@ bd daemons killall        # Restart all daemons
 ## Best Practices for Agents
 
 ### OSS Contributors
-- ✅ Planning issues auto-route to `~/.beads-planning`
-- ✅ Never commit `.beads/` in PRs to upstream
+- ✅ Planning issues auto-route to `~/.binds-planning`
+- ✅ Never commit `.binds/` in PRs to upstream
 - ✅ Use `bd ready` to see all work (upstream + planning)
 - ❌ Don't manually override routing without good reason
 
 ### Teams
-- ✅ Commit `.beads/issues.jsonl` to shared repo
+- ✅ Commit `.binds/issues.jsonl` to shared repo
 - ✅ Use `bd sync` to ensure changes are committed/pushed
 - ✅ Link related issues across repos with dependencies
-- ❌ Don't gitignore `.beads/` - you lose the git ledger
+- ❌ Don't gitignore `.binds/` - you lose the git ledger
 
 ### Multi-Phase Projects
 - ✅ Use clear repo names (`planning`, `impl`, `maint`)
@@ -328,14 +328,14 @@ Multi-repo mode is fully backward compatible:
 **Without multi-repo config:**
 ```bash
 bd create "Issue" -p 1
-# → Creates in .beads/issues.jsonl (single-repo mode)
+# → Creates in .binds/issues.jsonl (single-repo mode)
 ```
 
 **With multi-repo config:**
 ```bash
 bd create "Issue" -p 1
 # → Auto-routed based on config
-# → Old issues in .beads/issues.jsonl still work
+# → Old issues in .binds/issues.jsonl still work
 ```
 
 **Disabling multi-repo:**
@@ -353,7 +353,7 @@ bd config unset repos.additional
 # Auto-detect role (maintainer vs contributor)
 bd config set routing.mode auto
 bd config set routing.maintainer "."              # Where maintainer issues go
-bd config set routing.contributor "~/.beads-planning"  # Where contributor issues go
+bd config set routing.contributor "~/.binds-planning"  # Where contributor issues go
 
 # Explicit mode (always use default)
 bd config set routing.mode explicit
@@ -388,12 +388,12 @@ bd info --json
 
 # Sample output:
 {
-  "database_path": "/Users/you/projects/myapp/.beads/beads.db",
+  "database_path": "/Users/you/projects/myapp/.binds/beads.db",
   "config": {
     "routing": {
       "mode": "auto",
       "maintainer": ".",
-      "contributor": "~/.beads-planning"
+      "contributor": "~/.binds-planning"
     },
     "repos": {
       "primary": ".",
@@ -403,7 +403,7 @@ bd info --json
   "daemon": {
     "running": true,
     "pid": 12345,
-    "socket": ".beads/bd.sock"
+    "socket": ".binds/bd.sock"
   }
 }
 ```

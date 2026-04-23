@@ -13,7 +13,7 @@ Beads runs a background daemon for auto-sync and performance.
 Each workspace gets its own daemon process:
 - Auto-starts on first `bd` command
 - Handles database ↔ JSONL synchronization
-- Listens on `.beads/bd.sock` (Unix) or `.beads/bd.pipe` (Windows)
+- Listens on `.binds/bd.sock` (Unix) or `.binds/bd.pipe` (Windows)
 - Version checking prevents mismatches after upgrades
 
 ## How It Works
@@ -102,7 +102,7 @@ bd info | grep "daemon mode"
 
 ```bash
 # Check if socket exists
-ls -la .beads/bd.sock
+ls -la .binds/bd.sock
 
 # Try direct mode
 bd --no-daemon info
@@ -131,7 +131,7 @@ bd sync
 bd daemons logs . -n 50
 
 # Verify git status
-git status .beads/
+git status .binds/
 ```
 
 ### Port/socket conflicts
@@ -141,7 +141,7 @@ git status .beads/
 bd daemons killall
 
 # Remove stale socket
-rm -f .beads/bd.sock
+rm -f .binds/bd.sock
 
 # Restart
 bd info

@@ -19,7 +19,7 @@ bd's core design enables a distributed, git-backed issue tracker that feels like
                                v
 ┌─────────────────────────────────────────────────────────────────┐
 │                     SQLite Database                              │
-│                     (.beads/beads.db)                            │
+│                     (.binds/beads.db)                            │
 │                                                                  │
 │  - Local working copy (gitignored)                               │
 │  - Fast queries, indexes, foreign keys                           │
@@ -33,7 +33,7 @@ bd's core design enables a distributed, git-backed issue tracker that feels like
                                v
 ┌─────────────────────────────────────────────────────────────────┐
 │                       JSONL File                                 │
-│                   (.beads/issues.jsonl)                          │
+│                   (.binds/issues.jsonl)                          │
 │                                                                  │
 │  - Git-tracked source of truth                                   │
 │  - One JSON line per entity (issue, dep, label, comment)         │
@@ -200,7 +200,7 @@ Each workspace runs its own background daemon for auto-sync:
 - One daemon per workspace (LSP-like model)
 
 **Communication:**
-- Unix domain socket at `.beads/bd.sock` (Windows: named pipes)
+- Unix domain socket at `.binds/bd.sock` (Windows: named pipes)
 - Protocol defined in `internal/rpc/protocol.go`
 - CLI tries daemon first, falls back to direct DB access
 
@@ -243,7 +243,7 @@ open ──▶ in_progress ──▶ closed
 
 ### JSONL Issue Schema
 
-Each issue in `.beads/issues.jsonl` is a JSON object with the following fields. Fields marked with `(optional)` use `omitempty` and are excluded when empty/zero.
+Each issue in `.binds/issues.jsonl` is a JSON object with the following fields. Fields marked with `(optional)` use `omitempty` and are excluded when empty/zero.
 
 **Core Identification:**
 
@@ -314,7 +314,7 @@ Each issue in `.beads/issues.jsonl` is a JSON object with the following fields. 
 ## Directory Structure
 
 ```
-.beads/
+.binds/
 ├── beads.db          # SQLite database (gitignored)
 ├── issues.jsonl      # JSONL source of truth (git-tracked)
 ├── bd.sock           # Daemon socket (gitignored)

@@ -31,7 +31,7 @@ The setup adds to `.aider.conf.yml`:
 ```yaml
 # Beads integration
 read:
-  - .beads/issues.jsonl
+  - .binds/issues.jsonl
 
 # Optional: Auto-run bd prime
 auto-commits: false
@@ -68,7 +68,7 @@ bd sync
 
 ## Best Practices
 
-1. **Keep issues visible** - Aider reads `.beads/issues.jsonl`
+1. **Keep issues visible** - Aider reads `.binds/issues.jsonl`
 2. **Sync regularly** - Run `bd sync` after significant changes
 3. **Use discovered-from** - Track issues found during work
 4. **Document context** - Include descriptions in issues
@@ -108,7 +108,7 @@ bd setup aider
 
 ```bash
 # Check JSONL exists
-ls -la .beads/issues.jsonl
+ls -la .binds/issues.jsonl
 
 # Export if missing
 bd export

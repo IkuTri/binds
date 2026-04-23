@@ -32,7 +32,7 @@ bd daemon start
 ```
 
 The daemon will:
-- Listen on `.beads/bd.sock` (Windows: file stores loopback TCP metadata)
+- Listen on `.binds/bd.sock` (Windows: file stores loopback TCP metadata)
 - Route operations to correct database based on request cwd
 - Handle multiple repos simultaneously
 
@@ -61,7 +61,7 @@ Claude/Amp → Single MCP Server → Daemon Client → Daemon → Correct Databa
                   ↓ 
           Uses set_context to pass workspace_root
                   ↓
-          Daemon uses cwd to find .beads/*.db
+          Daemon uses cwd to find .binds/*.db
 ```
 
 - **No more multiple MCP servers** - one server handles all repos
@@ -151,7 +151,7 @@ bd daemon start
 
 Ensure:
 - Daemon is running in a parent directory that can reach all repos
-- Each repo has `.beads/*.db` properly initialized
+- Each repo has `.binds/*.db` properly initialized
 - MCP server is passing correct workspace_root via `set_context`
 
 ## Migration from Multi-Server Setup
@@ -164,13 +164,13 @@ Ensure:
     "beads-adar": {
       "command": "beads-mcp",
       "env": {
-        "BEADS_DB": "/path/to/adar/.beads/bd.db"
+        "BEADS_DB": "/path/to/adar/.binds/bd.db"
       }
     },
     "beads-wyvern": {
       "command": "beads-mcp",
       "env": {
-        "BEADS_DB": "/path/to/wyvern/.beads/wy.db"
+        "BEADS_DB": "/path/to/wyvern/.binds/wy.db"
       }
     }
   }

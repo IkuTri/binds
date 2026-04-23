@@ -6,7 +6,7 @@ MCP servers don't receive working directory context from AI clients (Claude Code
 
 1. MCP server process starts with its own CWD
 2. `bd` uses tree-walking to discover databases based on CWD
-3. Without correct CWD, `bd` discovers wrong database or falls back to `~/.beads`
+3. Without correct CWD, `bd` discovers wrong database or falls back to `~/.binds`
 4. Result: Issues get misrouted across repositories
 
 ## Current Implementation (Partial Solution)
@@ -26,7 +26,7 @@ Confirmation message with resolved paths (workspace root and database)
 
 **Behavior:**
 1. Resolves to git repo root if inside a git repository
-2. Walks up directory tree to find `.beads/*.db`
+2. Walks up directory tree to find `.binds/*.db`
 3. Sets `BEADS_WORKING_DIR`, `BEADS_DB`, and `BEADS_CONTEXT_SET` environment variables
 
 #### `where_am_i`
@@ -65,14 +65,14 @@ No changes needed. The MCP server works as before with auto-discovery.
       "command": "uvx",
       "args": ["beads-mcp"],
       "env": {
-        "BEADS_DB": "/path/to/repo1/.beads/prefix.db"
+        "BEADS_DB": "/path/to/repo1/.binds/prefix.db"
       }
     },
     "beads-repo2": {
       "command": "uvx",
       "args": ["beads-mcp"],
       "env": {
-        "BEADS_DB": "/path/to/repo2/.beads/prefix.db"
+        "BEADS_DB": "/path/to/repo2/.binds/prefix.db"
       }
     }
   }
@@ -109,6 +109,6 @@ uv run pytest tests/test_mcp_server_integration.py -v
 
 ## Future Work
 
-See [bd-105](https://github.com/steveyegge/beads/issues/105) for full architectural analysis and roadmap.
+See [bd-105](https://github.com/IkuTri/binds/issues/105) for full architectural analysis and roadmap.
 
 Priority: P0/P1 - Active data corruption risk in multi-repo setups.

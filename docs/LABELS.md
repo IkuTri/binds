@@ -319,7 +319,7 @@ done
 
 ## Integration with Git Workflow
 
-Labels are automatically synced to `.beads/issues.jsonl` along with all issue data:
+Labels are automatically synced to `.binds/issues.jsonl` along with all issue data:
 
 ```bash
 # Make changes
@@ -327,7 +327,7 @@ bd create "Fix bug" -l backend,urgent
 bd label add bd-42 needs-review
 
 # Auto-exported after 5 seconds (or use git hooks for immediate export)
-git add .beads/issues.jsonl
+git add .binds/issues.jsonl
 git commit -m "Add backend issue"
 
 # After git pull, labels are auto-imported
@@ -767,13 +767,13 @@ bd label list-all
 ```
 
 ### Syncing Labels with Git
-Labels are included in `.beads/issues.jsonl` export. If labels seem out of sync:
+Labels are included in `.binds/issues.jsonl` export. If labels seem out of sync:
 ```bash
 # Force export
-bd export -o .beads/issues.jsonl
+bd export -o .binds/issues.jsonl
 
 # After pull, force import
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 ```
 
 ## See Also

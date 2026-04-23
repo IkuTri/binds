@@ -51,4 +51,4 @@ When using bd for static data (terminology, glossaries, reference information):
 **No search by content:**
 - bd searches by ID, title filters, status, labels
 - For full-text search across descriptions/notes, use grep on the JSONL file
-- Example: `grep -i "authentication" .beads/issues.jsonl`
+- Example: `grep -i "authentication" .binds/issues.jsonl`

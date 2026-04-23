@@ -17,7 +17,7 @@ bd sync [flags]
 ```
 
 **What it does:**
-1. Exports database to `.beads/issues.jsonl`
+1. Exports database to `.binds/issues.jsonl`
 2. Stages the JSONL file
 3. Commits with auto-generated message
 4. Pushes to remote
@@ -49,7 +49,7 @@ bd export [flags]
 
 **Flags:**
 ```bash
---output, -o    Output file (default: .beads/issues.jsonl)
+--output, -o    Output file (default: .binds/issues.jsonl)
 --dry-run       Preview without writing
 --json          JSON output
 ```
@@ -88,7 +88,7 @@ bd import -i <file> [flags]
 
 **Examples:**
 ```bash
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 bd import -i backup.jsonl --dry-run
 bd import -i issues.jsonl --orphan-handling resurrect
 bd import -i issues.jsonl --dedupe-after --json
@@ -179,14 +179,14 @@ The driver automatically:
 
 ```bash
 # After merge conflict
-git checkout --ours .beads/issues.jsonl
-bd import -i .beads/issues.jsonl
+git checkout --ours .binds/issues.jsonl
+bd import -i .binds/issues.jsonl
 bd sync
 ```
 
 ## Deletion Tracking
 
-Deletions sync via `.beads/deletions.jsonl`:
+Deletions sync via `.binds/deletions.jsonl`:
 
 ```bash
 # Delete issue

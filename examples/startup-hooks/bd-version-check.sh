@@ -9,7 +9,7 @@
 # - Detects bd version changes by comparing to last-seen version
 # - Shows 'bd info --whats-new' output when upgrade detected
 # - Auto-updates git hooks if outdated
-# - Persists version in .beads/metadata.json
+# - Persists version in .binds/metadata.json
 # - Zero bd code changes required - works today!
 #
 # INTEGRATION:
@@ -39,11 +39,11 @@
 # REQUIREMENTS:
 # - bd (beads) installed and in PATH
 # - jq for JSON manipulation
-# - .beads directory exists in current project
+# - .binds directory exists in current project
 #
 
 # Exit early if not in a beads project
-if [ ! -d ".beads" ]; then
+if [ ! -d ".binds" ]; then
   return 0 2>/dev/null || exit 0
 fi
 
@@ -67,7 +67,7 @@ if [ -z "$CURRENT_VERSION" ]; then
 fi
 
 # Path to metadata file
-METADATA_FILE=".beads/metadata.json"
+METADATA_FILE=".binds/metadata.json"
 
 # Initialize metadata.json if it doesn't exist
 if [ ! -f "$METADATA_FILE" ]; then

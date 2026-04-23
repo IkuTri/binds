@@ -29,16 +29,16 @@ bd worktree remove .worktrees/{name}
 
 ## Architecture
 
-All worktrees share one `.beads/` database via redirect files:
+All worktrees share one `.binds/` database via redirect files:
 
 ```
 main-repo/
-├── .beads/              ← Single source of truth
+├── .binds/              ← Single source of truth
 └── .worktrees/
     ├── feature-a/
-    │   └── .beads       ← Redirect file (not directory)
+    │   └── .binds       ← Redirect file (not directory)
     └── feature-b/
-        └── .beads       ← Redirect file
+        └── .binds       ← Redirect file
 ```
 
 **Key insight**: Daemon auto-bypasses for wisp operations in worktrees.
@@ -64,7 +64,7 @@ bd worktree remove .worktrees/my-feature
 When beads commands behave unexpectedly in a worktree:
 
 ```bash
-bd where              # Shows actual .beads location (follows redirects)
+bd where              # Shows actual .binds location (follows redirects)
 bd doctor --deep      # Validates graph integrity across all refs
 ```
 
@@ -85,10 +85,10 @@ Multi-clone, multi-branch workflows:
 
 - Hash-based IDs (`bd-abc`) eliminate collision across clones
 - Each clone syncs independently via git
-- See [WORKTREES.md](https://github.com/steveyegge/beads/blob/main/docs/WORKTREES.md) for comprehensive guide
+- See [WORKTREES.md](https://github.com/IkuTri/binds/blob/main/docs/WORKTREES.md) for comprehensive guide
 
 ## External References
 
-- **Official Docs**: [github.com/steveyegge/beads/docs](https://github.com/steveyegge/beads/tree/main/docs)
-- **Sync Branch**: [PROTECTED_BRANCHES.md](https://github.com/steveyegge/beads/blob/main/docs/PROTECTED_BRANCHES.md)
-- **Worktrees**: [WORKTREES.md](https://github.com/steveyegge/beads/blob/main/docs/WORKTREES.md)
+- **Official Docs**: [github.com/IkuTri/binds/docs](https://github.com/IkuTri/binds/tree/main/docs)
+- **Sync Branch**: [PROTECTED_BRANCHES.md](https://github.com/IkuTri/binds/blob/main/docs/PROTECTED_BRANCHES.md)
+- **Worktrees**: [WORKTREES.md](https://github.com/IkuTri/binds/blob/main/docs/WORKTREES.md)

@@ -14,7 +14,7 @@ The hydration layer enables beads to aggregate issues from multiple repositories
 ```sql
 CREATE TABLE repo_mtimes (
     repo_path TEXT PRIMARY KEY,      -- Absolute path to repository root
-    jsonl_path TEXT NOT NULL,        -- Absolute path to .beads/issues.jsonl
+    jsonl_path TEXT NOT NULL,        -- Absolute path to .binds/issues.jsonl
     mtime_ns INTEGER NOT NULL,       -- Modification time in nanoseconds
     last_checked DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -27,7 +27,7 @@ This table tracks the last known modification time of each repository's JSONL fi
 Multi-repo mode is configured via `internal/config/config.go`:
 
 ```yaml
-# .beads/config.yaml
+# .binds/config.yaml
 repos:
   primary: /path/to/primary/repo  # Canonical source (optional)
   additional:                      # Additional repos to hydrate from
@@ -218,7 +218,7 @@ func New(path string) (*SQLiteStorage, error) {
 
 ### Configuration Example
 
-**`.beads/config.yaml`:**
+**`.binds/config.yaml`:**
 ```yaml
 repos:
   primary: /Users/alice/work/main-project
@@ -287,20 +287,20 @@ func MigrateRepoMtimesTable(db *sql.DB) error {
 
 **Optimization Tips:**
 - Place frequently-changing repos in primary position
-- Use `.beads/config.yaml` instead of env vars (faster viper access)
+- Use `.binds/config.yaml` instead of env vars (faster viper access)
 - Limit `additional` repos to ~10 for reasonable startup time
 
 ## Troubleshooting
 
 **Hydration not working?**
 1. Check config: `bd config list` should show `repos.primary` or `repos.additional`
-2. Verify JSONL exists: `ls -la /path/to/repo/.beads/issues.jsonl`
+2. Verify JSONL exists: `ls -la /path/to/repo/.binds/issues.jsonl`
 3. Check logs: Set `BD_DEBUG=1` to see hydration debug output
 
 **Issues not updating?**
 - Mtime cache might be stale
 - Force refresh by deleting cache: `DELETE FROM repo_mtimes WHERE repo_path = '/path/to/repo'`
-- Or touch the JSONL file: `touch /path/to/repo/.beads/issues.jsonl`
+- Or touch the JSONL file: `touch /path/to/repo/.binds/issues.jsonl`
 
 **Performance issues?**
 - Check repo count: `SELECT COUNT(*) FROM repo_mtimes`
@@ -311,4 +311,4 @@ func MigrateRepoMtimesTable(db *sql.DB) error {
 
 - [CONFIG.md](CONFIG.md) - Configuration system documentation
 - [EXTENDING.md](EXTENDING.md) - Database schema extension guide
-- [bd-307](https://github.com/steveyegge/beads/issues/307) - Original multi-repo feature request
+- [bd-307](https://github.com/IkuTri/binds/issues/307) - Original multi-repo feature request

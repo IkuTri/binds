@@ -66,7 +66,7 @@ bd prime --stealth             # No git operations mode
 bd prime --export              # Dump default content for customization
 ```
 
-**Customization:** Place `.beads/PRIME.md` to override default output.
+**Customization:** Place `.binds/PRIME.md` to override default output.
 
 ## Basic Operations
 
@@ -78,7 +78,7 @@ bd info --json
 
 # Example output:
 # {
-#   "database_path": "/path/to/.beads/beads.db",
+#   "database_path": "/path/to/.binds/beads.db",
 #   "issue_prefix": "bd",
 #   "daemon_running": true
 # }
@@ -387,7 +387,7 @@ bd --allow-stale list --status open --json
 
 ```bash
 # Force metadata update even when DB appears synced
-bd import --force -i .beads/issues.jsonl
+bd import --force -i .binds/issues.jsonl
 ```
 
 **When to use:** `bd import` reports "0 created, 0 updated" but staleness errors persist.
@@ -408,7 +408,7 @@ bd --no-auto-flush <command>    # Disable auto-export to JSONL
 bd --no-auto-import <command>   # Disable auto-import from JSONL
 
 # Custom database path
-bd --db /path/to/.beads/beads.db <command>
+bd --db /path/to/.binds/beads.db <command>
 
 # Custom actor for audit trail
 bd --actor alice <command>
@@ -475,9 +475,9 @@ bd rename-prefix kw- --json     # Apply rename
 
 ```bash
 # Import issues from JSONL
-bd import -i .beads/issues.jsonl --dry-run      # Preview changes
-bd import -i .beads/issues.jsonl                # Import and update issues
-bd import -i .beads/issues.jsonl --dedupe-after # Import + detect duplicates
+bd import -i .binds/issues.jsonl --dry-run      # Preview changes
+bd import -i .binds/issues.jsonl                # Import and update issues
+bd import -i .binds/issues.jsonl --dedupe-after # Import + detect duplicates
 
 # Handle missing parents during import
 bd import -i issues.jsonl --orphan-handling allow      # Default: import orphans without validation

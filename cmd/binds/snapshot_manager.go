@@ -359,7 +359,7 @@ func (sm *SnapshotManager) writeMetadata(path string, meta snapshotMetadata) err
 }
 
 func (sm *SnapshotManager) readMetadata(path string) (*snapshotMetadata, error) {
-	// #nosec G304 -- metadata lives under .beads and path is derived internally
+	// #nosec G304 -- metadata lives under .binds and path is derived internally
 	data, err := os.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -405,7 +405,7 @@ func (sm *SnapshotManager) validateMetadata(meta *snapshotMetadata, currentCommi
 func (sm *SnapshotManager) buildIDToLineMap(path string) (map[string]string, error) {
 	result := make(map[string]string)
 
-	// #nosec G304 -- snapshot file lives in .beads/snapshots and path is derived internally
+	// #nosec G304 -- snapshot file lives in .binds/snapshots and path is derived internally
 	f, err := os.Open(path)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -490,14 +490,14 @@ func (sm *SnapshotManager) jsonEquals(a, b string) bool {
 }
 
 func (sm *SnapshotManager) copyFile(src, dst string) error {
-	// #nosec G304 -- snapshot copy only touches files inside .beads/snapshots
+	// #nosec G304 -- snapshot copy only touches files inside .binds/snapshots
 	sourceFile, err := os.Open(src)
 	if err != nil {
 		return err
 	}
 	defer sourceFile.Close()
 
-	// #nosec G304 -- snapshot copy only writes files inside .beads/snapshots
+	// #nosec G304 -- snapshot copy only writes files inside .binds/snapshots
 	destFile, err := os.Create(dst)
 	if err != nil {
 		return err

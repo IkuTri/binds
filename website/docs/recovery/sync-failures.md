@@ -25,7 +25,7 @@ bd daemon status
 bd status
 
 # View daemon logs
-cat .beads/daemon.log | tail -50
+cat .binds/daemon.log | tail -50
 ```
 
 ## Solution
@@ -37,9 +37,9 @@ bd daemon stop
 
 **Step 2:** Check for lock files
 ```bash
-ls -la .beads/*.lock
+ls -la .binds/*.lock
 # Remove stale locks if daemon is definitely stopped
-rm -f .beads/*.lock
+rm -f .binds/*.lock
 ```
 
 **Step 3:** Force a fresh sync

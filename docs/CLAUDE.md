@@ -22,7 +22,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - Client/server architecture using Unix domain sockets (Windows named pipes)
    - Protocol defined in `protocol.go`
    - Server split into focused files: `server_core.go`, `server_issues_epics.go`, `server_labels_deps_comments.go`, etc.
-   - Per-workspace daemons communicate via `.beads/bd.sock`
+   - Per-workspace daemons communicate via `.binds/bd.sock`
 
 3. **CLI Layer** (`cmd/bd/`)
    - Cobra-based commands (one file per command: `create.go`, `list.go`, etc.)
@@ -35,9 +35,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 The "magic" is in the auto-sync between SQLite and JSONL:
 
 ```
-SQLite DB (.beads/beads.db, gitignored)
+SQLite DB (.binds/beads.db, gitignored)
     ↕ auto-sync (5s debounce)
-JSONL (.beads/issues.jsonl, git-tracked)
+JSONL (.binds/issues.jsonl, git-tracked)
     ↕ git push/pull
 Remote JSONL (shared across machines)
 ```
@@ -65,7 +65,7 @@ See `internal/types/types.go`:
 Each workspace gets its own daemon process:
 - Auto-starts on first command (unless disabled)
 - Handles auto-sync, batching, and background operations
-- Socket at `.beads/bd.sock` (or `.beads/bd.pipe` on Windows)
+- Socket at `.binds/bd.sock` (or `.binds/bd.pipe` on Windows)
 - Version checking prevents mismatches after upgrades
 - Manage with `bd daemons` command (see AGENTS.md)
 

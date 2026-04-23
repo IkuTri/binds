@@ -13,8 +13,8 @@ bd integrates deeply with git for issue tracking synchronization. This guide cov
 
 ### How It Works
 
-Git worktrees share the same `.git` directory and `.beads` database:
-- All worktrees use the same `.beads/beads.db` file in the main repository
+Git worktrees share the same `.git` directory and `.binds` database:
+- All worktrees use the same `.binds/beads.db` file in the main repository
 - Database discovery prioritizes main repository location
 - Worktree-aware git operations prevent conflicts
 - Git hooks automatically adapt to worktree context
@@ -23,7 +23,7 @@ Git worktrees share the same `.git` directory and `.beads` database:
 
 **⚠️ Important:** Daemon mode does NOT work correctly with `git worktree` due to shared database state.
 
-The daemon maintains its own view of the current working directory and git state. When multiple worktrees share the same `.beads` database, the daemon may commit changes intended for one branch to a different branch.
+The daemon maintains its own view of the current working directory and git state. When multiple worktrees share the same `.binds` database, the daemon may commit changes intended for one branch to a different branch.
 
 ### Solutions for Worktree Users
 
@@ -56,10 +56,10 @@ bd automatically detects worktrees and shows prominent warnings if daemon mode i
 ╔══════════════════════════════════════════════════════════════════════════╗
 ║ WARNING: Git worktree detected with daemon mode                         ║
 ╠══════════════════════════════════════════════════════════════════════════╣
-║ Git worktrees share the same .beads directory, which can cause the      ║
+║ Git worktrees share the same .binds directory, which can cause the      ║
 ║ daemon to commit/push to the wrong branch.                               ║
 ║                                                                          ║
-║ Shared database: /path/to/main/.beads                                    ║
+║ Shared database: /path/to/main/.binds                                    ║
 ║ Worktree git dir: /path/to/shared/.git                                   ║
 ║                                                                          ║
 ║ RECOMMENDED SOLUTIONS:                                                   ║
@@ -71,7 +71,7 @@ bd automatically detects worktrees and shows prominent warnings if daemon mode i
 ### Worktree-Aware Features
 
 **Database Discovery:**
-- Searches main repository first for `.beads` directory
+- Searches main repository first for `.binds` directory
 - Falls back to worktree-local search if needed
 - Prevents database duplication across worktrees
 
@@ -100,7 +100,7 @@ bd automatically detects worktrees and shows prominent warnings if daemon mode i
 
 ### When Conflicts Occur
 
-Git conflicts in `.beads/issues.jsonl` happen when:
+Git conflicts in `.binds/issues.jsonl` happen when:
 - **Same issue modified on both branches** (different timestamps/fields)
 - This is a **same-issue update conflict**, not an ID collision
 - Conflicts are rare in practice since hash IDs prevent structural collisions
@@ -111,9 +111,9 @@ bd automatically detects conflict markers and shows clear resolution steps:
 
 ```bash
 # bd import rejects files with conflict markers
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 # Error: JSONL file contains git conflict markers
-# Resolve with: git checkout --theirs .beads/issues.jsonl
+# Resolve with: git checkout --theirs .binds/issues.jsonl
 
 # Validate for conflicts
 bd validate --checks=conflicts
@@ -124,22 +124,22 @@ Conflict markers detected: `<<<<<<<`, `=======`, `>>>>>>>`
 ### Resolution Workflow
 
 ```bash
-# After git merge creates conflict in .beads/issues.jsonl
+# After git merge creates conflict in .binds/issues.jsonl
 
 # Option 1: Accept their version (remote)
-git checkout --theirs .beads/issues.jsonl
-bd import -i .beads/issues.jsonl
+git checkout --theirs .binds/issues.jsonl
+bd import -i .binds/issues.jsonl
 
 # Option 2: Keep our version (local)
-git checkout --ours .beads/issues.jsonl
-bd import -i .beads/issues.jsonl
+git checkout --ours .binds/issues.jsonl
+bd import -i .binds/issues.jsonl
 
 # Option 3: Manual resolution in editor
-# Edit .beads/issues.jsonl to remove conflict markers
-bd import -i .beads/issues.jsonl
+# Edit .binds/issues.jsonl to remove conflict markers
+bd import -i .binds/issues.jsonl
 
 # Commit the merge
-git add .beads/issues.jsonl
+git add .binds/issues.jsonl
 git commit
 ```
 
@@ -166,11 +166,11 @@ git commit
 
 ```bash
 # These are configured automatically:
-git config merge.beads.driver "bd merge %A %O %A %B"
-git config merge.beads.name "bd JSONL merge driver"
+git config merge.binds.driver "bd merge %A %O %A %B"
+git config merge.binds.name "bd JSONL merge driver"
 
 # .gitattributes entry added:
-# .beads/issues.jsonl merge=beads
+# .binds/issues.jsonl merge=beads
 ```
 
 ### Manual Setup
@@ -178,9 +178,9 @@ git config merge.beads.name "bd JSONL merge driver"
 **If you skipped merge driver with `--skip-merge-driver`:**
 
 ```bash
-git config merge.beads.driver "bd merge %A %O %A %B"
-git config merge.beads.name "bd JSONL merge driver"
-echo ".beads/issues.jsonl merge=beads" >> .gitattributes
+git config merge.binds.driver "bd merge %A %O %A %B"
+git config merge.binds.name "bd JSONL merge driver"
+echo ".binds/issues.jsonl merge=beads" >> .gitattributes
 ```
 
 ### How It Works
@@ -202,7 +202,7 @@ During `git merge`, beads-merge:
 **For Jujutsu users**, add to `~/.config/jj/config.toml`:
 
 ```toml
-[merge-tools.beads-merge]
+[merge-tools.binds-merge]
 program = "bd"
 merge-args = ["merge", "$output", "$base", "$left", "$right"]
 merge-conflict-exit-codes = [1]
@@ -210,10 +210,10 @@ merge-conflict-exit-codes = [1]
 
 Then resolve with:
 ```bash
-jj resolve --tool=beads-merge .beads/issues.jsonl
+jj resolve --tool=beads-merge .binds/issues.jsonl
 ```
 
-**Note:** This only works for `.beads/issues.jsonl` since `bd merge` is a specialized JSONL merge tool.
+**Note:** This only works for `.binds/issues.jsonl` since `bd merge` is a specialized JSONL merge tool.
 
 ## Protected Branch Workflows
 
@@ -324,7 +324,7 @@ The `installHooks()` function:
 - Creates the hooks directory with `os.MkdirAll()` if needed
 - Backs up existing hooks with `.backup` extension (unless `--force` flag used)
 - Sets execute permissions (0755) on installed hooks
-- Supports shared mode via `--shared` flag (installs to `.beads-hooks/` instead)
+- Supports shared mode via `--shared` flag (installs to `.binds-hooks/` instead)
 
 #### Git Directory Resolution
 
@@ -379,7 +379,7 @@ This approach ensures tests work correctly in both normal repos and git worktree
                     ▼
 ┌──────────────┐  ┌─────────────────┐
 │  Developer B │─▶│ Central Repo    │
-│  (Workspace) │  │ (.beads/*.jsonl)│
+│  (Workspace) │  │ (.binds/*.jsonl)│
 └──────────────┘  └─────────────────┘
                     ▲
 ┌──────────────┐    │
@@ -403,14 +403,14 @@ This approach ensures tests work correctly in both normal repos and git worktree
 ```
 ┌──────────────┐      ┌─────────────────┐
 │  OSS Contrib │─────▶│ Planning Repo   │
-│  (Fork)      │      │ (.beads/*.jsonl)│
+│  (Fork)      │      │ (.binds/*.jsonl)│
 └──────────────┘      └─────────────────┘
        │
        │ PR
        ▼
 ┌─────────────────┐
 │ Upstream Repo   │
-│ (no .beads/)    │
+│ (no .binds/)    │
 └─────────────────┘
 ```
 
@@ -504,13 +504,13 @@ export BEADS_NO_DAEMON=1  # Direct mode
 
 ```
 # bd database (not tracked - JSONL is source of truth)
-.beads/beads.db
-.beads/beads.db-*
-.beads/bd.sock
-.beads/bd.pipe
+.binds/beads.db
+.binds/beads.db-*
+.binds/bd.sock
+.binds/bd.pipe
 
 # bd daemon state
-.beads/.exclusive-lock
+.binds/.exclusive-lock
 
 # Git worktrees (if using protected branches)
 .git/beads-worktrees/
@@ -522,20 +522,20 @@ export BEADS_NO_DAEMON=1  # Direct mode
 
 ```
 # Intelligent merge driver for JSONL (auto-configured by bd init)
-.beads/issues.jsonl merge=beads
+.binds/issues.jsonl merge=beads
 
 # Treat JSONL as text for diffs
-.beads/*.jsonl text diff
+.binds/*.jsonl text diff
 ```
 
 This file is automatically created by `bd init` and is essential for:
-- Preventing spurious merge conflicts in `.beads/issues.jsonl`
+- Preventing spurious merge conflicts in `.binds/issues.jsonl`
 - Enabling field-level 3-way merging instead of line-by-line
 - Ensuring all team members get intelligent JSONL merging
 
 ### Git LFS Considerations
 
-**Do NOT use Git LFS for `.beads/issues.jsonl`:**
+**Do NOT use Git LFS for `.binds/issues.jsonl`:**
 - JSONL needs intelligent merge (doesn't work with LFS)
 - File size stays reasonable (<1MB per 10K issues)
 - Text diffs are valuable for review
@@ -553,7 +553,7 @@ WARN Database timestamp older than JSONL, importing...
 ```bash
 # Normal after git pull - auto-import handles it
 # If stuck, force import:
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 ```
 
 ### Issue: "Database is ahead of JSONL"
@@ -573,20 +573,20 @@ bd sync
 ### Issue: Merge conflicts every time
 
 **Symptoms:**
-- Git merge always creates conflicts in `.beads/issues.jsonl`
+- Git merge always creates conflicts in `.binds/issues.jsonl`
 - Merge driver not being used
 
 **Solutions:**
 ```bash
 # Check merge driver configured
-git config merge.beads.driver
+git config merge.binds.driver
 
 # Reinstall if missing
 bd init --skip-db  # Only reconfigure git, don't touch database
 
 # Verify .gitattributes
 grep "issues.jsonl" .gitattributes
-# Expected: .beads/issues.jsonl merge=beads
+# Expected: .binds/issues.jsonl merge=beads
 ```
 
 ### Issue: Changes not syncing to other workspaces
@@ -603,7 +603,7 @@ git push
 
 # Agent B: Force import
 git pull
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 
 # Check git hooks installed (prevent future issues)
 ./examples/git-hooks/install.sh

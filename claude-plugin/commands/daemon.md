@@ -7,7 +7,7 @@ Manage the per-project background daemon that handles database connections and s
 
 ## Per-Project Daemon (LSP Model)
 
-Each project runs its own daemon at `.beads/bd.sock` for complete database isolation.
+Each project runs its own daemon at `.binds/bd.sock` for complete database isolation.
 
 > On Windows this file stores the daemon's loopback TCP endpoint metadata—leave it in place so bd can reconnect.
 

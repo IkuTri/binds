@@ -1,6 +1,6 @@
 # beads-mcp
 
-MCP server for [beads](https://github.com/steveyegge/beads) issue tracker and agentic memory system.
+MCP server for [beads](https://github.com/IkuTri/binds) issue tracker and agentic memory system.
 Enables AI agents to manage tasks using bd CLI through Model Context Protocol.
 
 > **Note:** For environments with shell access (Claude Code, Cursor, Windsurf), the **CLI + hooks approach is recommended** over MCP. It uses ~1-2k tokens vs 10-50k for MCP schemas, resulting in lower compute cost and latency. See the [main README](../../README.md) for CLI setup.
@@ -36,7 +36,7 @@ Add to your Claude Desktop config:
 For development, clone the repository:
 
 ```bash
-git clone https://github.com/steveyegge/beads
+git clone https://github.com/IkuTri/binds
 cd beads/integrations/beads-mcp
 uv sync
 ```
@@ -86,7 +86,7 @@ Then use in Claude Desktop config:
 ```
 
 **How it works (LSP model):**
-1. MCP server checks for local daemon socket (`.beads/bd.sock`) in your current workspace
+1. MCP server checks for local daemon socket (`.binds/bd.sock`) in your current workspace
 2. Routes requests to the **per-project daemon** based on working directory
 3. Auto-starts the local daemon if not running
 4. **Each project gets its own isolated daemon** serving only its database
@@ -172,7 +172,7 @@ await beads_create_issue(
 
 **Path Canonicalization**:
 - Symlinks are resolved to physical paths (prevents duplicate connections)
-- Git submodules with `.beads` directories use local context
+- Git submodules with `.binds` directories use local context
 - Git toplevel is used for non-initialized directories
 - Results are cached for performance
 
@@ -201,7 +201,7 @@ await beads_ready_work(workspace_root="/Users/you/project-a")
 
 **Symlink aliasing**: Different paths to same project are deduplicated automatically via `realpath`.
 
-**Submodule handling**: Submodules with their own `.beads` directory are treated as separate projects.
+**Submodule handling**: Submodules with their own `.binds` directory are treated as separate projects.
 
 **Stale sockets**: Currently no health checks. Phase 2 will add retry-on-failure if monitoring shows need.
 
@@ -228,7 +228,7 @@ await beads_ready_work(workspace_root="/Users/you/project-a")
 
 ## Known Issues
 
-### ~~MCP Tools Not Loading in Claude Code~~ (Issue [#346](https://github.com/steveyegge/beads/issues/346)) - RESOLVED
+### ~~MCP Tools Not Loading in Claude Code~~ (Issue [#346](https://github.com/IkuTri/binds/issues/346)) - RESOLVED
 
 **Status:** ✅ Fixed in v0.24.0+
 

@@ -23,7 +23,7 @@ if ! command -v bd &> /dev/null; then
   echo "❌ Error: bd command not found"
   echo
   echo "Install bd:"
-  echo "  curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash"
+  echo "  curl -fsSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash"
   echo
   exit 1
 fi
@@ -69,5 +69,5 @@ echo "=== Compaction Complete ==="
 echo
 echo "Next steps:"
 echo "  1. Review compacted issues: bd list --json | jq '.[] | select(.compaction_level > 0)'"
-echo "  2. Commit changes: git add .beads/issues.jsonl issues.db && git commit -m 'Compact old issues'"
+echo "  2. Commit changes: git add .binds/issues.jsonl issues.db && git commit -m 'Compact old issues'"
 echo "  3. Push to remote: git push"

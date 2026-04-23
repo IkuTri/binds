@@ -40,7 +40,7 @@ func ensureStoreActive() error {
 		return nil
 	}
 
-	// Find the .beads directory
+	// Find the .binds directory
 	beadsDir := beads.FindBeadsDir()
 	if beadsDir == "" {
 		return fmt.Errorf("no binds database found.\n" +

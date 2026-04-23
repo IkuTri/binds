@@ -1,10 +1,10 @@
 ---
-description: How to resolve merge conflicts in .beads/issues.jsonl
+description: How to resolve merge conflicts in .binds/issues.jsonl
 ---
 
 # Resolving `issues.jsonl` Merge Conflicts
 
-If you encounter a merge conflict in `.beads/issues.jsonl` that doesn't have standard git conflict markers (or if `bd merge` failed automatically), follow this procedure.
+If you encounter a merge conflict in `.binds/issues.jsonl` that doesn't have standard git conflict markers (or if `bd merge` failed automatically), follow this procedure.
 
 ## 1. Identify the Conflict
 Check if `issues.jsonl` is in conflict:
@@ -20,9 +20,9 @@ Git stores three versions of conflicted files in its index:
 
 Extract them to temporary files:
 ```powershell
-git show :1:.beads/issues.jsonl > beads.base.jsonl
-git show :2:.beads/issues.jsonl > beads.ours.jsonl
-git show :3:.beads/issues.jsonl > beads.theirs.jsonl
+git show :1:.binds/issues.jsonl > beads.base.jsonl
+git show :2:.binds/issues.jsonl > beads.ours.jsonl
+git show :3:.binds/issues.jsonl > beads.theirs.jsonl
 ```
 
 ## 3. Run `bd merge` Manually
@@ -43,13 +43,13 @@ Optionally, verify the content (e.g., check for missing IDs if you suspect data 
 ## 5. Apply the Merge
 Overwrite the conflicted file with the resolved version:
 ```powershell
-cp beads.merged.jsonl .beads/issues.jsonl
+cp beads.merged.jsonl .binds/issues.jsonl
 ```
 
 ## 6. Cleanup and Continue
 Stage the resolved file and continue the merge:
 ```powershell
-git add .beads/issues.jsonl
+git add .binds/issues.jsonl
 git merge --continue
 ```
 

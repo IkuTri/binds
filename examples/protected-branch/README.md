@@ -175,10 +175,10 @@ my-project/
 ├── .git/
 │   ├── beads-worktrees/       # Hidden worktree directory
 │   │   └── beads-metadata/    # Lightweight checkout of sync branch
-│   │       └── .beads/
+│   │       └── .binds/
 │   │           └── issues.jsonl
 │   └── ...
-├── .beads/                    # Main beads directory (in your workspace)
+├── .binds/                    # Main beads directory (in your workspace)
 │   ├── beads.db               # SQLite database
 │   ├── issues.jsonl            # JSONL export
 │   └── bd.sock                # Daemon socket (if running)
@@ -189,7 +189,7 @@ my-project/
 
 **Key points:**
 - `.git/beads-worktrees/` is hidden from your main workspace
-- Only `.beads/` is checked out in the worktree (sparse checkout)
+- Only `.binds/` is checked out in the worktree (sparse checkout)
 - Your `src/` code is never affected by beads commits
 - Minimal disk overhead (~few MB for worktree)
 
@@ -251,13 +251,13 @@ jobs:
           fetch-depth: 0
 
       - name: Install bd
-        run: curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
+        run: curl -fsSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash
 
       - name: Check for changes
         id: check
         run: |
           git fetch origin beads-metadata
-          if git diff --quiet main origin/beads-metadata -- .beads/; then
+          if git diff --quiet main origin/beads-metadata -- .binds/; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
           else
             echo "has_changes=true" >> $GITHUB_OUTPUT

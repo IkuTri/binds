@@ -87,7 +87,7 @@ if err != nil {
 **sync.go:52-54, 59-60**
 ```go
 if jsonlPath == "" {
-    fmt.Fprintf(os.Stderr, "Error: not in a bd workspace (no .beads directory found)\n")
+    fmt.Fprintf(os.Stderr, "Error: not in a bd workspace (no .binds directory found)\n")
     os.Exit(1)
 }
 ```

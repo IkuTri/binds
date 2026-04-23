@@ -14,15 +14,15 @@ Tool preferences control how `bd` behaves globally or per-user. These are stored
 **Configuration precedence** (highest to lowest):
 1. Command-line flags (`--json`, `--no-daemon`, etc.)
 2. Environment variables (`BD_JSON`, `BD_NO_DAEMON`, etc.)
-3. Config file (`~/.config/bd/config.yaml` or `.beads/config.yaml`)
+3. Config file (`~/.config/bd/config.yaml` or `.binds/config.yaml`)
 4. Defaults
 
 ### Config File Locations
 
 Viper searches for `config.yaml` in these locations (in order):
-1. `.beads/config.yaml` - Project-specific tool settings (version-controlled)
+1. `.binds/config.yaml` - Project-specific tool settings (version-controlled)
 2. `~/.config/bd/config.yaml` - User-specific tool settings
-3. `~/.beads/config.yaml` - Legacy user settings
+3. `~/.binds/config.yaml` - Legacy user settings
 
 ### Supported Settings
 
@@ -78,7 +78,7 @@ By default, `bd` is configured to **auto-commit Dolt history after each successf
 bd --dolt-auto-commit off create "No commit for this one"
 ```
 
-- **Disable in config** (`.beads/config.yaml` or `~/.config/bd/config.yaml`):
+- **Disable in config** (`.binds/config.yaml` or `~/.config/bd/config.yaml`):
 
 ```yaml
 dolt:
@@ -150,7 +150,7 @@ For Dolt-native or belt-and-suspenders modes:
 #### Example Sync Configuration
 
 ```yaml
-# .beads/config.yaml
+# .binds/config.yaml
 sync:
   mode: git-portable    # git-portable | realtime | dolt-native | belt-and-suspenders
   export_on: push       # push | change
@@ -195,7 +195,7 @@ daemon-log-max-age: 30       # Days to keep old logs (default 30)
 daemon-log-compress: true    # Compress rotated logs (default true)
 ```
 
-`.beads/config.yaml` (project-specific):
+`.binds/config.yaml` (project-specific):
 ```yaml
 # Project team prefers longer flush delay
 flush-debounce: 15s
@@ -255,7 +255,7 @@ Agents benefit from `bd config`'s structured CLI interface over manual YAML edit
 ### Overview
 
 Project configuration is:
-- **Per-project**: Isolated to each `.beads/*.db` database
+- **Per-project**: Isolated to each `.binds/*.db` database
 - **Version-control-friendly**: Stored in SQLite, queryable and scriptable
 - **Machine-readable**: JSON output for automation
 - **Namespace-based**: Organized by integration or purpose
@@ -699,7 +699,7 @@ jira_project = get_config("jira.project")
 1. **Use namespaces**: Prefix keys with integration name (e.g., `jira.*`, `linear.*`)
 2. **Hierarchical keys**: Use dots for structure (e.g., `jira.status_map.open`)
 3. **Document your keys**: Add comments in integration scripts
-4. **Security**: Store tokens in config, but add `.beads/*.db` to `.gitignore` (bd does this automatically)
+4. **Security**: Store tokens in config, but add `.binds/*.db` to `.gitignore` (bd does this automatically)
 5. **Per-project**: Configuration is project-specific, so each repo can have different settings
 
 ## Integration with bd Commands

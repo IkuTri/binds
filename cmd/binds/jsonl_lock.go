@@ -33,7 +33,7 @@ const (
 // - Exclusive: Used for write operations (export, auto-flush)
 // - Shared: Used for read operations (auto-import)
 //
-// The lock file is located at .beads/.jsonl.lock
+// The lock file is located at .binds/.jsonl.lock
 type JSONLLock struct {
 	flock    *flock.Flock
 	beadsDir string

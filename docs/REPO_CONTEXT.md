@@ -1,14 +1,14 @@
 # Repository Context
 
 This document explains how beads resolves repository context when commands run from
-different directories than where `.beads/` lives.
+different directories than where `.binds/` lives.
 
 ## Problem
 
 Git commands must run in the correct repository, but users may invoke `bd` from:
 
 - A different repository (using `BEADS_DIR` environment variable)
-- A git worktree (separate working directory, shared `.beads/`)
+- A git worktree (separate working directory, shared `.binds/`)
 - A subdirectory within the repository
 
 Without centralized handling, each command must implement its own path resolution,
@@ -19,7 +19,7 @@ leading to bugs when assumptions don't match reality.
 The `RepoContext` API provides a single source of truth for repository resolution:
 
 ```go
-import "github.com/steveyegge/beads/internal/beads"
+import "github.com/IkuTri/binds/internal/beads"
 
 rc, err := beads.GetRepoContext()
 if err != nil {
@@ -35,7 +35,7 @@ output, err := cmd.Output()
 
 | Method | Use Case | Example |
 |--------|----------|---------|
-| `GitCmd()` | Git commands for beads operations | `git add .beads/`, `git push` |
+| `GitCmd()` | Git commands for beads operations | `git add .binds/`, `git push` |
 | `GitCmdCWD()` | Git commands for user's working repo | `git status` (show user's changes) |
 | `RelPath()` | Convert absolute path to repo-relative | Display paths in output |
 
@@ -47,8 +47,8 @@ The distinction matters when `BEADS_DIR` points to a different repository:
 rc, _ := beads.GetRepoContext()
 
 // GitCmd: runs in the beads repository
-// Use for: committing .beads/, pushing/pulling beads data
-cmd := rc.GitCmd(ctx, "add", ".beads/issues.jsonl")
+// Use for: committing .binds/, pushing/pulling beads data
+cmd := rc.GitCmd(ctx, "add", ".binds/issues.jsonl")
 
 // GitCmdCWD: runs in user's current repository
 // Use for: checking user's uncommitted changes, status display
@@ -59,11 +59,11 @@ cmd := rc.GitCmdCWD(ctx, "status", "--porcelain")
 
 ### Normal Repository
 
-CWD is inside the repository containing `.beads/`:
+CWD is inside the repository containing `.binds/`:
 
 ```
 /project/
-├── .beads/
+├── .binds/
 ├── src/
 └── README.md
 
@@ -78,7 +78,7 @@ User is in one repository but managing beads in another:
 
 ```
 $ cd /repo-a          # Has uncommitted changes
-$ export BEADS_DIR=/repo-b/.beads
+$ export BEADS_DIR=/repo-b/.binds
 $ bd sync
 # GitCmd() runs in /repo-b (correct, not /repo-a)
 ```
@@ -90,18 +90,18 @@ This pattern is common for:
 
 ### Git Worktree
 
-User is in a worktree but `.beads/` lives in main repository:
+User is in a worktree but `.binds/` lives in main repository:
 
 ```
 /project/                    # Main repo
-├── .beads/
+├── .binds/
 ├── .worktrees/
 │   └── feature-branch/      # Worktree (CWD)
 └── src/
 
 $ cd /project/.worktrees/feature-branch
 $ bd sync
-# GitCmd() runs in /project (main repo, where .beads lives)
+# GitCmd() runs in /project (main repo, where .binds lives)
 ```
 
 ### Combined: Worktree + Redirect
@@ -110,7 +110,7 @@ Both worktree and BEADS_DIR can be active simultaneously:
 
 ```
 $ cd /repo-a/.worktrees/branch-x
-$ export BEADS_DIR=/repo-b/.beads
+$ export BEADS_DIR=/repo-b/.binds
 $ bd sync
 # GitCmd() runs in /repo-b (BEADS_DIR takes precedence)
 ```
@@ -119,7 +119,7 @@ $ bd sync
 
 | Field | Description |
 |-------|-------------|
-| `BeadsDir` | Actual `.beads/` directory (after following redirects) |
+| `BeadsDir` | Actual `.binds/` directory (after following redirects) |
 | `RepoRoot` | Repository root containing `BeadsDir` |
 | `CWDRepoRoot` | Repository root containing user's CWD (may differ) |
 | `IsRedirected` | True if BEADS_DIR points to different repo than CWD |

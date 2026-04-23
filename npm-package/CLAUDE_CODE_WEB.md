@@ -34,7 +34,7 @@ echo "Installing bd (beads issue tracker)..."
 npm install -g @beads/bd
 
 # Initialize bd in the project (if not already initialized)
-if [ ! -d .beads ]; then
+if [ ! -d .binds ]; then
   bd init --quiet
 fi
 
@@ -127,7 +127,7 @@ Use `--json` flags for programmatic parsing.
 2. **npm install**: Downloads the @beads/bd package from npm registry
 3. **postinstall**: Package automatically downloads the native binary for your platform
 4. **CLI Wrapper**: `bd` command is a Node.js wrapper that invokes the native binary
-5. **bd init**: Sets up the .beads directory and imports existing issues from git
+5. **bd init**: Sets up the .binds directory and imports existing issues from git
 
 ## Performance
 
@@ -165,7 +165,7 @@ If Go is available (it usually is in Claude Code web), use the `go install` fall
 
 ```bash
 # Install via go
-go install github.com/steveyegge/beads/cmd/bd@latest
+go install github.com/IkuTri/binds/cmd/bd@latest
 
 # Add to PATH (required each session)
 export PATH="$PATH:$HOME/go/bin"
@@ -188,7 +188,7 @@ if ! command -v bd &> /dev/null; then
         echo "✓ Installed via npm"
     elif command -v go &> /dev/null; then
         echo "npm install failed, trying go install..."
-        go install github.com/steveyegge/beads/cmd/bd@latest
+        go install github.com/IkuTri/binds/cmd/bd@latest
         export PATH="$PATH:$HOME/go/bin"
         echo "✓ Installed via go install"
     else
@@ -272,7 +272,7 @@ else
 fi
 
 # Initialize if needed
-if [ ! -d .beads ]; then
+if [ ! -d .binds ]; then
     echo "Initializing bd in project..."
     bd init --quiet
 else
@@ -305,7 +305,7 @@ While working:
 
 When done:
 - Close the issue: `bd close <id> --reason "Description of what was done"`
-- Commit your changes including .beads/issues.jsonl
+- Commit your changes including .binds/issues.jsonl
 ```
 
 ## Alternative: Package as Project Dependency
@@ -334,7 +334,7 @@ npx bd create "New issue"
 
 ## Resources
 
-- [beads GitHub repository](https://github.com/steveyegge/beads)
+- [beads GitHub repository](https://github.com/IkuTri/binds)
 - [npm package page](https://www.npmjs.com/package/@beads/bd)
-- [Complete documentation](https://github.com/steveyegge/beads#readme)
+- [Complete documentation](https://github.com/IkuTri/binds#readme)
 - [Claude Code hooks documentation](https://docs.claude.com/claude-code)

@@ -23,7 +23,7 @@ data between independent teams or locations. Key benefits:
 
 ### Enable Federation-Compatible Sync
 
-Edit `.beads/config.yaml` or `~/.config/bd/config.yaml`:
+Edit `.binds/config.yaml` or `~/.config/bd/config.yaml`:
 
 ```yaml
 sync:

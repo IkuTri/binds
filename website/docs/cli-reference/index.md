@@ -173,7 +173,7 @@ bd sync
 bd export
 
 # Import from file
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 ```
 
 ## See Also

@@ -14,7 +14,7 @@ This guide helps you adopt beads' multi-repo workflow for OSS contributions, tea
 
 ## What is Multi-Repo Mode?
 
-By default, beads stores issues in `.beads/issues.jsonl` in your current repository. Multi-repo mode lets you:
+By default, beads stores issues in `.binds/issues.jsonl` in your current repository. Multi-repo mode lets you:
 
 - **Route issues to different repositories** based on your role (maintainer vs. contributor)
 - **Aggregate issues from multiple repos** into a unified view
@@ -42,11 +42,11 @@ Every issue has a `source_repo` field indicating which repository owns it:
 
 ```jsonl
 {"id":"bd-abc","source_repo":".","title":"Core issue"}
-{"id":"bd-xyz","source_repo":"~/.beads-planning","title":"Planning issue"}
+{"id":"bd-xyz","source_repo":"~/.binds-planning","title":"Planning issue"}
 ```
 
 - `.` = Current repository (default)
-- `~/.beads-planning` = Contributor planning repo
+- `~/.binds-planning` = Contributor planning repo
 - `/path/to/repo` = Absolute path to another repo
 
 ### 2. Auto-Routing
@@ -60,7 +60,7 @@ bd create "Fix bug" -p 1
 
 # Contributor (HTTPS or no push access)
 bd create "Fix bug" -p 1  
-# → Creates in ~/.beads-planning (source_repo = "~/.beads-planning")
+# → Creates in ~/.binds-planning (source_repo = "~/.binds-planning")
 ```
 
 ### 3. Multi-Repo Hydration
@@ -71,7 +71,7 @@ Beads can aggregate issues from multiple repositories into a unified database:
 bd list --json
 # Shows issues from:
 # - Current repo (.)
-# - Planning repo (~/.beads-planning)
+# - Planning repo (~/.binds-planning)
 # - Any configured additional repos
 ```
 
@@ -96,7 +96,7 @@ bd init --contributor
 
 # The wizard will:
 # - Detect that you're in a fork (checks for 'upstream' remote)
-# - Prompt you to create a planning repo (~/.beads-planning by default)
+# - Prompt you to create a planning repo (~/.binds-planning by default)
 # - Configure auto-routing (contributor → planning repo)
 # - Set up multi-repo hydration
 ```
@@ -107,18 +107,18 @@ If you prefer manual setup:
 
 ```bash
 # 1. Create planning repository
-mkdir -p ~/.beads-planning
-cd ~/.beads-planning
+mkdir -p ~/.binds-planning
+cd ~/.binds-planning
 git init
 bd init --prefix plan
 
 # 2. Configure routing in your fork
 cd ~/projects/project
 bd config set routing.mode auto
-bd config set routing.contributor "~/.beads-planning"
+bd config set routing.contributor "~/.binds-planning"
 
 # 3. Add planning repo to hydration sources
-bd config set repos.additional "~/.beads-planning"
+bd config set repos.additional "~/.binds-planning"
 ```
 
 ### Daily Workflow
@@ -127,7 +127,7 @@ bd config set repos.additional "~/.beads-planning"
 # Work in your fork
 cd ~/projects/project
 
-# Create planning issues (auto-routed to ~/.beads-planning)
+# Create planning issues (auto-routed to ~/.binds-planning)
 bd create "Investigate auth implementation" -p 1
 bd create "Draft RFC for new feature" -p 2
 
@@ -145,7 +145,7 @@ bd close plan-42 --reason "Completed"
 git add .
 git commit -m "Fix authentication bug"
 git push origin my-feature-branch
-# ✅ PR only contains code changes, no .beads/ pollution
+# ✅ PR only contains code changes, no .binds/ pollution
 ```
 
 ### Proposing Issues Upstream
@@ -197,14 +197,14 @@ bd create "Implement feature X" -p 1
 # → Creates in current repo (team-123)
 
 # 3. Optional: Create personal planning repo for experiments
-mkdir -p ~/.beads-planning-personal
-cd ~/.beads-planning-personal
+mkdir -p ~/.binds-planning-personal
+cd ~/.binds-planning-personal
 git init
 bd init --prefix exp
 
 # 4. Configure multi-repo in team project
 cd ~/projects/project
-bd config set repos.additional "~/.beads-planning-personal"
+bd config set repos.additional "~/.binds-planning-personal"
 ```
 
 ### Daily Workflow
@@ -215,7 +215,7 @@ bd create "Implement auth" -p 1 --repo .
 # → team-42 (visible to entire team)
 
 # Personal experiments (not committed to team repo)
-bd create "Try alternative approach" -p 2 --repo ~/.beads-planning-personal
+bd create "Try alternative approach" -p 2 --repo ~/.binds-planning-personal
 # → exp-99 (private planning)
 
 # View all work
@@ -223,7 +223,7 @@ bd ready
 bd list --json
 
 # Complete team work
-git add .beads/issues.jsonl
+git add .binds/issues.jsonl
 git commit -m "Updated issue tracker"
 git push origin main
 ```
@@ -337,7 +337,7 @@ bd config set routing.default "."
 
 # Configure repos for each role
 bd config set routing.maintainer "."
-bd config set routing.contributor "~/.beads-planning"
+bd config set routing.contributor "~/.binds-planning"
 ```
 
 ### Multi-Repo Hydration
@@ -394,7 +394,7 @@ bd sync
 bd list --json
 ```
 
-### Git merge conflicts in .beads/issues.jsonl
+### Git merge conflicts in .binds/issues.jsonl
 
 **Problem:** Multiple repos modifying same JSONL file.
 
@@ -411,16 +411,16 @@ bd create "Issue" -p 1 --deps discovered-from:bd-42 --repo /different/repo
 
 ### Planning repo polluting PRs
 
-**Problem:** Your `~/.beads-planning` changes appear in PRs to upstream.
+**Problem:** Your `~/.binds-planning` changes appear in PRs to upstream.
 
 **Solution:** This shouldn't happen if configured correctly. Verify:
 ```bash
 # Check that planning repo is separate from fork
-ls -la ~/.beads-planning/.git  # Should exist
-ls -la ~/projects/fork/.beads/  # Should NOT contain planning issues
+ls -la ~/.binds-planning/.git  # Should exist
+ls -la ~/projects/fork/.binds/  # Should NOT contain planning issues
 
 # Verify routing
-bd config get routing.contributor  # Should be ~/.beads-planning
+bd config get routing.contributor  # Should be ~/.binds-planning
 ```
 
 ## Backward Compatibility
@@ -432,12 +432,12 @@ No migration needed! Multi-repo mode is opt-in:
 ```bash
 # Before (single repo)
 bd create "Issue" -p 1
-# → Creates in .beads/issues.jsonl
+# → Creates in .binds/issues.jsonl
 
 # After (multi-repo configured)
 bd create "Issue" -p 1
 # → Auto-routed based on role
-# → Old issues in .beads/issues.jsonl still work
+# → Old issues in .binds/issues.jsonl still work
 ```
 
 ### Disabling Multi-Repo
@@ -455,16 +455,16 @@ bd create "Issue" -p 1
 ## Best Practices
 
 ### OSS Contributors
-- ✅ Always use `~/.beads-planning` or similar for personal planning
-- ✅ Never commit `.beads/` changes to upstream PRs
+- ✅ Always use `~/.binds-planning` or similar for personal planning
+- ✅ Never commit `.binds/` changes to upstream PRs
 - ✅ Use descriptive prefixes (`plan-`, `exp-`) for clarity
 - ❌ Don't mix planning and implementation in the same repo
 
 ### Teams
-- ✅ Commit `.beads/issues.jsonl` to shared repository
+- ✅ Commit `.binds/issues.jsonl` to shared repository
 - ✅ Use protected branch workflow for main/master
 - ✅ Review issue changes in PRs like code changes
-- ❌ Don't gitignore `.beads/` - you lose the git ledger
+- ❌ Don't gitignore `.binds/` - you lose the git ledger
 
 ### Multi-Phase Projects
 - ✅ Use clear phase naming (`planning`, `impl`, `maint`)
@@ -487,8 +487,8 @@ bd create "Issue" -p 1
 - `bd-kla1` - `bd init --contributor` wizard ✅ implemented
 - `bd-twlr` - `bd init --team` wizard ✅ implemented
 =======
-- [bd-8rd](/.beads/issues.jsonl#bd-8rd) - Migration and onboarding epic
-- [bd-mlcz](/.beads/issues.jsonl#bd-mlcz) - `bd migrate` command (planned)
-- [bd-kla1](/.beads/issues.jsonl#bd-kla1) - `bd init --contributor` wizard ✅ implemented
-- [bd-twlr](/.beads/issues.jsonl#bd-twlr) - `bd init --team` wizard ✅ implemented
+- [bd-8rd](/.binds/issues.jsonl#bd-8rd) - Migration and onboarding epic
+- [bd-mlcz](/.binds/issues.jsonl#bd-mlcz) - `bd migrate` command (planned)
+- [bd-kla1](/.binds/issues.jsonl#bd-kla1) - `bd init --contributor` wizard ✅ implemented
+- [bd-twlr](/.binds/issues.jsonl#bd-twlr) - `bd init --team` wizard ✅ implemented
 >>>>>>> origin/bd-l0pg-slit

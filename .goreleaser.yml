@@ -189,13 +189,13 @@ changelog:
 
 release:
   github:
-    owner: steveyegge
-    name: beads
+    owner: IkuTri
+    name: binds
   draft: false
   prerelease: auto
   name_template: "v{{.Version}}"
   header: |
-    ## beads v{{.Version}}
+    ## binds v{{.Version}}
 
     Pre-compiled binaries for Linux, macOS (Intel & Apple Silicon), Windows (AMD64 & ARM64), Android/Termux (ARM64), and FreeBSD.
 
@@ -203,17 +203,17 @@ release:
 
     **Homebrew (macOS/Linux):**
     ```bash
-    brew install beads
+    brew install binds
     ```
 
     **Quick Install (macOS/Linux/FreeBSD):**
     ```bash
-    curl -sSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
+    curl -sSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash
     ```
 
     **Windows (PowerShell):**
     ```powershell
-    irm https://raw.githubusercontent.com/steveyegge/beads/main/install.ps1 | iex
+    irm https://raw.githubusercontent.com/IkuTri/binds/main/install.ps1 | iex
     ```
 
     **Manual Install:**

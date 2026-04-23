@@ -25,7 +25,7 @@ Create the file `.claude/hooks/session-start.sh` in your repository:
 npm install -g @beads/bd
 
 # Initialize bd if not already done
-if [ ! -d .beads ]; then
+if [ ! -d .binds ]; then
   bd init --quiet
 fi
 
@@ -99,7 +99,7 @@ bd dep tree <issue-id>
 2. **Create issues proactively**: When you notice work, file it immediately
 3. **Link discovered work**: Use `bd dep add --type discovered-from`
 4. **Close with context**: Always provide --reason when closing
-5. **Commit .beads/**: The .beads/issues.jsonl file should be committed to git
+5. **Commit .binds/**: The .binds/issues.jsonl file should be committed to git
 ```
 
 ### Step 4: Commit and Push
@@ -118,7 +118,7 @@ git push
 2. **Hook runs** → `.claude/hooks/session-start.sh` executes automatically
 3. **npm install** → Downloads @beads/bd package from npm
 4. **Postinstall** → Downloads native bd binary for platform (~17MB)
-5. **bd init** → Imports existing issues from `.beads/issues.jsonl` in git
+5. **bd init** → Imports existing issues from `.binds/issues.jsonl` in git
 6. **Ready** → `bd` command is available, shows ready work
 
 **Time: ~5-10 seconds**
@@ -126,7 +126,7 @@ git push
 ### Subsequent Sessions
 
 Same process, but:
-- Git clone pulls existing `.beads/issues.jsonl`
+- Git clone pulls existing `.binds/issues.jsonl`
 - `bd init --quiet` imports all existing issues
 - Agent picks up right where it left off
 
@@ -293,14 +293,14 @@ npm install --save-dev @beads/bd
 
 ## 📚 Next Steps
 
-1. **Read the full docs**: https://github.com/steveyegge/beads
+1. **Read the full docs**: https://github.com/IkuTri/binds
 2. **Try the quickstart**: `bd quickstart` (interactive tutorial)
 3. **Set up MCP**: For local Claude Desktop integration
-4. **Explore examples**: https://github.com/steveyegge/beads/tree/main/examples
+4. **Explore examples**: https://github.com/IkuTri/binds/tree/main/examples
 
 ## 🔗 Resources
 
-- [beads GitHub](https://github.com/steveyegge/beads)
+- [beads GitHub](https://github.com/IkuTri/binds)
 - [npm package](https://www.npmjs.com/package/@beads/bd)
 - [Claude Code docs](https://docs.claude.com/claude-code)
 - [SessionStart hooks](https://docs.claude.com/claude-code/hooks)
@@ -320,20 +320,20 @@ WORKFLOW:
 5. File new issues: Create issues for any work discovered
 6. Link issues: Use `bd dep add` to track relationships
 7. Close when done: `bd close <id> --reason "what you did"`
-8. Commit changes: Include .beads/issues.jsonl in commits
+8. Commit changes: Include .binds/issues.jsonl in commits
 
 ALWAYS:
 - Use --json flags for programmatic parsing
 - Create issues proactively (don't let work be forgotten)
 - Link related issues with dependencies
 - Close issues with descriptive reasons
-- Commit .beads/issues.jsonl with code changes
+- Commit .binds/issues.jsonl with code changes
 
 NEVER:
 - Use markdown TODOs (use bd instead)
 - Work on blocked issues (check `bd show <id>` for blockers)
 - Close issues without --reason
-- Forget to commit .beads/issues.jsonl
+- Forget to commit .binds/issues.jsonl
 ```
 
 ## 🎉 Success Criteria
@@ -348,6 +348,6 @@ After setup, you should see:
 
 ## 🆘 Support
 
-- [File an issue](https://github.com/steveyegge/beads/issues)
-- [Read the FAQ](https://github.com/steveyegge/beads/blob/main/FAQ.md)
-- [Check troubleshooting](https://github.com/steveyegge/beads/blob/main/TROUBLESHOOTING.md)
+- [File an issue](https://github.com/IkuTri/binds/issues)
+- [Read the FAQ](https://github.com/IkuTri/binds/blob/main/FAQ.md)
+- [Check troubleshooting](https://github.com/IkuTri/binds/blob/main/TROUBLESHOOTING.md)

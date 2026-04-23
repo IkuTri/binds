@@ -70,7 +70,7 @@ cd your-project
 bd init --quiet
 ```
 
-This creates a `.beads/` directory with the issue database. The init wizard will ask about git hooks—these are optional and you can skip them if unfamiliar.
+This creates a `.binds/` directory with the issue database. The init wizard will ask about git hooks—these are optional and you can skip them if unfamiliar.
 
 ### Step 4: Add Copilot instructions (optional but recommended)
 
@@ -222,7 +222,7 @@ For Copilot Enterprise, your organization must enable "MCP servers in Copilot" p
 
 ### Do I need to clone the beads repository?
 
-**No.** Beads is a system-wide CLI tool. You install it once (via Homebrew, npm, or pip) and use it in any project. The `.beads/` directory in your project only contains the issue database, not beads itself.
+**No.** Beads is a system-wide CLI tool. You install it once (via Homebrew, npm, or pip) and use it in any project. The `.binds/` directory in your project only contains the issue database, not beads itself.
 
 ### What are the git hooks and are they safe?
 
@@ -230,7 +230,7 @@ When you run `bd init`, beads can install git hooks that:
 - **post-merge**: Import issues when you pull
 - **pre-push**: Sync issues before you push
 
-These hooks are safe—they only read/write the `.beads/` directory and never modify your code. You can opt out with `bd init --no-hooks` or skip them during the interactive setup.
+These hooks are safe—they only read/write the `.binds/` directory and never modify your code. You can opt out with `bd init --no-hooks` or skip them during the interactive setup.
 
 ### Can I use beads without Copilot?
 

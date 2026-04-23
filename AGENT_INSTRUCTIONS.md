@@ -46,7 +46,7 @@ BEADS_DB=/tmp/test.db ./bd create "Test feature" -p 1
 ```go
 func TestMyFeature(t *testing.T) {
     tmpDir := t.TempDir()
-    testDB := filepath.Join(tmpDir, ".beads", "beads.db")
+    testDB := filepath.Join(tmpDir, ".binds", "beads.db")
     s := newTestStore(t, testDB)
     // ... test code
 }
@@ -59,7 +59,7 @@ func TestMyFeature(t *testing.T) {
 1. **Run tests**: `go test -short ./...` (full tests run in CI)
 2. **Run linter**: `golangci-lint run ./...` (ignore baseline warnings)
 3. **Update docs**: If you changed behavior, update README.md or other docs
-4. **Commit**: Issues auto-sync to `.beads/issues.jsonl` and import after pull
+4. **Commit**: Issues auto-sync to `.binds/issues.jsonl` and import after pull
 
 ### Commit Message Convention
 
@@ -90,7 +90,7 @@ The 30-second debounce provides a **transaction window** for batch operations - 
 
 **Git worktrees**: Enhanced support with shared database architecture. Use `bd --no-daemon` if daemon warnings appear. See [docs/GIT_INTEGRATION.md](docs/GIT_INTEGRATION.md).
 
-**Merge conflicts**: Rare with hash IDs. If conflicts occur, use `git checkout --theirs/.beads/issues.jsonl` and `bd import`. See [docs/GIT_INTEGRATION.md](docs/GIT_INTEGRATION.md).
+**Merge conflicts**: Rare with hash IDs. If conflicts occur, use `git checkout --theirs/.binds/issues.jsonl` and `bd import`. See [docs/GIT_INTEGRATION.md](docs/GIT_INTEGRATION.md).
 
 ## Landing the Plane
 
@@ -109,9 +109,9 @@ The 30-second debounce provides a **transaction window** for batch operations - 
    # Pull first to catch any remote changes
    git pull --rebase
 
-   # If conflicts in .beads/issues.jsonl, resolve thoughtfully:
-   #   - git checkout --theirs .beads/issues.jsonl (accept remote)
-   #   - bd import -i .beads/issues.jsonl (re-import)
+   # If conflicts in .binds/issues.jsonl, resolve thoughtfully:
+   #   - git checkout --theirs .binds/issues.jsonl (accept remote)
+   #   - bd import -i .binds/issues.jsonl (re-import)
    #   - Or manual merge, then import
 
    # Sync the database (exports to JSONL, commits)
@@ -159,9 +159,9 @@ bd close bd-42 bd-43 --reason "Completed" --json
 
 # 4. PUSH TO REMOTE - MANDATORY, NO STOPPING BEFORE THIS IS DONE
 git pull --rebase
-# If conflicts in .beads/issues.jsonl, resolve thoughtfully:
-#   - git checkout --theirs .beads/issues.jsonl (accept remote)
-#   - bd import -i .beads/issues.jsonl (re-import)
+# If conflicts in .binds/issues.jsonl, resolve thoughtfully:
+#   - git checkout --theirs .binds/issues.jsonl (accept remote)
+#   - bd import -i .binds/issues.jsonl (re-import)
 #   - Or manual merge, then import
 bd sync        # Export/import/commit
 git push       # MANDATORY - THE PLANE IS STILL IN THE AIR UNTIL THIS SUCCEEDS

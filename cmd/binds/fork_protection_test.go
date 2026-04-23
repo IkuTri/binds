@@ -58,7 +58,7 @@ func TestIsUpstreamRepo(t *testing.T) {
 		remote   string
 		expected bool
 	}{
-		{"ssh upstream", "git@github.com:steveyegge/beads.git", true},
+		{"ssh upstream", "git@github.com:IkuTri/binds.git", true},
 		{"https upstream", "https://github.com/IkuTri/binds.git", true},
 		{"https upstream no .git", "https://github.com/IkuTri/binds", true},
 		{"fork ssh", "git@github.com:contributor/beads.git", false},
@@ -70,8 +70,8 @@ func TestIsUpstreamRepo(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// Verify the pattern matching logic matches what isUpstreamRepo uses
 			upstreamPatterns := []string{
-				"steveyegge/beads",
-				"git@github.com:steveyegge/beads",
+				"IkuTri/binds",
+				"git@github.com:IkuTri/binds",
 				"https://github.com/IkuTri/binds",
 			}
 
@@ -90,23 +90,23 @@ func TestIsUpstreamRepo(t *testing.T) {
 	}
 }
 
-// Test 1: Upstream maintainer (origin = steveyegge/beads)
+// Test 1: Upstream maintainer (origin = IkuTri/binds)
 func TestIsUpstreamRepo_Maintainer(t *testing.T) {
 	dir := setupGitRepoForForkTest(t)
 	addRemote(t, dir, "origin", "https://github.com/IkuTri/binds.git")
 
 	if !isUpstreamRepo(dir) {
-		t.Error("expected isUpstreamRepo to return true for steveyegge/beads")
+		t.Error("expected isUpstreamRepo to return true for IkuTri/binds")
 	}
 }
 
 // Test 1b: Upstream maintainer with SSH URL
 func TestIsUpstreamRepo_MaintainerSSH(t *testing.T) {
 	dir := setupGitRepoForForkTest(t)
-	addRemote(t, dir, "origin", "git@github.com:steveyegge/beads.git")
+	addRemote(t, dir, "origin", "git@github.com:IkuTri/binds.git")
 
 	if !isUpstreamRepo(dir) {
-		t.Error("expected isUpstreamRepo to return true for SSH steveyegge/beads")
+		t.Error("expected isUpstreamRepo to return true for SSH IkuTri/binds")
 	}
 }
 
@@ -191,7 +191,7 @@ func TestIsForkOfBeads_NoRemotes(t *testing.T) {
 func TestIsForkOfBeads_SSHRemote(t *testing.T) {
 	dir := setupGitRepoForForkTest(t)
 	addRemote(t, dir, "origin", "git@github.com:peterkc/beads.git")
-	addRemote(t, dir, "upstream", "git@github.com:steveyegge/beads.git")
+	addRemote(t, dir, "upstream", "git@github.com:IkuTri/binds.git")
 
 	if !isForkOfBeads(dir) {
 		t.Error("expected isForkOfBeads to return true for SSH upstream")
@@ -297,7 +297,7 @@ func TestIsForkProtectionDisabled(t *testing.T) {
 			dir := setupGitRepoForForkTest(t)
 
 			if tt.config != "" {
-				cmd := exec.Command("git", "-C", dir, "config", "beads.fork-protection", tt.config)
+				cmd := exec.Command("git", "-C", dir, "config", "binds.fork-protection", tt.config)
 				if err := cmd.Run(); err != nil {
 					t.Fatalf("failed to set git config: %v", err)
 				}
@@ -323,7 +323,7 @@ func TestConfigOptOut_GitConfig(t *testing.T) {
 	}
 
 	// Set git config opt-out
-	cmd := exec.Command("git", "-C", dir, "config", "beads.fork-protection", "false")
+	cmd := exec.Command("git", "-C", dir, "config", "binds.fork-protection", "false")
 	if err := cmd.Run(); err != nil {
 		t.Fatalf("failed to set git config: %v", err)
 	}

@@ -24,7 +24,7 @@ bd info --json
 
 # Example output:
 # {
-#   "database_path": "/path/to/.beads/beads.db",
+#   "database_path": "/path/to/.binds/beads.db",
 #   "issue_prefix": "bd",
 #   "daemon_running": true,
 #   "agent_mail_enabled": false
@@ -302,7 +302,7 @@ bd --allow-stale list --status open --json
 
 ```bash
 # Force metadata update even when DB appears synced
-bd import --force -i .beads/issues.jsonl
+bd import --force -i .binds/issues.jsonl
 ```
 
 **When to use:** `bd import` reports "0 created, 0 updated" but staleness errors persist.
@@ -323,7 +323,7 @@ bd --no-auto-flush <command>    # Disable auto-export to JSONL
 bd --no-auto-import <command>   # Disable auto-import from JSONL
 
 # Custom database path
-bd --db /path/to/.beads/beads.db <command>
+bd --db /path/to/.binds/beads.db <command>
 
 # Custom actor for audit trail
 bd --actor alice <command>
@@ -355,7 +355,7 @@ bd orphans
 
 # Cross-repo: scan CODE repo's commits against external BEADS database
 cd ~/my-code-repo
-bd orphans --db ~/my-beads-repo/.beads/beads.db
+bd orphans --db ~/my-beads-repo/.binds/beads.db
 
 # JSON output
 bd orphans --json
@@ -415,7 +415,7 @@ bd admin reset --force
 ```
 
 **What gets removed:**
-- `.beads/` directory (database, JSONL, config)
+- `.binds/` directory (database, JSONL, config)
 - Git hooks installed by bd
 - Merge driver configuration
 - Sync branch worktrees (`.git/beads-worktrees/`)
@@ -437,9 +437,9 @@ Beads uses a chemistry metaphor for template-based workflows. See [MOLECULES.md]
 
 | Phase | State | Storage | Command |
 |-------|-------|---------|---------|
-| Solid | Proto | `.beads/` | `bd formula list` |
-| Liquid | Mol | `.beads/` | `bd mol pour` |
-| Vapor | Wisp | `.beads/` (Ephemeral=true, not exported) | `bd mol wisp` |
+| Solid | Proto | `.binds/` | `bd formula list` |
+| Liquid | Mol | `.binds/` | `bd mol pour` |
+| Vapor | Wisp | `.binds/` (Ephemeral=true, not exported) | `bd mol wisp` |
 
 ### Proto/Template Commands
 
@@ -545,9 +545,9 @@ bd mol burn <ephemeral-id> --force --json
 
 ```bash
 # Import issues from JSONL
-bd import -i .beads/issues.jsonl --dry-run      # Preview changes
-bd import -i .beads/issues.jsonl                # Import and update issues
-bd import -i .beads/issues.jsonl --dedupe-after # Import + detect duplicates
+bd import -i .binds/issues.jsonl --dry-run      # Preview changes
+bd import -i .binds/issues.jsonl                # Import and update issues
+bd import -i .binds/issues.jsonl --dedupe-after # Import + detect duplicates
 
 # Handle missing parents during import
 bd import -i issues.jsonl --orphan-handling allow      # Default: import orphans without validation
@@ -635,7 +635,7 @@ bd migrate sync beads-sync --orphan                    # Delete and recreate as 
 - Clean "data sync channel" mental model
 - No accidental merge risk (git warns loudly)
 - Smaller repository footprint (no stale source code)
-- Sync branch contains only `.beads/` directory
+- Sync branch contains only `.binds/` directory
 
 **After setup:**
 

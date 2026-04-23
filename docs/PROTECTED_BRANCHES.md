@@ -36,7 +36,7 @@ cd your-project
 bd init --branch beads-sync
 ```
 
-This creates a `.beads/` directory and configures beads to commit to `beads-sync` instead of `main`.
+This creates a `.binds/` directory and configures beads to commit to `beads-sync` instead of `main`.
 
 **Important:** After initialization, you'll see some untracked files that should be committed to your protected branch:
 
@@ -45,7 +45,7 @@ This creates a `.beads/` directory and configures beads to commit to `beads-sync
 git status
 
 # Commit the beads configuration to your protected branch
-git add .beads/.gitignore .gitattributes
+git add .binds/.gitignore .gitattributes
 git commit -m "Initialize beads issue tracker"
 git push origin main  # Or create a PR if required
 ```
@@ -53,18 +53,18 @@ git push origin main  # Or create a PR if required
 **Files created by `bd init --branch`:**
 
 Files that should be committed to your protected branch (main):
-- `.beads/.gitignore` - Tells git what to ignore in .beads/ directory
+- `.binds/.gitignore` - Tells git what to ignore in .binds/ directory
 - `.gitattributes` - Configures merge driver for intelligent JSONL conflict resolution
 
 Files that are automatically gitignored (do NOT commit):
-- `.beads/beads.db` - SQLite database (local only, regenerated from JSONL)
-- `.beads/daemon.lock`, `daemon.log`, `daemon.pid` - Runtime files
-- `.beads/beads.left.jsonl`, `beads.right.jsonl` - Temporary merge artifacts
+- `.binds/beads.db` - SQLite database (local only, regenerated from JSONL)
+- `.binds/daemon.lock`, `daemon.log`, `daemon.pid` - Runtime files
+- `.binds/beads.left.jsonl`, `beads.right.jsonl` - Temporary merge artifacts
 
 The sync branch (beads-sync) will contain:
-- `.beads/issues.jsonl` - Issue data in JSONL format (committed automatically by daemon)
-- `.beads/metadata.json` - Metadata about the beads installation
-- `.beads/config.yaml` - Configuration template (optional)
+- `.binds/issues.jsonl` - Issue data in JSONL format (committed automatically by daemon)
+- `.binds/metadata.json` - Metadata about the beads installation
+- `.binds/config.yaml` - Configuration template (optional)
 
 **2. Start the daemon with auto-commit:**
 
@@ -98,10 +98,10 @@ Beads uses [git worktrees](https://git-scm.com/docs/git-worktree) to maintain a 
 your-project/
 ├── .git/                    # Main git directory
 │   └── beads-worktrees/
-│       └── beads-sync/  # Worktree (only .beads/ checked out)
-│           └── .beads/
+│       └── beads-sync/  # Worktree (only .binds/ checked out)
+│           └── .binds/
 │               └── issues.jsonl
-├── .beads/                  # Your main copy
+├── .binds/                  # Your main copy
 │   ├── beads.db
 │   ├── issues.jsonl
 │   └── .gitignore
@@ -112,21 +112,21 @@ your-project/
 **What lives in each branch:**
 
 Main branch (protected):
-- `.beads/.gitignore` - Tells git what to ignore
+- `.binds/.gitignore` - Tells git what to ignore
 - `.gitattributes` - Merge driver configuration
 
 Sync branch (beads-sync):
-- `.beads/issues.jsonl` - Issue data (committed by daemon)
-- `.beads/metadata.json` - Repository metadata
-- `.beads/config.yaml` - Configuration template
+- `.binds/issues.jsonl` - Issue data (committed by daemon)
+- `.binds/metadata.json` - Repository metadata
+- `.binds/config.yaml` - Configuration template
 
 Not tracked (gitignored):
-- `.beads/beads.db` - SQLite database (local only)
-- `.beads/daemon.*` - Runtime files
+- `.binds/beads.db` - SQLite database (local only)
+- `.binds/daemon.*` - Runtime files
 
 **Key points:**
 - The worktree is in `.git/beads-worktrees/` (hidden from your workspace)
-- Only `.beads/` is checked out in the worktree (sparse checkout)
+- Only `.binds/` is checked out in the worktree (sparse checkout)
 - Changes to issues are committed in the worktree
 - Your main working directory is never affected
 - Disk overhead is minimal (~few MB for the worktree)
@@ -135,9 +135,9 @@ Not tracked (gitignored):
 
 When you update an issue:
 
-1. Issue is updated in `.beads/beads.db` (SQLite database)
-2. Daemon exports to `.beads/issues.jsonl` (JSONL file)
-3. JSONL is copied to worktree (`.git/beads-worktrees/beads-sync/.beads/`)
+1. Issue is updated in `.binds/beads.db` (SQLite database)
+2. Daemon exports to `.binds/issues.jsonl` (JSONL file)
+3. JSONL is copied to worktree (`.git/beads-worktrees/beads-sync/.binds/`)
 4. Daemon commits the change in the worktree to `beads-sync` branch
 5. Main branch stays untouched (no commits on `main`)
 
@@ -151,7 +151,7 @@ bd init --branch beads-sync
 ```
 
 This will:
-- Create `.beads/` directory with database
+- Create `.binds/` directory with database
 - Set `sync.branch` config to `beads-sync`
 - Import any existing issues from git (if present)
 - Prompt to install git hooks (recommended: say yes)
@@ -295,11 +295,11 @@ If you encounter conflicts during merge:
 # bd sync --merge will detect conflicts and show:
 Error: Merge conflicts detected
 Conflicting files:
-  .beads/issues.jsonl
+  .binds/issues.jsonl
 
 To resolve:
-1. Fix conflicts in .beads/issues.jsonl
-2. git add .beads/issues.jsonl
+1. Fix conflicts in .binds/issues.jsonl
+2. git add .binds/issues.jsonl
 3. git commit
 4. bd import  # Reimport to sync database
 ```
@@ -308,7 +308,7 @@ To resolve:
 
 JSONL files are append-only and line-based, so conflicts are rare. When they occur:
 
-1. Open `.beads/issues.jsonl` and look for conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`)
+1. Open `.binds/issues.jsonl` and look for conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`)
 2. Both versions are usually valid - keep both lines
 3. Remove the conflict markers
 4. Save and commit
@@ -332,7 +332,7 @@ Example conflict resolution:
 Then:
 
 ```bash
-git add .beads/issues.jsonl
+git add .binds/issues.jsonl
 git commit -m "Resolve issues.jsonl merge conflict"
 bd import  # Import to database (will use latest timestamp)
 ```
@@ -392,7 +392,7 @@ Check daemon status and logs:
 bd daemon status
 
 # View logs
-tail -f ~/.beads/daemon.log
+tail -f ~/.binds/daemon.log
 
 # Restart daemon
 bd daemon stop && bd daemon start
@@ -400,7 +400,7 @@ bd daemon stop && bd daemon start
 
 Common issues:
 - Port already in use: Another daemon is running
-- Permission denied: Check `.beads/` directory permissions
+- Permission denied: Check `.binds/` directory permissions
 - Git errors: Ensure git is installed and repository is initialized
 
 ### Changes not syncing between clones
@@ -491,7 +491,7 @@ Or create a pull request and review on GitHub/GitLab.
 ### What about disk space?
 
 Worktrees are very lightweight:
-- Sparse checkout means only `.beads/` is checked out
+- Sparse checkout means only `.binds/` is checked out
 - Typically < 1 MB for the worktree
 - Shared git history (no duplication)
 
@@ -562,7 +562,7 @@ jobs:
 
       - name: Install bd
         run: |
-          curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
+          curl -fsSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash
 
       - name: Pull changes
         run: |
@@ -700,4 +700,4 @@ Future commits will go to your current branch (e.g., `main`).
 
 ---
 
-**Need help?** Open an issue at https://github.com/steveyegge/beads/issues
+**Need help?** Open an issue at https://github.com/IkuTri/binds/issues

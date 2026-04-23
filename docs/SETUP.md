@@ -455,7 +455,7 @@ bd setup myeditor --remove
 
 ### User Recipes File
 
-Custom recipes are stored in `.beads/recipes.toml`:
+Custom recipes are stored in `.binds/recipes.toml`:
 
 ```toml
 [recipes.myeditor]

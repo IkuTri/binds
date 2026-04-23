@@ -106,17 +106,17 @@ If changes are in release-related files (CHANGELOG, version files), you may want
 - Include them in the release commit
 - Or stash and apply after version bump
 
-If changes are in **non-release files** (e.g., .beads/config.yaml, .claude/settings.json, local configs):
+If changes are in **non-release files** (e.g., .binds/config.yaml, .claude/settings.json, local configs):
 ```bash
 # Auto-stash non-release files
-git stash push -m "pre-release: non-release changes" -- .beads/ .claude/ *.local* .env*
+git stash push -m "pre-release: non-release changes" -- .binds/ .claude/ *.local* .env*
 
 # Verify working tree is now clean (or only has release files)
 git status --short
 ```
 
 **Important:** The bump script may fail if non-release files are modified. Always stash:
-- `.beads/` directory (local config)
+- `.binds/` directory (local config)
 - `.claude/` directory (agent settings)
 - Any `.local`, `.env`, or personal config files
 
@@ -652,7 +652,7 @@ needs = ["await-ci"]
 description = """
 Check the GitHub releases page.
 
-https://github.com/steveyegge/beads/releases/tag/v{{version}}
+https://github.com/IkuTri/binds/releases/tag/v{{version}}
 
 Verify:
 - Release created
@@ -720,7 +720,7 @@ brew upgrade bd
 
 Option B - Install script:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash
 ```
 
 **Step 2: Check for dev builds (developers only)**

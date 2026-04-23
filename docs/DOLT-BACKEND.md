@@ -42,7 +42,7 @@ bd migrate --to=dolt
 ### 3. Configure Sync Mode
 
 ```yaml
-# .beads/config.yaml
+# .binds/config.yaml
 backend: dolt
 
 sync:
@@ -85,11 +85,11 @@ dolt:
 bd doctor
 
 # Server auto-starts when needed
-# PID stored in: .beads/dolt/sql-server.pid
-# Logs written to: .beads/dolt/sql-server.log
+# PID stored in: .binds/dolt/sql-server.pid
+# Logs written to: .binds/dolt/sql-server.log
 
 # Manual stop (rarely needed)
-kill $(cat .beads/dolt/sql-server.pid)
+kill $(cat .binds/dolt/sql-server.pid)
 ```
 
 ## Sync Modes
@@ -136,7 +136,7 @@ sync:
 
 ```bash
 # DoltHub (public or private)
-cd .beads/dolt
+cd .binds/dolt
 dolt remote add origin https://doltremoteapi.dolthub.com/org/beads
 
 # S3
@@ -156,7 +156,7 @@ dolt remote add origin file:///path/to/remote
 bd sync
 
 # Direct dolt commands (if needed)
-cd .beads/dolt
+cd .binds/dolt
 dolt push origin main
 dolt pull origin main
 ```
@@ -167,13 +167,13 @@ dolt pull origin main
 
 ```bash
 # Archive existing beads
-mv .beads .beads-sqlite-backup
+mv .binds .binds-sqlite-backup
 
 # Initialize with Dolt
 bd init --backend=dolt
 
 # Import from JSONL (if you have one)
-bd import .beads-sqlite-backup/issues.jsonl
+bd import .binds-sqlite-backup/issues.jsonl
 ```
 
 ### Option 2: In-Place Migration
@@ -183,7 +183,7 @@ bd import .beads-sqlite-backup/issues.jsonl
 bd export --full issues.jsonl
 
 # Reconfigure backend
-# Edit .beads/config.yaml to set backend: dolt
+# Edit .binds/config.yaml to set backend: dolt
 
 # Re-initialize
 bd init --backend=dolt
@@ -201,13 +201,13 @@ bd import issues.jsonl
 lsof -i :3306
 
 # Check server logs
-cat .beads/dolt/sql-server.log
+cat .binds/dolt/sql-server.log
 
 # Verify dolt installation
 dolt version
 
 # Try manual start
-cd .beads/dolt && dolt sql-server --host 127.0.0.1 --port 3306
+cd .binds/dolt && dolt sql-server --host 127.0.0.1 --port 3306
 ```
 
 ### Connection Issues
@@ -220,7 +220,7 @@ mysql -h 127.0.0.1 -P 3306 -u root beads
 bd doctor
 
 # Force restart
-kill $(cat .beads/dolt/sql-server.pid) 2>/dev/null
+kill $(cat .binds/dolt/sql-server.pid) 2>/dev/null
 bd list  # Triggers auto-start
 ```
 
@@ -231,7 +231,7 @@ bd list  # Triggers auto-start
 3. Run `bd doctor` for diagnostics
 4. Consider `dolt gc` for database maintenance:
    ```bash
-   cd .beads/dolt && dolt gc
+   cd .binds/dolt && dolt gc
    ```
 
 ## Advanced Usage
@@ -239,7 +239,7 @@ bd list  # Triggers auto-start
 ### Branching
 
 ```bash
-cd .beads/dolt
+cd .binds/dolt
 
 # Create feature branch
 dolt checkout -b feature/experiment
@@ -255,7 +255,7 @@ dolt merge feature/experiment
 ### Time Travel
 
 ```bash
-cd .beads/dolt
+cd .binds/dolt
 
 # List commits
 dolt log --oneline
@@ -270,7 +270,7 @@ dolt checkout abc123
 ### Diff and Blame
 
 ```bash
-cd .beads/dolt
+cd .binds/dolt
 
 # See changes since last commit
 dolt diff
@@ -287,7 +287,7 @@ dolt blame issues
 ### Full Config Example
 
 ```yaml
-# .beads/config.yaml
+# .binds/config.yaml
 backend: dolt
 
 sync:

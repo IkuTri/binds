@@ -35,7 +35,7 @@ bd init --contributor
 
 The wizard will:
 1. ✅ Detect that you're in a fork (checks for 'upstream' remote)
-2. ✅ Prompt you to create a planning repo (`~/.beads-planning` by default)
+2. ✅ Prompt you to create a planning repo (`~/.binds-planning` by default)
 3. ✅ Configure auto-routing so your planning stays separate
 4. ✅ Initialize the planning repo with git
 
@@ -45,7 +45,7 @@ The wizard will:
 # Create a planning issue
 bd create "Plan how to fix bug X" -p 2
 
-# This issue goes to ~/.beads-planning automatically!
+# This issue goes to ~/.binds-planning automatically!
 ```
 
 ## How It Works
@@ -58,7 +58,7 @@ When you create issues as a contributor:
 bd create "Fix authentication bug" -p 1
 ```
 
-Beads automatically routes this to your planning repo (`~/.beads-planning/.beads/issues.jsonl`), not the current repo.
+Beads automatically routes this to your planning repo (`~/.binds-planning/.binds/issues.jsonl`), not the current repo.
 
 ### Viewing Issues
 
@@ -70,7 +70,7 @@ bd list
 bd list --source-repo .
 
 # See only planning issues
-bd list --source-repo ~/.beads-planning
+bd list --source-repo ~/.binds-planning
 ```
 
 ### Discovered Work
@@ -93,7 +93,7 @@ git commit -m "Fix: authentication bug"
 git push origin my-feature-branch
 ```
 
-Your planning issues in `~/.beads-planning` **never appear in PRs**.
+Your planning issues in `~/.binds-planning` **never appear in PRs**.
 
 ## Example Workflow
 
@@ -106,7 +106,7 @@ git remote add upstream https://github.com/upstream/upstream-project.git
 # 2. Run contributor setup
 bd init --contributor
 # Wizard detects fork ✓
-# Creates ~/.beads-planning ✓
+# Creates ~/.binds-planning ✓
 # Configures auto-routing ✓
 
 # 3. Plan your work (routes to planning repo)
@@ -132,12 +132,12 @@ bd close bd-abc --reason "PR merged"
 
 ## Configuration
 
-The wizard configures these settings in `.beads/beads.db`:
+The wizard configures these settings in `.binds/beads.db`:
 
 ```yaml
 routing:
   mode: auto
-  contributor: ~/.beads-planning
+  contributor: ~/.binds-planning
   maintainer: .
 ```
 
@@ -151,7 +151,7 @@ bd init
 
 # Configure routing
 bd config set routing.mode auto
-bd config set routing.contributor ~/.beads-planning
+bd config set routing.contributor ~/.binds-planning
 bd config set routing.maintainer .
 ```
 
@@ -161,12 +161,12 @@ Older versions used `contributor.*` keys. These still work for backward compatib
 
 ```bash
 # Old keys (deprecated but functional)
-bd config set contributor.planning_repo ~/.beads-planning
+bd config set contributor.planning_repo ~/.binds-planning
 bd config set contributor.auto_route true
 
 # New keys (preferred)
 bd config set routing.mode auto
-bd config set routing.contributor ~/.beads-planning
+bd config set routing.contributor ~/.binds-planning
 ```
 
 ## Multi-Repository View
@@ -179,7 +179,7 @@ bd list
 
 # Filter by source repository
 bd list --source-repo .                    # Current repo only
-bd list --source-repo ~/.beads-planning    # Planning repo only
+bd list --source-repo ~/.binds-planning    # Planning repo only
 ```
 
 ## Benefits

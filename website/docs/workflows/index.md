@@ -15,8 +15,8 @@ Beads uses a molecular chemistry metaphor:
 | Phase | Storage | Synced | Use Case |
 |-------|---------|--------|----------|
 | **Proto** (solid) | Built-in | N/A | Reusable templates |
-| **Mol** (liquid) | `.beads/` | Yes | Persistent work |
-| **Wisp** (vapor) | `.beads-wisp/` | No | Ephemeral operations |
+| **Mol** (liquid) | `.binds/` | Yes | Persistent work |
+| **Wisp** (vapor) | `.binds-wisp/` | No | Ephemeral operations |
 
 ## Core Concepts
 
@@ -58,7 +58,7 @@ Async coordination primitives:
 
 Ephemeral operations that don't sync to git:
 - Created with `bd wisp`
-- Stored in `.beads-wisp/` (gitignored)
+- Stored in `.binds-wisp/` (gitignored)
 - Auto-expire after completion
 
 ## Workflow Commands

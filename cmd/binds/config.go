@@ -351,7 +351,7 @@ func validateSyncConfig(repoPath string) []string {
 	var issues []string
 
 	// Load config.yaml directly from the repo path
-	configPath := filepath.Join(repoPath, ".beads", "config.yaml")
+	configPath := filepath.Join(repoPath, ".binds", "config.yaml")
 	v := viper.New()
 	v.SetConfigType("yaml")
 	v.SetConfigFile(configPath)
@@ -440,11 +440,11 @@ func isValidRemoteURL(url string) bool {
 	return gitSSHRemotePattern.MatchString(url)
 }
 
-// findBeadsRepoRoot walks up from the given path to find the repo root (containing .beads)
+// findBeadsRepoRoot walks up from the given path to find the repo root (containing .binds)
 func findBeadsRepoRoot(startPath string) string {
 	path := startPath
 	for {
-		beadsDir := filepath.Join(path, ".beads")
+		beadsDir := filepath.Join(path, ".binds")
 		if info, err := os.Stat(beadsDir); err == nil && info.IsDir() {
 			return path
 		}

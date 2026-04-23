@@ -14,15 +14,15 @@ bd daemons killall
 rm -f .git/hooks/pre-commit .git/hooks/post-merge .git/hooks/pre-push .git/hooks/post-checkout
 
 # 3. Remove merge driver config
-git config --unset merge.beads.driver
-git config --unset merge.beads.name
+git config --unset merge.binds.driver
+git config --unset merge.binds.name
 
 # 4. Remove .gitattributes entry (if only contains beads config)
 # Or manually edit to remove the beads line
 rm -f .gitattributes
 
-# 5. Remove .beads directory
-rm -rf .beads
+# 5. Remove .binds directory
+rm -rf .binds
 
 # 6. Remove sync worktree (if exists)
 rm -rf .git/beads-worktrees
@@ -74,8 +74,8 @@ mv .git/hooks/pre-commit.backup .git/hooks/pre-commit
 Beads configures a custom merge driver in your git config:
 
 ```bash
-git config --unset merge.beads.driver
-git config --unset merge.beads.name
+git config --unset merge.binds.driver
+git config --unset merge.binds.name
 ```
 
 ### 4. Remove .gitattributes Entry
@@ -83,7 +83,7 @@ git config --unset merge.beads.name
 Beads adds a line to `.gitattributes` for JSONL merge handling:
 
 ```
-.beads/issues.jsonl merge=beads
+.binds/issues.jsonl merge=beads
 ```
 
 Either remove the entire file (if it only contains this line):
@@ -96,9 +96,9 @@ Or edit it to remove just the beads line:
 # Edit .gitattributes and remove the line containing "merge=beads"
 ```
 
-### 5. Remove .beads Directory
+### 5. Remove .binds Directory
 
-The `.beads/` directory contains:
+The `.binds/` directory contains:
 
 | File/Dir | Description |
 |----------|-------------|
@@ -115,12 +115,12 @@ The `.beads/` directory contains:
 
 Remove everything:
 ```bash
-rm -rf .beads
+rm -rf .binds
 ```
 
 **Warning:** This permanently deletes all issue data. Consider backing up first:
 ```bash
-cp .beads/issues.jsonl ~/beads-backup-$(date +%Y%m%d).jsonl
+cp .binds/issues.jsonl ~/beads-backup-$(date +%Y%m%d).jsonl
 ```
 
 ### 6. Remove Sync Worktree
@@ -133,7 +133,7 @@ rm -rf .git/beads-worktrees
 
 ### 7. Commit the Removal (Optional)
 
-If `.beads/` was tracked in git, commit its removal:
+If `.binds/` was tracked in git, commit its removal:
 
 ```bash
 git add -A
@@ -166,13 +166,13 @@ Run these checks to confirm Beads is fully removed:
 which bd
 
 # Should not exist
-ls .beads/
+ls .binds/
 
 # Should not contain beads hooks
 ls .git/hooks/
 
 # Should not have merge driver
-git config --get merge.beads.driver
+git config --get merge.binds.driver
 
 # No .gitattributes or no beads line
 cat .gitattributes
@@ -186,4 +186,4 @@ To set up Beads again in the future:
 bd init
 ```
 
-This will recreate the `.beads/` directory, install hooks, and configure the merge driver.
+This will recreate the `.binds/` directory, install hooks, and configure the merge driver.

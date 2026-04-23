@@ -186,8 +186,8 @@ title = "Security scan before {step.title}"
 ## Formula Locations
 
 Formulas are searched in order:
-1. `.beads/formulas/` (project-level)
-2. `~/.beads/formulas/` (user-level)
+1. `.binds/formulas/` (project-level)
+2. `~/.binds/formulas/` (user-level)
 3. Built-in formulas
 
 ## Using Formulas
@@ -205,7 +205,7 @@ bd pour <formula-name> --dry-run
 
 ## Creating Custom Formulas
 
-1. Create file: `.beads/formulas/my-workflow.formula.toml`
+1. Create file: `.binds/formulas/my-workflow.formula.toml`
 2. Define structure (see examples above)
 3. Use with: `bd pour my-workflow`
 

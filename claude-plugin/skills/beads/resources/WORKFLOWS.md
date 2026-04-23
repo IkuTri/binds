@@ -24,8 +24,8 @@ Detailed step-by-step workflows for common bd usage patterns with checklists.
 ## Session Start Workflow {#session-start}
 
 **bd is available when**:
-- Project has `.beads/` directory (project-local), OR
-- `~/.beads/` exists (global fallback for any directory)
+- Project has `.binds/` directory (project-local), OR
+- `~/.binds/` exists (global fallback for any directory)
 
 **Automatic checklist at session start:**
 
@@ -33,14 +33,14 @@ Detailed step-by-step workflows for common bd usage patterns with checklists.
 Session Start (when bd is available):
 - [ ] Run bd ready --json
 - [ ] Report: "X items ready to work on: [summary]"
-- [ ] If using global ~/.beads, note this in report
+- [ ] If using global ~/.binds, note this in report
 - [ ] If none ready, check bd blocked --json
 - [ ] Suggest next action based on findings
 ```
 
 **Pattern**: Always run `bd ready` when starting work where bd is available. Report status immediately to establish shared context.
 
-**Database selection**: bd auto-discovers which database to use (project-local `.beads/` takes precedence over global `~/.beads/`).
+**Database selection**: bd auto-discovers which database to use (project-local `.binds/` takes precedence over global `~/.binds/`).
 
 ---
 
@@ -527,7 +527,7 @@ Research or investigation work:
 ### Starting Any Work Session
 
 ```
-- [ ] Check for .beads/ directory
+- [ ] Check for .binds/ directory
 - [ ] If exists: bd ready
 - [ ] Report status to user
 - [ ] Get user input on what to work on

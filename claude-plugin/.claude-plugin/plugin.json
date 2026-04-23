@@ -3,12 +3,12 @@
   "description": "AI-supervised issue tracker for coding workflows. Manage tasks, discover work, and maintain context with simple CLI commands.",
   "version": "0.49.4",
   "author": {
-    "name": "Steve Yegge",
-    "url": "https://github.com/steveyegge"
+    "name": "IkuTri",
+    "url": "https://github.com/IkuTri"
   },
-  "repository": "https://github.com/steveyegge/beads",
+  "repository": "https://github.com/IkuTri/binds",
   "license": "MIT",
-  "homepage": "https://github.com/steveyegge/beads",
+  "homepage": "https://github.com/IkuTri/binds",
   "keywords": [
     "issue-tracker",
     "task-management",

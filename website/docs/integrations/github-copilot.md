@@ -132,7 +132,7 @@ bd init --quiet
 
 ### Do I need to clone beads?
 
-**No.** Beads is a system-wide CLI tool. Install once, use everywhere. The `.beads/` directory in your project only contains the issue database.
+**No.** Beads is a system-wide CLI tool. Install once, use everywhere. The `.binds/` directory in your project only contains the issue database.
 
 ### What about git hooks?
 
@@ -142,4 +142,4 @@ Git hooks are optional. They auto-sync issues but you can skip them during `bd i
 
 - [MCP Server](/integrations/mcp-server) - Detailed MCP configuration
 - [Installation](/getting-started/installation) - Full install guide
-- [Detailed Copilot Guide](https://github.com/steveyegge/beads/blob/main/docs/COPILOT_INTEGRATION.md) - Comprehensive documentation
+- [Detailed Copilot Guide](https://github.com/IkuTri/binds/blob/main/docs/COPILOT_INTEGRATION.md) - Comprehensive documentation

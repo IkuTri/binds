@@ -64,9 +64,9 @@ func CheckClaude() DoctorCheck {
 			Name:    "Claude Integration",
 			Status:  "warning",
 			Message: "Not configured",
-			Detail:  "Claude can use bd more effectively with the beads plugin",
+			Detail:  "Claude can use bd more effectively with the binds plugin",
 			Fix: "Set up Claude integration:\n" +
-				"  Option 1: Install the beads plugin (recommended)\n" +
+				"  Option 1: Install the binds plugin\n" +
 				"    • Provides hooks, slash commands, and MCP tools automatically\n" +
 				"    • See: https://github.com/IkuTri/binds/blob/main/docs/PLUGIN.md\n" +
 				"\n" +
@@ -129,9 +129,9 @@ func checkPluginInSettings(settingsPath string) bool {
 		return false
 	}
 
-	// Look for beads@beads-marketplace plugin
+	// Look for binds plugin
 	for key, value := range enabledPlugins {
-		if strings.Contains(strings.ToLower(key), "beads") {
+		if strings.Contains(strings.ToLower(key), "binds") {
 			// Check if it's enabled (value should be true)
 			if enabled, ok := value.(bool); ok && enabled {
 				return true
@@ -190,9 +190,9 @@ func checkMCPInSettings(settingsPath string) bool {
 		return false
 	}
 
-	// Look for beads server (any key containing "beads")
+	// Look for binds server (any key containing "binds")
 	for key := range mcpServers {
-		if strings.Contains(strings.ToLower(key), "beads") {
+		if strings.Contains(strings.ToLower(key), "binds") {
 			return true
 		}
 	}
@@ -290,7 +290,7 @@ func VerifyPrimeOutput() DoctorCheck {
 	hasMCP := isMCPServerInstalled()
 	outputStr := string(output)
 
-	if hasMCP && strings.Contains(outputStr, "mcp__plugin_beads_beads__") {
+	if hasMCP && strings.Contains(outputStr, "mcp__plugin_binds__") {
 		return DoctorCheck{
 			Name:    "binds prime Output",
 			Status:  "ok",
@@ -324,8 +324,8 @@ func CheckBdInPath() DoctorCheck {
 			Message: "'bd' command not found in PATH",
 			Detail:  "Claude hooks execute 'binds prime' and won't work without bd in PATH",
 			Fix: "Install bd globally:\n" +
-				"  • Homebrew: brew install beads\n" +
-				"  • Script: curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash\n" +
+				"  • Homebrew: brew install binds\n" +
+				"  • Script: curl -fsSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash\n" +
 				"  • Or add bd to your PATH",
 		}
 	}
@@ -382,7 +382,7 @@ func CheckDocumentationBdPrimeReference(repoPath string) DoctorCheck {
 			Detail:  "Files: " + strings.Join(filesWithBdPrime, ", "),
 			Fix: "Upgrade bd to get the 'binds prime' command:\n" +
 				"  • Homebrew: brew upgrade bd\n" +
-				"  • Script: curl -fsSL https://raw.githubusercontent.com/steveyegge/beads/main/scripts/install.sh | bash\n" +
+				"  • Script: curl -fsSL https://raw.githubusercontent.com/IkuTri/binds/main/scripts/install.sh | bash\n" +
 				"  Or remove 'binds prime' references from documentation if using older version",
 		}
 	}
@@ -421,13 +421,13 @@ func CheckClaudePlugin() DoctorCheck {
 		return DoctorCheck{
 			Name:    "Claude Plugin",
 			Status:  StatusWarning,
-			Message: "beads plugin not installed",
-			Fix:     "Install plugin: /plugin install beads@beads-marketplace",
+			Message: "binds plugin not installed",
+			Fix:     "Install plugin: /plugin install binds",
 		}
 	}
 
 	// Query PyPI for latest MCP version
-	latestMCPVersion, err := fetchLatestPyPIVersion("beads-mcp")
+	latestMCPVersion, err := fetchLatestPyPIVersion("binds-mcp")
 	if err != nil {
 		// Network error - don't fail
 		return DoctorCheck{
@@ -451,7 +451,7 @@ func CheckClaudePlugin() DoctorCheck {
 			Name:    "Claude Plugin",
 			Status:  StatusWarning,
 			Message: fmt.Sprintf("version %s (latest: %s)", pluginVersion, latestMCPVersion),
-			Fix:     "Update plugin: /plugin update beads@beads-marketplace\nRestart Claude Code after update",
+			Fix:     "Update plugin: /plugin update binds\nRestart Claude Code after update",
 		}
 	}
 
@@ -503,7 +503,7 @@ func GetClaudePluginVersion() (version string, installed bool, err error) {
 		}
 
 		// Look for beads plugin - take first entry from the array
-		if entries, ok := pluginDataV2.Plugins["beads@beads-marketplace"]; ok && len(entries) > 0 {
+		if entries, ok := pluginDataV2.Plugins["binds"]; ok && len(entries) > 0 {
 			return entries[0].Version, true, nil
 		}
 		return "", false, nil
@@ -521,7 +521,7 @@ func GetClaudePluginVersion() (version string, installed bool, err error) {
 	}
 
 	// Look for beads plugin
-	if plugin, ok := pluginDataV1.Plugins["beads@beads-marketplace"]; ok {
+	if plugin, ok := pluginDataV1.Plugins["binds"]; ok {
 		return plugin.Version, true, nil
 	}
 
@@ -541,7 +541,7 @@ func fetchLatestPyPIVersion(packageName string) (string, error) {
 	}
 
 	// Set User-Agent
-	req.Header.Set("User-Agent", "beads-cli-doctor")
+	req.Header.Set("User-Agent", "binds-cli-doctor")
 
 	resp, err := client.Do(req)
 	if err != nil {

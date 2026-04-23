@@ -2,7 +2,7 @@
 
 Coordination layer for AI coding agents. Single Go binary. Local-first. Zero cloud dependency.
 
-Forked from [steveyegge/beads](https://github.com/steveyegge/beads) v0.49.4. Upstream moved to Dolt-only at v0.51.0; binds stays on SQLite + JSONL and adds multi-agent coordination.
+Forked from [IkuTri/binds](https://github.com/IkuTri/binds) v0.49.4. Upstream moved to Dolt-only at v0.51.0; binds stays on SQLite + JSONL and adds multi-agent coordination.
 
 - be me
 - use beads
@@ -22,7 +22,7 @@ Forked from [steveyegge/beads](https://github.com/steveyegge/beads) v0.49.4. Ups
 - Mail, rooms, presence, reservations, checkpoints, aliases
 - Agent identity model with machine/scope/capabilities
 - Cross-repo issue aggregation (`binds issues`)
-- `.binds/` directory (`.beads/` still supported as fallback)
+- `.binds/` directory (`.binds/` still supported as fallback)
 
 ## Install
 

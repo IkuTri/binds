@@ -6,7 +6,7 @@
 >
 > **For external integrations** (syncing with Jira, Shortcut, Linear, etc.), build
 > a standalone sync tool following the pattern of [jira-beads-sync](https://github.com/conallob/jira-beads-sync).
-> These tools use bd's CLI with `--json` flags or read/write the `.beads/` JSONL files directly.
+> These tools use bd's CLI with `--json` flags or read/write the `.binds/` JSONL files directly.
 >
 > **For orchestration layers**, consider using a separate database that references
 > bd issue IDs, or wait for the forthcoming plugin architecture.
@@ -110,7 +110,7 @@ func InitializeMyAppSchema(dbPath string) error {
 
 ```go
 import (
-    "github.com/steveyegge/beads"
+    "github.com/IkuTri/binds"
 )
 
 // Open bd's storage
@@ -180,7 +180,7 @@ package vc
 
 import (
     "database/sql"
-    "github.com/steveyegge/beads"
+    "github.com/IkuTri/binds"
     _ "modernc.org/sqlite"
 )
 
@@ -454,7 +454,7 @@ if [ "$ISSUE_ID" = "null" ]; then
 fi
 
 # Create execution record in your table
-sqlite3 .beads/myapp.db <<SQL
+sqlite3 .binds/myapp.db <<SQL
 INSERT INTO myapp_executions (issue_id, agent_id, status, started_at)
 VALUES ('$ISSUE_ID', 'agent-1', 'running', datetime('now'));
 SQL
@@ -467,7 +467,7 @@ echo "Working on $ISSUE_ID"
 
 # Mark complete
 bd close $ISSUE_ID --reason "Completed by agent-1"
-sqlite3 .beads/myapp.db <<SQL
+sqlite3 .binds/myapp.db <<SQL
 UPDATE myapp_executions
 SET status = 'completed', completed_at = datetime('now')
 WHERE issue_id = '$ISSUE_ID';
@@ -483,12 +483,12 @@ The recommended way to extend bd is using the `UnderlyingDB()` method on the sto
 ```go
 import (
     "database/sql"
-    "github.com/steveyegge/beads"
+    "github.com/IkuTri/binds"
     _ "modernc.org/sqlite"
 )
 
 // Open bd's storage
-store, err := beads.NewSQLiteStorage(".beads/issues.db")
+store, err := beads.NewSQLiteStorage(".binds/issues.db")
 if err != nil {
     log.Fatal(err)
 }
@@ -573,7 +573,7 @@ If you need independent connection management, you can still open the database d
 import (
     "database/sql"
     _ "modernc.org/sqlite"
-    "github.com/steveyegge/beads"
+    "github.com/IkuTri/binds"
 )
 
 // Auto-discover bd's database path
@@ -612,12 +612,12 @@ When creating many issues at once (e.g., bulk imports, batch processing), use `C
 ```go
 import (
     "context"
-    "github.com/steveyegge/beads/internal/storage/sqlite"
-    "github.com/steveyegge/beads/internal/types"
+    "github.com/IkuTri/binds/internal/storage/sqlite"
+    "github.com/IkuTri/binds/internal/types"
 )
 
 // Open bd's storage
-store, err := sqlite.New(".beads/issues.db")
+store, err := sqlite.New(".binds/issues.db")
 if err != nil {
     log.Fatal(err)
 }
@@ -671,7 +671,7 @@ if err := store.CreateIssues(ctx, issues, "import"); err != nil {
 ```go
 // Example: Import from external issue tracker
 func ImportFromExternal(externalIssues []ExternalIssue) error {
-    store, err := sqlite.New(".beads/issues.db")
+    store, err := sqlite.New(".binds/issues.db")
     if err != nil {
         return err
     }

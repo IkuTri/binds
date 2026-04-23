@@ -44,7 +44,7 @@ export BD_DEBUG_RPC=1
 bd list
 
 # Example output:
-# [RPC DEBUG] Connecting to daemon at .beads/bd.sock
+# [RPC DEBUG] Connecting to daemon at .binds/bd.sock
 # [RPC DEBUG] Sent request: list (correlation_id=abc123)
 # [RPC DEBUG] Received response: 200 OK
 ```
@@ -115,7 +115,7 @@ bd daemon start --foreground
   bd daemons logs . -n 200
 
   # Or directly:
-  tail -f .beads/daemon.log
+  tail -f .binds/daemon.log
   ```
 
 - **When filing bug reports**: Include relevant debug output to help maintainers diagnose issues faster.
@@ -134,13 +134,13 @@ bd is not in your PATH. Either:
 
 ```bash
 # Check if installed
-go list -f {{.Target}} github.com/steveyegge/beads/cmd/bd
+go list -f {{.Target}} github.com/IkuTri/binds/cmd/bd
 
 # Add Go bin to PATH (add to ~/.bashrc or ~/.zshrc)
 export PATH="$PATH:$(go env GOPATH)/bin"
 
 # Or reinstall
-go install github.com/steveyegge/beads/cmd/bd@latest
+go install github.com/IkuTri/binds/cmd/bd@latest
 ```
 
 ### Wrong version of bd running / Multiple bd binaries in PATH
@@ -181,16 +181,16 @@ Some users report crashes when running `bd init` or other commands on macOS. Thi
 **Workaround:**
 ```bash
 # Build with CGO enabled
-CGO_ENABLED=1 go install github.com/steveyegge/beads/cmd/bd@latest
+CGO_ENABLED=1 go install github.com/IkuTri/binds/cmd/bd@latest
 
 # Or if building from source
-git clone https://github.com/steveyegge/beads
+git clone https://github.com/IkuTri/binds
 cd beads
 CGO_ENABLED=1 go build -o bd ./cmd/bd
 sudo mv bd /usr/local/bin/
 ```
 
-If you installed via Homebrew, this shouldn't be necessary as the formula already enables CGO. If you're still seeing crashes with the Homebrew version, please [file an issue](https://github.com/steveyegge/beads/issues).
+If you installed via Homebrew, this shouldn't be necessary as the formula already enables CGO. If you're still seeing crashes with the Homebrew version, please [file an issue](https://github.com/IkuTri/binds/issues).
 
 ## Antivirus False Positives
 
@@ -218,7 +218,7 @@ If you installed via Homebrew, this shouldn't be necessary as the formula alread
    # macOS/Linux
    shasum -a 256 bd
    ```
-   Compare with checksums from the [GitHub release page](https://github.com/steveyegge/beads/releases)
+   Compare with checksums from the [GitHub release page](https://github.com/IkuTri/binds/releases)
 
 3. **Report the false positive**:
    - Help improve detection by reporting to your antivirus vendor
@@ -242,21 +242,21 @@ ps aux | grep bd
 kill <pid>
 
 # Remove lock files (safe if no bd processes running)
-rm .beads/*.db-journal .beads/*.db-wal .beads/*.db-shm
+rm .binds/*.db-journal .binds/*.db-wal .binds/*.db-shm
 ```
 
 **Note**: bd uses a pure Go SQLite driver (`modernc.org/sqlite`) for better portability. Under extreme concurrent load (100+ simultaneous operations), you may see "database is locked" errors. This is a known limitation of the pure Go implementation and does not affect normal usage. For very high concurrency scenarios, consider using the CGO-enabled driver or PostgreSQL (planned for future release).
 
 ### `bd init` fails with "directory not empty"
 
-`.beads/` already exists. Options:
+`.binds/` already exists. Options:
 
 ```bash
 # Use existing database
 bd list  # Should work if already initialized
 
 # Or remove and reinitialize (DESTROYS DATA!)
-rm -rf .beads/
+rm -rf .binds/
 bd init
 ```
 
@@ -269,8 +269,8 @@ You're trying to import issues that conflict with existing ones. Options:
 bd import -i issues.jsonl --skip-existing
 
 # Or clear database and re-import everything
-rm .beads/*.db
-bd import -i .beads/issues.jsonl
+rm .binds/*.db
+bd import -i .binds/issues.jsonl
 ```
 
 ### Import fails with missing parent errors
@@ -350,7 +350,7 @@ git push origin --delete <sync-branch-name>
 # 3. Remove JSONL from git history (optional, destructive)
 # Only do this if you want to completely erase beads history
 git filter-branch --force --index-filter \
-  'git rm --cached --ignore-unmatch .beads/issues.jsonl' \
+  'git rm --cached --ignore-unmatch .binds/issues.jsonl' \
   --prune-empty -- --all
 git push origin --force --all
 
@@ -372,9 +372,9 @@ bd init
 bd config set sync.branch ""  # Disable sync branch feature
 ```
 
-**Note:** The `--hard` and `--skip-init` flags mentioned in [GH#479](https://github.com/steveyegge/beads/issues/479) were never implemented. Use the workarounds above for a complete reset.
+**Note:** The `--hard` and `--skip-init` flags mentioned in [GH#479](https://github.com/IkuTri/binds/issues/479) were never implemented. Use the workarounds above for a complete reset.
 
-**Related:** [GH#922](https://github.com/steveyegge/beads/issues/922)
+**Related:** [GH#922](https://github.com/IkuTri/binds/issues/922)
 
 ### Database corruption
 
@@ -384,26 +384,26 @@ For **physical database corruption** (disk failures, power loss, filesystem erro
 
 ```bash
 # Check database integrity
-sqlite3 .beads/*.db "PRAGMA integrity_check;"
+sqlite3 .binds/*.db "PRAGMA integrity_check;"
 
 # If corrupted, reimport from JSONL (source of truth in git)
-mv .beads/*.db .beads/*.db.backup
+mv .binds/*.db .binds/*.db.backup
 bd init
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 ```
 
 For **logical consistency issues** (ID collisions from branch merges, parallel workers):
 
 ```bash
 # This is NOT corruption - use collision resolution instead
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 ```
 
 See [FAQ](FAQ.md#whats-the-difference-between-sqlite-corruption-and-id-collisions) for the distinction.
 
 ### Multiple databases detected warning
 
-If you see a warning about multiple `.beads` databases in the directory hierarchy:
+If you see a warning about multiple `.binds` databases in the directory hierarchy:
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════╗
@@ -411,8 +411,8 @@ If you see a warning about multiple `.beads` databases in the directory hierarch
 ╠══════════════════════════════════════════════════════════════════════════╣
 ║ Multiple databases can cause confusion and database pollution.          ║
 ║                                                                          ║
-║ ▶ /path/to/project/.beads (15 issues)                                   ║
-║   /path/to/parent/.beads (32 issues)                                    ║
+║ ▶ /path/to/project/.binds (15 issues)                                   ║
+║   /path/to/parent/.binds (32 issues)                                    ║
 ║                                                                          ║
 ║ Currently using the closest database (▶). This is usually correct.      ║
 ║                                                                          ║
@@ -420,7 +420,7 @@ If you see a warning about multiple `.beads` databases in the directory hierarch
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
-This means bd found multiple `.beads` directories in your directory hierarchy. The `▶` marker shows which database is actively being used (usually the closest one to your current directory).
+This means bd found multiple `.binds` directories in your directory hierarchy. The `▶` marker shows which database is actively being used (usually the closest one to your current directory).
 
 **Why this matters:**
 - Can cause confusion about which database contains your work
@@ -432,26 +432,26 @@ This means bd found multiple `.beads` directories in your directory hierarchy. T
 1. **If you have nested projects** (intentional):
    - This is fine! bd is designed to support this
    - Just be aware which database you're using
-   - Set `BEADS_DIR` environment variable to point to your `.beads` directory if you want to override the default selection
+   - Set `BEADS_DIR` environment variable to point to your `.binds` directory if you want to override the default selection
    - Or use `BEADS_DB` (deprecated) to point directly to the database file
 
 2. **If you have accidental duplicates** (unintentional):
    - Decide which database to keep
    - Export issues from the unwanted database: `cd <unwanted-dir> && bd export -o backup.jsonl`
-   - Remove the unwanted `.beads` directory: `rm -rf <unwanted-dir>/.beads`
+   - Remove the unwanted `.binds` directory: `rm -rf <unwanted-dir>/.binds`
    - Optionally import issues into the main database if needed
 
 3. **Override database selection**:
    ```bash
-   # Temporarily use specific .beads directory (recommended)
-   BEADS_DIR=/path/to/.beads bd list
+   # Temporarily use specific .binds directory (recommended)
+   BEADS_DIR=/path/to/.binds bd list
 
    # Or add to shell config for permanent override
-   export BEADS_DIR=/path/to/.beads
+   export BEADS_DIR=/path/to/.binds
 
    # Legacy method (deprecated, points to database file directly)
-   BEADS_DB=/path/to/.beads/issues.db bd list
-   export BEADS_DB=/path/to/.beads/issues.db
+   BEADS_DB=/path/to/.binds/issues.db bd list
+   export BEADS_DB=/path/to/.binds/issues.db
    ```
 
 **Note**: The warning only appears when bd detects multiple databases. If you see this consistently and want to suppress it, you're using the correct database (marked with `▶`).
@@ -462,7 +462,7 @@ This means bd found multiple `.beads` directories in your directory hierarchy. T
 
 When both sides add issues, you'll get conflicts. Resolution:
 
-1. Open `.beads/issues.jsonl`
+1. Open `.binds/issues.jsonl`
 2. Look for `<<<<<<< HEAD` markers
 3. Most conflicts can be resolved by **keeping both sides**
 4. Each line is independent unless IDs conflict
@@ -471,9 +471,9 @@ When both sides add issues, you'll get conflicts. Resolution:
 Example resolution:
 ```bash
 # After resolving conflicts manually
-git add .beads/issues.jsonl
+git add .binds/issues.jsonl
 git commit
-bd import -i .beads/issues.jsonl  # Sync to SQLite
+bd import -i .binds/issues.jsonl  # Sync to SQLite
 ```
 
 See [ADVANCED.md](ADVANCED.md) for detailed merge strategies.
@@ -482,17 +482,17 @@ See [ADVANCED.md](ADVANCED.md) for detailed merge strategies.
 
 **With hash-based IDs (v0.20.1+), ID collisions don't occur.** Different issues get different hash IDs.
 
-If git shows a conflict in `.beads/issues.jsonl`, it's because the same issue was modified on both branches:
+If git shows a conflict in `.binds/issues.jsonl`, it's because the same issue was modified on both branches:
 
 ```bash
 # Preview what will be updated
-bd import -i .beads/issues.jsonl --dry-run
+bd import -i .binds/issues.jsonl --dry-run
 
 # Resolve git conflict (keep newer version or manually merge)
-git checkout --theirs .beads/issues.jsonl  # Or --ours, or edit manually
+git checkout --theirs .binds/issues.jsonl  # Or --ours, or edit manually
 
 # Import updates the database
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 ```
 
 See [ADVANCED.md#handling-git-merge-conflicts](ADVANCED.md#handling-git-merge-conflicts) for details.
@@ -563,8 +563,8 @@ Check if auto-sync is enabled:
 ps aux | grep "bd daemon"
 
 # Manually export/import
-bd export -o .beads/issues.jsonl
-bd import -i .beads/issues.jsonl
+bd export -o .binds/issues.jsonl
+bd import -i .binds/issues.jsonl
 
 # Install git hooks for guaranteed sync
 bd hooks install
@@ -634,7 +634,7 @@ For large databases (10k+ issues):
 
 ```bash
 # Export only open issues
-bd export --format=jsonl --status=open -o .beads/issues.jsonl
+bd export --format=jsonl --status=open -o .binds/issues.jsonl
 
 # Or filter by priority
 bd export --format=jsonl --priority=0 --priority=1 -o critical.jsonl
@@ -659,11 +659,11 @@ bd admin compact --days 90
 
 ### Large JSONL files
 
-If `.beads/issues.jsonl` is very large:
+If `.binds/issues.jsonl` is very large:
 
 ```bash
 # Check file size
-ls -lh .beads/issues.jsonl
+ls -lh .binds/issues.jsonl
 
 # Remove old closed issues
 bd admin compact --days 90
@@ -821,7 +821,7 @@ bd --allow-stale list --status open
 ```bash
 # Most reliable for sandboxed environments
 bd --sandbox ready
-bd --sandbox import -i .beads/issues.jsonl
+bd --sandbox import -i .binds/issues.jsonl
 ```
 
 ---
@@ -835,7 +835,7 @@ If stuck in a sandboxed environment:
 bd --sandbox ready
 
 # Step 2: If you get staleness errors, force import
-bd import --force -i .beads/issues.jsonl
+bd import --force -i .binds/issues.jsonl
 
 # Step 3: If still blocked, use allow-stale (emergency only)
 bd --allow-stale ready
@@ -857,7 +857,7 @@ bd sync
 **Related:**
 - See [DAEMON.md](DAEMON.md) for daemon troubleshooting
 - See [Claude Code sandboxing documentation](https://www.anthropic.com/engineering/claude-code-sandboxing) for more about sandbox restrictions
-- GitHub issue [#353](https://github.com/steveyegge/beads/issues/353) for background
+- GitHub issue [#353](https://github.com/IkuTri/binds/issues/353) for background
 
 ## Platform-Specific Issues
 
@@ -891,12 +891,12 @@ The daemon listens on loopback TCP. Allow `bd.exe` through Windows Firewall:
 
 **Symptom:** `bd init` hangs indefinitely with high CPU usage, and CTRL+C doesn't work.
 
-**Cause:** Windows Controlled Folder Access is blocking `bd.exe` from creating the `.beads` directory.
+**Cause:** Windows Controlled Folder Access is blocking `bd.exe` from creating the `.binds` directory.
 
 **Diagnosis:** Run with verbose flag to see the actual error:
 ```pwsh
 bd init -v
-# Error: failed to create .beads directory: mkdir .beads: The system cannot find the file specified
+# Error: failed to create .binds directory: mkdir .binds: The system cannot find the file specified
 ```
 
 **Solution:** Add `bd.exe` to the Controlled Folder Access whitelist:
@@ -940,14 +940,14 @@ export PATH="$HOME/.local/bin:$PATH"
 
 If none of these solutions work:
 
-1. **Check existing issues**: [GitHub Issues](https://github.com/steveyegge/beads/issues)
+1. **Check existing issues**: [GitHub Issues](https://github.com/IkuTri/binds/issues)
 2. **Enable debug logging**: `bd --verbose <command>`
 3. **File a bug report**: Include:
    - bd version: `bd version`
    - OS and architecture: `uname -a`
    - Error message and full command
    - Steps to reproduce
-4. **Join discussions**: [GitHub Discussions](https://github.com/steveyegge/beads/discussions)
+4. **Join discussions**: [GitHub Discussions](https://github.com/IkuTri/binds/discussions)
 
 ## Related Documentation
 

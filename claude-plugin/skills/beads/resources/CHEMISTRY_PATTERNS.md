@@ -10,7 +10,7 @@ Beads uses a chemistry metaphor for work templates. This guide covers when and h
 ┌─────────────────────────────────────────────────────────────┐
 │                    PROTO (Solid)                            │
 │              Frozen template, reusable pattern              │
-│                    .beads/ with template label              │
+│                    .binds/ with template label              │
 └─────────────────────────┬───────────────────────────────────┘
                           │
           ┌───────────────┼───────────────┐
@@ -21,7 +21,7 @@ Beads uses a chemistry metaphor for work templates. This guide covers when and h
 │   bd pour       │       │       │  bd wisp create │
 │                 │       │       │                 │
 │  Persistent     │       │       │  Ephemeral      │
-│  .beads/        │       │       │  .beads-wisp/   │
+│  .binds/        │       │       │  .binds-wisp/   │
 │  Git synced     │       │       │  Gitignored     │
 └────────┬────────┘       │       └────────┬────────┘
          │                │                │
@@ -177,9 +177,9 @@ bd mol catalog
 
 | Type | Location | Git Behavior |
 |------|----------|--------------|
-| Proto | `.beads/` | Synced (template label) |
-| Mol | `.beads/` | Synced |
-| Wisp | `.beads-wisp/` | Gitignored |
+| Proto | `.binds/` | Synced (template label) |
+| Mol | `.binds/` | Synced |
+| Wisp | `.binds-wisp/` | Gitignored |
 
 ## Anti-Patterns
 

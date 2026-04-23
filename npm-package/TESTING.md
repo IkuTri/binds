@@ -111,7 +111,7 @@ Failed: 0
 - ✅ stdio streams work (stdin/stdout/stderr)
 
 ### bd Commands
-- ✅ `bd init` creates .beads directory
+- ✅ `bd init` creates .binds directory
 - ✅ `bd create` creates issues with hash IDs
 - ✅ `bd list` returns JSON array
 - ✅ `bd show` returns issue details

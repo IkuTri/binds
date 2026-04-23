@@ -328,7 +328,7 @@ func runJunieRecipe() {
 
 func findBeadsDir() string {
 	// Check for .beads in current directory
-	if info, err := os.Stat(".beads"); err == nil && info.IsDir() {
+	if info, err := os.Stat(".binds"); err == nil && info.IsDir() {
 		return ".binds"
 	}
 	// Check for redirected beads directory

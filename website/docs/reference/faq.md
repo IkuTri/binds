@@ -101,8 +101,8 @@ Async coordination primitives:
 
 ### What's the difference between molecules and wisps?
 
-- **Molecules** persist in `.beads/` and sync with git
-- **Wisps** are ephemeral in `.beads-wisp/` and don't sync
+- **Molecules** persist in `.binds/` and sync with git
+- **Wisps** are ephemeral in `.binds-wisp/` and don't sync
 
 ## Integration
 
@@ -136,7 +136,7 @@ bd import --from github --repo owner/repo
 
 ```bash
 # Remove stale socket
-rm -f .beads/bd.sock
+rm -f .binds/bd.sock
 
 # Restart
 bd daemons killall
@@ -158,6 +158,6 @@ bd hooks status
 
 ### How do I report a bug?
 
-1. Check existing issues: https://github.com/steveyegge/beads/issues
+1. Check existing issues: https://github.com/IkuTri/binds/issues
 2. Include: `bd version`, `bd info --json`, reproduction steps
-3. File at: https://github.com/steveyegge/beads/issues/new
+3. File at: https://github.com/IkuTri/binds/issues/new

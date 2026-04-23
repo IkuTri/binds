@@ -95,13 +95,13 @@ CREATE TABLE kv (
 
 KV data syncs via the standard beads-sync mechanism:
 
-1. **Export**: On push, KV table exports to `.beads/kv.jsonl`
-2. **Import**: On pull, `.beads/kv.jsonl` imports back to KV table
+1. **Export**: On push, KV table exports to `.binds/kv.jsonl`
+2. **Import**: On pull, `.binds/kv.jsonl` imports back to KV table
 3. **Merge**: Last-write-wins based on `set_at` timestamp
 
 ### JSONL Format
 
-`.beads/kv.jsonl` - one JSON object per line:
+`.binds/kv.jsonl` - one JSON object per line:
 
 ```jsonl
 {"key":"primary_language","value":"go","set_at":"2026-01-21T10:30:00Z","set_by":"beads/crew/collins"}

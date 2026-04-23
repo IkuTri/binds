@@ -10,7 +10,7 @@ This directory contains startup hook scripts that help AI agents automatically d
 - ✅ Detects when bd version changes between sessions
 - ✅ Shows `bd info --whats-new` output automatically
 - ✅ Auto-updates outdated git hooks
-- ✅ Persists version tracking in `.beads/metadata.json`
+- ✅ Persists version tracking in `.binds/metadata.json`
 - ✅ Works today - no bd code changes required!
 
 **Usage:**
@@ -41,7 +41,7 @@ Add to your shell initialization file:
 ```bash
 # ~/.bashrc or ~/.zshrc
 # Run bd version check when entering a beads project
-if [ -d ".beads" ]; then
+if [ -d ".binds" ]; then
   source /path/to/beads/examples/startup-hooks/bd-version-check.sh
 fi
 ```
@@ -58,11 +58,11 @@ Any AI coding environment that allows custom startup scripts can source this fil
 
 - **bd (beads)**: Must be installed and in PATH
 - **jq**: Required for JSON manipulation (`brew install jq` on macOS, `apt-get install jq` on Ubuntu)
-- **.beads directory**: Must exist in current project
+- **.binds directory**: Must exist in current project
 
 ### How It Works
 
-1. **Version Detection**: Reads current bd version and compares to `.beads/metadata.json`
+1. **Version Detection**: Reads current bd version and compares to `.binds/metadata.json`
 2. **Change Notification**: If version changed, displays upgrade banner with what's new
 3. **Hook Updates**: Checks for outdated git hooks and auto-updates them
 4. **Persistence**: Updates `metadata.json` with current version for next session
@@ -103,7 +103,7 @@ Any AI coding environment that allows custom startup scripts can source this fil
 ### Troubleshooting
 
 **Q: Script doesn't detect version change**
-A: Check that `.beads/metadata.json` exists and contains `last_bd_version` field
+A: Check that `.binds/metadata.json` exists and contains `last_bd_version` field
 
 **Q: "jq not found" warning**
 A: Install jq: `brew install jq` (macOS) or `apt-get install jq` (Ubuntu)

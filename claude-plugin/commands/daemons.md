@@ -232,7 +232,7 @@ bd daemons list --search /path/to/workspace
 Or check the socket manually:
 
 ```bash
-ls -la /path/to/workspace/.beads/bd.sock
+ls -la /path/to/workspace/.binds/bd.sock
 ```
 
 ## See Also

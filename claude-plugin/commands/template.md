@@ -16,7 +16,7 @@ bd template create <template-name>
 
 Templates can be:
 - **Built-in**: Provided by bd (epic, bug, feature)
-- **Custom**: Stored in `.beads/templates/` directory
+- **Custom**: Stored in `.binds/templates/` directory
 
 Each template defines default values for:
 - Description structure with placeholders
@@ -82,7 +82,7 @@ Description:
 
 ### create
 
-Create a custom template in `.beads/templates/` directory.
+Create a custom template in `.binds/templates/` directory.
 
 ```bash
 bd template create <template-name>
@@ -94,10 +94,10 @@ This creates a YAML file with default structure that you can edit to customize.
 
 ```bash
 $ bd template create performance
-✓ Created template: .beads/templates/performance.yaml
+✓ Created template: .binds/templates/performance.yaml
 Edit the file to customize your template.
 
-$ cat .beads/templates/performance.yaml
+$ cat .binds/templates/performance.yaml
 name: performance
 description: |-
     [Describe the issue]
@@ -114,7 +114,7 @@ acceptance_criteria: |-
     - [ ] Acceptance criterion 2
 
 # Edit the template to customize it
-$ vim .beads/templates/performance.yaml
+$ vim .binds/templates/performance.yaml
 ```
 
 ## Using Templates with `bd create`
@@ -244,7 +244,7 @@ For feature requests and enhancements.
 Custom templates override built-in templates with the same name. This allows you to customize built-in templates for your project.
 
 **Priority:**
-1. Custom templates in `.beads/templates/`
+1. Custom templates in `.binds/templates/`
 2. Built-in templates
 
 **Example - Override bug template:**
@@ -254,7 +254,7 @@ Custom templates override built-in templates with the same name. This allows you
 $ bd template create bug
 
 # Edit to add project-specific fields
-$ cat > .beads/templates/bug.yaml << 'EOF'
+$ cat > .binds/templates/bug.yaml << 'EOF'
 name: bug
 description: |
   ## Bug Report
@@ -325,7 +325,7 @@ $ bd template show bug --json
 
 1. **Use templates for consistency**: Establish team conventions for common issue types
 2. **Customize built-ins**: Override built-in templates to match your workflow
-3. **Version control templates**: Commit `.beads/templates/` to share across team
+3. **Version control templates**: Commit `.binds/templates/` to share across team
 4. **Keep templates focused**: Create specific templates (e.g., `performance`, `security-audit`) rather than generic ones
 5. **Use placeholders**: Mark sections requiring input with `[brackets]` or `TODO`
 6. **Include checklists**: Use `- [ ]` for actionable items in description and acceptance criteria

@@ -22,7 +22,7 @@ This runbook helps you recover from SQLite database corruption in Beads.
 bd status
 
 # Look for corruption indicators
-ls -la .beads/beads.db*
+ls -la .binds/beads.db*
 ```
 
 If you see `-wal` or `-shm` files alongside `beads.db`, a transaction may have been interrupted.
@@ -30,7 +30,7 @@ If you see `-wal` or `-shm` files alongside `beads.db`, a transaction may have b
 ## Solution
 
 :::warning
-Back up your `.beads/` directory before proceeding.
+Back up your `.binds/` directory before proceeding.
 :::
 
 **Step 1:** Stop the daemon
@@ -40,7 +40,7 @@ bd daemon stop
 
 **Step 2:** Back up current state
 ```bash
-cp -r .beads .beads.backup
+cp -r .binds .binds.backup
 ```
 
 **Step 3:** Rebuild from JSONL (source of truth)

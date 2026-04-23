@@ -134,7 +134,7 @@ What happens if you run `bd sync` twice simultaneously? Without protection, both
 4. Overwrite each other's exports
 5. Push conflicting commits
 
-Beads uses an **exclusive file lock** (`.beads/.sync.lock`) to serialize sync operations:
+Beads uses an **exclusive file lock** (`.binds/.sync.lock`) to serialize sync operations:
 
 ```go
 lock := flock.New(lockPath)
@@ -173,10 +173,10 @@ For maximum reliability, ensure machine clocks are synchronized via NTP.
 
 | File | Purpose |
 |------|---------|
-| `.beads/issues.jsonl` | Current state (git-tracked) |
-| `.beads/sync_base.jsonl` | Last-synced state (not tracked, per-machine) |
-| `.beads/.sync.lock` | Concurrency guard (not tracked) |
-| `.beads/beads.db` | SQLite database (not tracked) |
+| `.binds/issues.jsonl` | Current state (git-tracked) |
+| `.binds/sync_base.jsonl` | Last-synced state (not tracked, per-machine) |
+| `.binds/.sync.lock` | Concurrency guard (not tracked) |
+| `.binds/beads.db` | SQLite database (not tracked) |
 
 The JSONL files are the source of truth for git. The database is derived from JSONL on each machine.
 
@@ -201,7 +201,7 @@ sync:
 │   └─ Yes → Export-only (skip pull/merge)
 ├─ No remote configured?
 │   └─ Yes → Local-only (export only)
-├─ BEADS_DIR or external .beads?
+├─ BEADS_DIR or external .binds?
 │   └─ Yes → External repo mode
 ├─ sync.branch configured?
 │   └─ Yes → Sync-branch mode
@@ -252,7 +252,7 @@ Each E2E test requires proper isolation to prevent interference:
 | Variable | Purpose |
 |----------|---------|
 | `BEADS_NO_DAEMON=1` | Prevent daemon auto-start (set in TestMain) |
-| `BEADS_DIR=<clone>/.beads` | Isolate database per clone |
+| `BEADS_DIR=<clone>/.binds` | Isolate database per clone |
 
 ### E2E Test Architecture: Bare Repo Pattern
 

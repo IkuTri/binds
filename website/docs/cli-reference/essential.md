@@ -168,7 +168,7 @@ bd sync [flags]
 
 Performs:
 1. Export database to JSONL
-2. Git add `.beads/issues.jsonl`
+2. Git add `.binds/issues.jsonl`
 3. Git commit
 4. Git push
 

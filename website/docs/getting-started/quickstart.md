@@ -33,20 +33,20 @@ bd init --branch beads-sync
 ```
 
 The wizard will:
-- Create `.beads/` directory and database
+- Create `.binds/` directory and database
 - Import existing issues from git (if any)
 - Prompt to install git hooks (recommended)
 - Prompt to configure git merge driver (recommended)
 - Auto-start daemon for sync (SQLite backend only)
 
 Notes:
-- SQLite backend stores data in `.beads/beads.db`.
-- Dolt backend stores data in `.beads/dolt/` and records `"database": "dolt"` in `.beads/metadata.json`.
+- SQLite backend stores data in `.binds/beads.db`.
+- Dolt backend stores data in `.binds/dolt/` and records `"database": "dolt"` in `.binds/metadata.json`.
 - Dolt backend runs **single-process-only**; daemon mode is disabled.
 
 Notes:
-- SQLite backend stores data in `.beads/beads.db`.
-- Dolt backend stores data in `.beads/dolt/` and records `"database": "dolt"` in `.beads/metadata.json`.
+- SQLite backend stores data in `.binds/beads.db`.
+- Dolt backend stores data in `.binds/dolt/` and records `"database": "dolt"` in `.binds/metadata.json`.
 
 ## Your First Issues
 
@@ -154,9 +154,9 @@ bd stats
 
 ## Database Location
 
-By default, the database is in `.beads/beads.db` (gitignored).
+By default, the database is in `.binds/beads.db` (gitignored).
 
-The JSONL file `.beads/issues.jsonl` is git-tracked and syncs automatically.
+The JSONL file `.binds/issues.jsonl` is git-tracked and syncs automatically.
 
 ## Next Steps
 

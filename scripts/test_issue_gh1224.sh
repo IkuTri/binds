@@ -27,7 +27,7 @@ mkdir -p "$native_test_dir"
 cd "$native_test_dir"
 git init > /dev/null 2>&1 || true
 bd init -q > /dev/null 2>&1 || echo "Note: bd init may fail in test env, but database setup is what matters"
-if [ -f ".beads/beads.db" ]; then
+if [ -f ".binds/beads.db" ]; then
     echo "✓ Database created successfully in native filesystem"
 else
     echo "✗ Failed to create database in native filesystem"

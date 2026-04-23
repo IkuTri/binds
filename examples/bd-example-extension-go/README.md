@@ -66,7 +66,7 @@ GROUP BY i.id, e.id
 
 ```bash
 # Install from the repository
-go install github.com/steveyegge/beads/examples/bd-example-extension-go@latest
+go install github.com/IkuTri/binds/examples/bd-example-extension-go@latest
 
 # Or install from local source
 cd examples/bd-example-extension-go
@@ -82,7 +82,7 @@ The binary will be installed as `bd-example-extension-go` in your `$GOPATH/bin` 
 bd-example-extension-go
 
 # Or specify database path
-bd-example-extension-go -db .beads/demo.db
+bd-example-extension-go -db .binds/demo.db
 ```
 
 **Output:**
@@ -213,7 +213,7 @@ rows, err := db.Query("SELECT * FROM example_executions WHERE status = ?", "runn
 4. **Check the results:**
    ```bash
    bd list
-   sqlite3 .beads/demo.db "SELECT * FROM example_executions"
+   sqlite3 .binds/demo.db "SELECT * FROM example_executions"
    ```
 
 ## Real-World Usage

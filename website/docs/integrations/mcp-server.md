@@ -174,7 +174,7 @@ pip install beads-mcp
 
 ```bash
 # Check directory permissions
-ls -la .beads/
+ls -la .binds/
 
 # Initialize if needed
 bd init --quiet

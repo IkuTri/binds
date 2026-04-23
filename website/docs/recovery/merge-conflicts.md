@@ -10,7 +10,7 @@ This runbook helps you resolve JSONL merge conflicts that occur during Git opera
 
 ## Symptoms
 
-- Git merge conflicts in `.beads/*.jsonl` files
+- Git merge conflicts in `.binds/*.jsonl` files
 - `bd sync` fails with conflict errors
 - Different issue states between clones
 
@@ -21,7 +21,7 @@ This runbook helps you resolve JSONL merge conflicts that occur during Git opera
 git status
 
 # Look for conflict markers
-grep -l "<<<<<<" .beads/*.jsonl
+grep -l "<<<<<<" .binds/*.jsonl
 ```
 
 ## Solution
@@ -38,8 +38,8 @@ git diff --name-only --diff-filter=U
 **Step 2:** For each conflicted JSONL file, keep both versions
 ```bash
 # Accept both changes (append-only is safe)
-git checkout --ours .beads/issues.jsonl
-git add .beads/issues.jsonl
+git checkout --ours .binds/issues.jsonl
+git add .binds/issues.jsonl
 ```
 
 **Step 3:** Force rebuild to reconcile

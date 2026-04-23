@@ -72,7 +72,7 @@ Tombstones expire after a configurable TTL (default: 30 days). This prevents unb
 ### Configuration
 
 ```yaml
-# .beads/config.yaml
+# .binds/config.yaml
 tombstone:
   ttl_days: 30        # Default: 30 days
 ```
@@ -147,7 +147,7 @@ Ensure tombstones are being exported:
 
 ```bash
 # Check if tombstone is in JSONL
-grep '"id":"bd-xxx"' .beads/issues.jsonl
+grep '"id":"bd-xxx"' .binds/issues.jsonl
 
 # Force export
 bd export --force

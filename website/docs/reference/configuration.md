@@ -10,8 +10,8 @@ Complete configuration reference for beads.
 
 ## Configuration Locations
 
-1. **Project config**: `.beads/config.toml` (highest priority)
-2. **User config**: `~/.beads/config.toml`
+1. **Project config**: `.binds/config.toml` (highest priority)
+2. **User config**: `~/.binds/config.toml`
 3. **Environment variables**: `BEADS_*`
 4. **Command-line flags**: (highest priority)
 
@@ -37,7 +37,7 @@ bd config reset import.orphan_handling
 
 ```toml
 [database]
-path = ".beads/beads.db"     # Database file location
+path = ".binds/beads.db"     # Database file location
 ```
 
 ### ID Generation
@@ -67,7 +67,7 @@ dedupe_on_import = false      # Run duplicate detection after import
 
 ```toml
 [export]
-path = ".beads/issues.jsonl"  # Export file location
+path = ".binds/issues.jsonl"  # Export file location
 auto_export = true            # Auto-export on changes
 debounce_seconds = 5          # Debounce interval
 ```
@@ -130,7 +130,7 @@ bd --no-daemon create "Task"
 
 ## Example Configuration
 
-`.beads/config.toml`:
+`.binds/config.toml`:
 
 ```toml
 [id]

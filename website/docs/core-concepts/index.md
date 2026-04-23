@@ -45,7 +45,7 @@ Four types of relationships:
 Background process per workspace:
 - Auto-starts on first command
 - Handles auto-sync with 5s debounce
-- Socket at `.beads/bd.sock`
+- Socket at `.binds/bd.sock`
 - Manage with `bd daemons` commands
 
 ### JSONL Sync
@@ -53,9 +53,9 @@ Background process per workspace:
 The synchronization mechanism:
 
 ```
-SQLite DB (.beads/beads.db)
+SQLite DB (.binds/beads.db)
     ↕ auto-sync
-JSONL (.beads/issues.jsonl)
+JSONL (.binds/issues.jsonl)
     ↕ git
 Remote repository
 ```

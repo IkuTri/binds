@@ -40,7 +40,7 @@ GitHub Issues + gh CLI can approximate some features, but fundamentally cannot r
 
 **When to use each:** GitHub Issues excels for human teams in web UI with cross-repo dashboards and integrations. bd excels for AI agents needing offline, git-synchronized task memory with graph semantics and deterministic queries.
 
-See [GitHub issue #125](https://github.com/steveyegge/beads/issues/125) for detailed comparison.
+See [GitHub issue #125](https://github.com/IkuTri/binds/issues/125) for detailed comparison.
 
 ### How is this different from Taskwarrior?
 
@@ -170,12 +170,12 @@ bd init --quiet  # Non-interactive - auto-installs hooks, no prompts
 # Clone existing project with bd:
 git clone <repo>
 cd <repo>
-bd init  # Auto-imports from .beads/issues.jsonl
+bd init  # Auto-imports from .binds/issues.jsonl
 
 # Or initialize new project:
 cd ~/my-project
-bd init  # Creates .beads/, sets up daemon
-git add .beads/
+bd init  # Creates .binds/, sets up daemon
+git add .binds/
 git commit -m "Initialize beads"
 ```
 
@@ -195,7 +195,7 @@ bd automatically:
 - **Exports** to JSONL after CRUD operations (5-second debounce)
 - **Imports** from JSONL when it's newer than DB (e.g., after `git pull`)
 
-**How auto-import works:** The first bd command after `git pull` detects that `.beads/issues.jsonl` is newer than the database and automatically imports it. There's no background daemon watching for changes - the check happens when you run a bd command.
+**How auto-import works:** The first bd command after `git pull` detects that `.binds/issues.jsonl` is newer than the database and automatically imports it. There's no background daemon watching for changes - the check happens when you run a bd command.
 
 **Optional**: For immediate export (no 5-second wait) and guaranteed import after git operations, install the git hooks:
 ```bash
@@ -230,23 +230,23 @@ cd ~/project1 && bd init --prefix proj1
 cd ~/project2 && bd init --prefix proj2
 ```
 
-Each project gets its own `.beads/` directory with its own database and JSONL file. bd auto-discovers the correct database based on your current directory (walks up like git).
+Each project gets its own `.binds/` directory with its own database and JSONL file. bd auto-discovers the correct database based on your current directory (walks up like git).
 
 **Multi-project scenarios work seamlessly:**
 - Multiple agents working on different projects simultaneously → No conflicts
-- Same machine, different repos → Each finds its own `.beads/*.db` automatically
+- Same machine, different repos → Each finds its own `.binds/*.db` automatically
 - Agents in subdirectories → bd walks up to find the project root (like git)
-- **Per-project daemons** → Each project gets its own daemon at `.beads/bd.sock` (LSP model)
+- **Per-project daemons** → Each project gets its own daemon at `.binds/bd.sock` (LSP model)
 
 **Limitation:** Issues cannot reference issues in other projects. Each database is isolated by design. If you need cross-project tracking, initialize bd in a parent directory that contains both projects.
 
 **Example:** Multiple agents, multiple projects, same machine:
 ```bash
 # Agent 1 working on web app
-cd ~/work/webapp && bd ready --json    # Uses ~/work/webapp/.beads/webapp.db
+cd ~/work/webapp && bd ready --json    # Uses ~/work/webapp/.binds/webapp.db
 
 # Agent 2 working on API
-cd ~/work/api && bd ready --json       # Uses ~/work/api/.beads/api.db
+cd ~/work/api && bd ready --json       # Uses ~/work/api/.binds/api.db
 
 # No conflicts! Completely isolated databases and daemons.
 ```
@@ -476,9 +476,9 @@ SQLite database file corruption can occur from:
 
 **Solution**: Reimport from JSONL (which survives in git history):
 ```bash
-mv .beads/*.db .beads/*.db.backup
+mv .binds/*.db .binds/*.db.backup
 bd init
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 ```
 
 **Key Difference**: Collision resolution fixes logical issues in the data. Physical corruption requires restoring from the JSONL source of truth.
@@ -492,8 +492,8 @@ bd import -i .beads/issues.jsonl
 - **Documentation**: [README.md](../README.md), [QUICKSTART.md](QUICKSTART.md), [ADVANCED.md](ADVANCED.md)
 - **Troubleshooting**: [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 - **Examples**: [examples/](../examples/)
-- **GitHub Issues**: [Report bugs or request features](https://github.com/steveyegge/beads/issues)
-- **GitHub Discussions**: [Ask questions](https://github.com/steveyegge/beads/discussions)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/IkuTri/binds/issues)
+- **GitHub Discussions**: [Ask questions](https://github.com/IkuTri/binds/discussions)
 
 ### How can I contribute?
 

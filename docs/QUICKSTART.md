@@ -32,7 +32,7 @@ bd init --branch beads-sync
 ```
 
 The wizard will:
-- Create `.beads/` directory and database
+- Create `.binds/` directory and database
 - **Prompt for your role** (maintainer or contributor) unless a flag is provided
 - Import existing issues from git (if any)
 - Prompt to install git hooks (recommended)
@@ -40,8 +40,8 @@ The wizard will:
 - Auto-start daemon for sync (SQLite backend only)
 
 Notes:
-- SQLite backend stores data in `.beads/beads.db`.
-- Dolt backend stores data in `.beads/dolt/` and records `"database": "dolt"` in `.beads/metadata.json`.
+- SQLite backend stores data in `.binds/beads.db`.
+- Dolt backend stores data in `.binds/dolt/` and records `"database": "dolt"` in `.binds/metadata.json`.
 - Dolt backend runs **single-process-only**; daemon mode is disabled.
 - Dolt backend **auto-commits** after each successful write command by default (`dolt.auto-commit: on`). Disable with `bd --dolt-auto-commit off ...` or config.
 
@@ -56,7 +56,7 @@ This sets `git config beads.role` which determines how beads routes issues:
 
 | Role | Use Case | Issue Storage |
 |------|----------|---------------|
-| `maintainer` | Repo owner, team with push access | In-repo `.beads/` |
+| `maintainer` | Repo owner, team with push access | In-repo `.binds/` |
 | `contributor` | Fork contributor, OSS contributor | Separate planning repo |
 
 You can also configure manually:
@@ -189,7 +189,7 @@ Now bd-2 is ready! 🎉
 
 ## Database Location
 
-By default: `~/.beads/default.db`
+By default: `~/.binds/default.db`
 
 You can use project-specific databases:
 

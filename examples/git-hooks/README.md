@@ -59,7 +59,7 @@ For teams that need to share hooks across members (especially when using pre-bui
 bd hooks install --shared
 ```
 
-This installs hooks to `.beads-hooks/` (a versioned directory) instead of `.git/hooks/`, and configures git to use them via `git config core.hooksPath .beads-hooks`.
+This installs hooks to `.binds-hooks/` (a versioned directory) instead of `.git/hooks/`, and configures git to use them via `git config core.hooksPath .binds-hooks`.
 
 **Benefits:**
 - ✅ Hooks are versioned and can be committed to your repository
@@ -74,10 +74,10 @@ This installs hooks to `.beads-hooks/` (a versioned directory) instead of `.git/
 - Projects where consistent tooling across team members is critical
 - Devcontainer workflows where bd is installed during container build
 
-After running `bd hooks install --shared`, commit `.beads-hooks/` to your repository:
+After running `bd hooks install --shared`, commit `.binds-hooks/` to your repository:
 
 ```bash
-git add .beads-hooks/
+git add .binds-hooks/
 git commit -m "Add bd git hooks for team"
 ```
 
@@ -101,7 +101,7 @@ bd sync --flush-only
 ```
 
 This:
-1. Exports any pending database changes to `.beads/issues.jsonl`
+1. Exports any pending database changes to `.binds/issues.jsonl`
 2. Stages the JSONL file if modified
 3. Allows the commit to proceed with clean state
 
@@ -113,7 +113,7 @@ Before each push, the hook:
 
 ```bash
 bd sync --flush-only  # Flush pending changes (if bd available)
-git status --porcelain .beads/*.jsonl  # Check for uncommitted changes
+git status --porcelain .binds/*.jsonl  # Check for uncommitted changes
 ```
 
 This prevents pushing stale JSONL by:
@@ -129,11 +129,11 @@ This solves bd-my64: changes made between commit and push (or pending debounced 
 After a git pull or merge, the hook runs:
 
 ```bash
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 ```
 
 This ensures your local database reflects the merged state. The hook:
-- Only runs if `.beads/issues.jsonl` exists (also checks `issues.jsonl` for backward compat)
+- Only runs if `.binds/issues.jsonl` exists (also checks `issues.jsonl` for backward compat)
 - Imports any new issues or updates from the merge
 - Warns on failure but doesn't block the merge
 
@@ -165,6 +165,6 @@ Your backed-up hooks (if any) are in `.git/hooks/*.backup-*`.
 
 ## Related
 
-- See [bd-51](../../.beads/bd-51) for the race condition bug report
+- See [bd-51](../../.binds/bd-51) for the race condition bug report
 - See [AGENTS.md](../../AGENTS.md) for the full git workflow
 - See [examples/](../) for other integrations

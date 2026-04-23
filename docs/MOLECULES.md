@@ -121,9 +121,9 @@ For reusable workflows, beads uses a chemistry metaphor:
 
 | Phase | Name | Storage | Synced | Purpose |
 |-------|------|---------|--------|---------|
-| **Solid** | Proto | `.beads/` | Yes | Frozen template |
-| **Liquid** | Mol | `.beads/` | Yes | Active persistent work |
-| **Vapor** | Wisp | `.beads/` (Wisp=true) | No | Ephemeral operations |
+| **Solid** | Proto | `.binds/` | Yes | Frozen template |
+| **Liquid** | Mol | `.binds/` | Yes | Active persistent work |
+| **Vapor** | Wisp | `.binds/` (Wisp=true) | No | Ephemeral operations |
 
 ### Phase Commands
 

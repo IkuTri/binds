@@ -61,11 +61,11 @@ log "Compaction statistics:"
 bd admin compact --stats 2>&1 | tee -a "$LOG_FILE"
 
 # Commit and push if changes exist
-if git diff --quiet .beads/issues.jsonl issues.db 2>/dev/null; then
+if git diff --quiet .binds/issues.jsonl issues.db 2>/dev/null; then
   log "No changes to commit"
 else
   log "Committing compaction results..."
-  git add .beads/issues.jsonl issues.db
+  git add .binds/issues.jsonl issues.db
   git commit -m "Automated compaction: $(date +%Y-%m-%d) - T1:$TIER1_COUNT T2:$TIER2_COUNT"
   git push origin main 2>&1 | tee -a "$LOG_FILE"
   log "Changes pushed to remote"

@@ -75,7 +75,7 @@ bd restore bd-42 --to-file issue.json
 bd info --schema --json
 
 # Raw database query (advanced)
-sqlite3 .beads/beads.db "SELECT * FROM issues LIMIT 5"
+sqlite3 .binds/beads.db "SELECT * FROM issues LIMIT 5"
 ```
 
 ## Custom Tables
@@ -89,7 +89,7 @@ storage.UnderlyingDB().Exec(`
 `)
 ```
 
-See [EXTENDING.md](https://github.com/steveyegge/beads/blob/main/docs/EXTENDING.md).
+See [EXTENDING.md](https://github.com/IkuTri/binds/blob/main/docs/EXTENDING.md).
 
 ## Event System
 
@@ -139,9 +139,9 @@ bd list --label "sprint-1" --status open --json | \
 Use beads as a Go library:
 
 ```go
-import "github.com/steveyegge/beads/internal/storage"
+import "github.com/IkuTri/binds/internal/storage"
 
-db, _ := storage.NewSQLite(".beads/beads.db")
+db, _ := storage.NewSQLite(".binds/beads.db")
 issues, _ := db.ListIssues(storage.ListOptions{
     Status: "open",
 })

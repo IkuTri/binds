@@ -55,10 +55,10 @@ bd version
 brew upgrade bd
 
 # Via go install
-go install github.com/steveyegge/beads/cmd/bd@latest
+go install github.com/IkuTri/binds/cmd/bd@latest
 
 # Via package manager
-# See https://github.com/steveyegge/beads#installing
+# See https://github.com/IkuTri/binds#installing
 ```
 
 **3. Restart daemon after upgrade:**
@@ -93,7 +93,7 @@ If dependencies still don't persist after updating:
 
 3. **Check JSONL file:**
    ```bash
-   cat .beads/issues.jsonl | jq '.dependencies'
+   cat .binds/issues.jsonl | jq '.dependencies'
    # Should show dependency array
    ```
 
@@ -118,8 +118,8 @@ bd show issue-1
 This is **expected behavior**, not a bug. Understanding requires knowing bd's architecture:
 
 **BD Architecture:**
-- **JSONL files** (`.beads/issues.jsonl`): Human-readable export format
-- **SQLite database** (`.beads/*.db`): Source of truth for queries
+- **JSONL files** (`.binds/issues.jsonl`): Human-readable export format
+- **SQLite database** (`.binds/*.db`): Source of truth for queries
 - **Daemon**: Syncs JSONL ↔ SQLite every 5 minutes
 
 **What `--no-daemon` actually does:**
@@ -180,7 +180,7 @@ bd daemon start
 ### Root Cause
 bd daemon requires a **git repository** because it uses git for:
 - Syncing issues to git remote (optional)
-- Version control of `.beads/*.jsonl` files
+- Version control of `.binds/*.jsonl` files
 - Commit history of issue changes
 
 ### Resolution
@@ -232,11 +232,11 @@ This is a **known SQLite limitation**, not a bd bug.
 
 ```bash
 # Wrong location (cloud sync)
-~/Google Drive/My Work/project/.beads/  # ✗ Will fail
+~/Google Drive/My Work/project/.binds/  # ✗ Will fail
 
 # Correct location (local disk)
-~/Repos/project/.beads/                 # ✓ Works reliably
-~/Projects/project/.beads/              # ✓ Works reliably
+~/Repos/project/.binds/                 # ✓ Works reliably
+~/Projects/project/.binds/              # ✓ Works reliably
 ```
 
 **Migration steps:**
@@ -257,7 +257,7 @@ This is a **known SQLite limitation**, not a bd bug.
    bd import < issues-backup.jsonl
    ```
 
-**Alternative: Use global `~/.beads/` database**
+**Alternative: Use global `~/.binds/` database**
 
 If you must keep work on cloud storage:
 ```bash
@@ -265,7 +265,7 @@ If you must keep work on cloud storage:
 # Use global database instead
 cd ~/Google\ Drive/project
 bd create "My task"
-# Uses ~/.beads/default.db (on local disk)
+# Uses ~/.binds/default.db (on local disk)
 ```
 
 **Workaround limitations:**
@@ -283,7 +283,7 @@ bd create "My task"
 ```bash
 bd init myproject
 bd --no-daemon create "Test" -t task
-ls .beads/
+ls .binds/
 # Only shows: .gitignore, myproject.db
 # Missing: issues.jsonl
 ```
@@ -300,12 +300,12 @@ bd daemon start --local &
 sleep 2
 
 # Now JSONL file exists
-ls .beads/issues.jsonl
+ls .binds/issues.jsonl
 # ✓ File created
 
 # Subsequent --no-daemon operations work
 bd --no-daemon create "Task 1" -t task
-cat .beads/issues.jsonl
+cat .binds/issues.jsonl
 # ✓ Shows task data
 ```
 
@@ -431,22 +431,22 @@ bd version
 ps aux | grep "bd daemon"
 
 # 3. Database location
-echo $PWD/.beads/*.db
-ls -la .beads/
+echo $PWD/.binds/*.db
+ls -la .binds/
 
 # 4. Git status
 git status
 git log --oneline -1
 
 # 5. JSONL contents (for dependency issues)
-cat .beads/issues.jsonl | jq '.' | head -50
+cat .binds/issues.jsonl | jq '.' | head -50
 ```
 
 ### Report to beads GitHub
 
 If problems persist:
 
-1. **Check existing issues:** https://github.com/steveyegge/beads/issues
+1. **Check existing issues:** https://github.com/IkuTri/binds/issues
 2. **Create new issue** with:
    - bd version (`bd version`)
    - Operating system
@@ -486,4 +486,4 @@ If the **bd-issue-tracking skill** provides incorrect guidance:
 - [CLI Reference](CLI_REFERENCE.md) - Complete command documentation
 - [Dependencies Guide](DEPENDENCIES.md) - Understanding dependency types
 - [Workflows](WORKFLOWS.md) - Step-by-step workflow guides
-- [beads GitHub](https://github.com/steveyegge/beads) - Official documentation
+- [beads GitHub](https://github.com/IkuTri/binds) - Official documentation

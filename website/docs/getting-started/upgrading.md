@@ -30,7 +30,7 @@ brew upgrade bd
 ### go install
 
 ```bash
-go install github.com/steveyegge/beads/cmd/bd@latest
+go install github.com/IkuTri/binds/cmd/bd@latest
 ```
 
 ### From Source
@@ -122,5 +122,5 @@ Check the import configuration:
 
 ```bash
 bd config get import.orphan_handling
-bd import -i .beads/issues.jsonl --orphan-handling allow
+bd import -i .binds/issues.jsonl --orphan-handling allow
 ```

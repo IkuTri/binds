@@ -65,7 +65,7 @@ bd migrate --to-sqlite
 Single-process access to the Dolt database. Good for development and single-agent use.
 
 ```yaml
-# .beads/config.yaml (or auto-detected)
+# .binds/config.yaml (or auto-detected)
 database: dolt
 ```
 
@@ -87,7 +87,7 @@ cd ~/.dolt-data/beads && dolt sql-server --port 3307
 ```
 
 ```yaml
-# .beads/config.yaml
+# .binds/config.yaml
 database: dolt
 dolt:
   mode: server
@@ -261,14 +261,14 @@ gt dolt status       # Check if running
 
 **Check:**
 ```bash
-ls .beads/issues.jsonl     # Should exist
-ls .beads/dolt/            # Should NOT exist (pre-bootstrap)
+ls .binds/issues.jsonl     # Should exist
+ls .binds/dolt/            # Should NOT exist (pre-bootstrap)
 BD_DEBUG=1 bd list         # See bootstrap output
 ```
 
 **Force bootstrap:**
 ```bash
-rm -rf .beads/dolt         # Remove broken state
+rm -rf .binds/dolt         # Remove broken state
 bd list                    # Re-triggers bootstrap
 ```
 
@@ -292,14 +292,14 @@ bd doctor --server         # Server mode checks (if applicable)
 
 2. **Nuclear option (rebuild from JSONL):**
    ```bash
-   rm -rf .beads/dolt
+   rm -rf .binds/dolt
    bd sync                  # Rebuilds from JSONL
    ```
 
 3. **Restore from backup:**
    ```bash
    # If you have a pre-migration backup
-   ls .beads/*.backup-*.db
+   ls .binds/*.backup-*.db
    ```
 
 ### Hooks Not Firing
@@ -325,14 +325,14 @@ bd hooks install --beads --force
 **Recovery:**
 ```bash
 # Check what exists
-ls .beads/*.db .beads/dolt/
+ls .binds/*.db .binds/dolt/
 
 # If Dolt looks incomplete, restart migration
-rm -rf .beads/dolt
+rm -rf .binds/dolt
 bd migrate --to-dolt
 
 # If you want to abandon migration
-rm -rf .beads/dolt
+rm -rf .binds/dolt
 # SQLite remains as primary
 ```
 
@@ -351,7 +351,7 @@ bd config set dolt.mode server
 ## Configuration Reference
 
 ```yaml
-# .beads/config.yaml
+# .binds/config.yaml
 
 # Database backend
 database: dolt           # sqlite | dolt
@@ -445,8 +445,8 @@ Server runs on port 3307 (avoids MySQL conflict on 3306).
 After successful migration, you may have backup files:
 
 ```
-.beads/beads.backup-pre-dolt-20260122-213600.db
-.beads/sqlite.backup-pre-dolt-20260123-192812.db
+.binds/beads.backup-pre-dolt-20260122-213600.db
+.binds/sqlite.backup-pre-dolt-20260123-192812.db
 ```
 
 These are safe to delete once you've verified Dolt is working:
@@ -457,7 +457,7 @@ bd list
 bd doctor
 
 # Then clean up (after appropriate waiting period)
-rm .beads/*.backup-*.db
+rm .binds/*.backup-*.db
 ```
 
 **Recommendation:** Keep backups for at least a week before deleting.

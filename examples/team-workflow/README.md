@@ -244,20 +244,20 @@ Hash-based IDs prevent most conflicts. If conflicts occur:
 ```bash
 # During git pull/merge
 git pull origin beads-metadata
-# CONFLICT in .beads/issues.jsonl
+# CONFLICT in .binds/issues.jsonl
 
 # Option 1: Accept remote
-git checkout --theirs .beads/issues.jsonl
-bd import -i .beads/issues.jsonl
+git checkout --theirs .binds/issues.jsonl
+bd import -i .binds/issues.jsonl
 
 # Option 2: Accept local
-git checkout --ours .beads/issues.jsonl
-bd import -i .beads/issues.jsonl
+git checkout --ours .binds/issues.jsonl
+bd import -i .binds/issues.jsonl
 
 # Option 3: Use beads-merge tool (recommended)
 # See docs/GIT_INTEGRATION.md for merge conflict resolution
 
-git add .beads/issues.jsonl
+git add .binds/issues.jsonl
 git commit
 ```
 
@@ -299,7 +299,7 @@ git commit
 
 ### Q: How do team members see each other's issues?
 
-A: Issues are stored in `.beads/issues.jsonl` which is version-controlled. Pull from git to sync.
+A: Issues are stored in `.binds/issues.jsonl` which is version-controlled. Pull from git to sync.
 
 ```bash
 git pull
@@ -372,9 +372,9 @@ bd daemon start --auto-commit --auto-push
 Use beads-merge or resolve manually (see [GIT_INTEGRATION.md](../../docs/GIT_INTEGRATION.md)):
 
 ```bash
-git checkout --theirs .beads/issues.jsonl
-bd import -i .beads/issues.jsonl
-git add .beads/issues.jsonl
+git checkout --theirs .binds/issues.jsonl
+bd import -i .binds/issues.jsonl
+git add .binds/issues.jsonl
 git commit
 ```
 

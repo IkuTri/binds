@@ -633,7 +633,7 @@ func stringSliceEqual(a, b []string) bool {
 
 const syncBaseFileName = "sync_base.jsonl"
 
-// loadBaseState loads the last-synced state from .beads/sync_base.jsonl
+// loadBaseState loads the last-synced state from .binds/sync_base.jsonl
 // Returns empty slice if file doesn't exist (first sync scenario)
 func loadBaseState(beadsDir string) ([]*beads.Issue, error) {
 	baseStatePath := filepath.Join(beadsDir, syncBaseFileName)
@@ -680,7 +680,7 @@ func loadBaseState(beadsDir string) ([]*beads.Issue, error) {
 	return issues, nil
 }
 
-// saveBaseState writes the merged state to .beads/sync_base.jsonl
+// saveBaseState writes the merged state to .binds/sync_base.jsonl
 // This becomes the base for the next 3-way merge
 func saveBaseState(beadsDir string, issues []*beads.Issue) error {
 	baseStatePath := filepath.Join(beadsDir, syncBaseFileName)

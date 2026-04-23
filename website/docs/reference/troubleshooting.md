@@ -15,13 +15,13 @@ Common issues and solutions.
 ```bash
 # Check if installed
 which bd
-go list -f {{.Target}} github.com/steveyegge/beads/cmd/bd
+go list -f {{.Target}} github.com/IkuTri/binds/cmd/bd
 
 # Add Go bin to PATH
 export PATH="$PATH:$(go env GOPATH)/bin"
 
 # Or reinstall
-go install github.com/steveyegge/beads/cmd/bd@latest
+go install github.com/IkuTri/binds/cmd/bd@latest
 ```
 
 ### `zsh: killed bd` on macOS
@@ -29,7 +29,7 @@ go install github.com/steveyegge/beads/cmd/bd@latest
 CGO/SQLite compatibility issue:
 
 ```bash
-CGO_ENABLED=1 go install github.com/steveyegge/beads/cmd/bd@latest
+CGO_ENABLED=1 go install github.com/IkuTri/binds/cmd/bd@latest
 ```
 
 ### Permission denied
@@ -47,7 +47,7 @@ chmod +x $(which bd)
 bd init --quiet
 
 # Or specify database
-bd --db .beads/beads.db list
+bd --db .binds/beads.db list
 ```
 
 ### Database locked
@@ -64,8 +64,8 @@ bd list
 
 ```bash
 # Restore from JSONL
-rm .beads/beads.db
-bd import -i .beads/issues.jsonl
+rm .binds/beads.db
+bd import -i .binds/issues.jsonl
 ```
 
 ## Daemon Issues
@@ -77,7 +77,7 @@ bd import -i .beads/issues.jsonl
 bd info
 
 # Remove stale socket
-rm -f .beads/bd.sock
+rm -f .binds/bd.sock
 
 # Restart
 bd daemons killall
@@ -120,7 +120,7 @@ bd hooks status
 
 ```bash
 # Allow orphans
-bd import -i .beads/issues.jsonl --orphan-handling allow
+bd import -i .binds/issues.jsonl --orphan-handling allow
 
 # Check for duplicates after
 bd duplicates
@@ -133,8 +133,8 @@ bd duplicates
 bd init  # Setup merge driver
 
 # Or manual resolution
-git checkout --ours .beads/issues.jsonl
-bd import -i .beads/issues.jsonl
+git checkout --ours .binds/issues.jsonl
+bd import -i .binds/issues.jsonl
 bd sync
 ```
 
@@ -188,7 +188,7 @@ bd config set import.orphan_handling allow
 
 ```bash
 # Check database size
-ls -lh .beads/beads.db
+ls -lh .binds/beads.db
 
 # Compact if large
 bd admin compact --analyze
@@ -230,4 +230,4 @@ bd info --json
 uname -a
 ```
 
-Report at: https://github.com/steveyegge/beads/issues
+Report at: https://github.com/IkuTri/binds/issues

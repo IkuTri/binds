@@ -165,7 +165,7 @@ When agents discover duplicate issues, they should:
 **⚠️ Important Limitation:** Daemon mode does not work correctly with `git worktree`.
 
 **The Problem:**
-Git worktrees share the same `.git` directory and thus share the same `.beads` database. The daemon doesn't know which branch each worktree has checked out, which can cause it to commit/push to the wrong branch.
+Git worktrees share the same `.git` directory and thus share the same `.binds` database. The daemon doesn't know which branch each worktree has checked out, which can cause it to commit/push to the wrong branch.
 
 **What you lose without daemon mode:**
 - **Auto-sync** - No automatic commit/push of changes (use `bd sync` manually)
@@ -196,7 +196,7 @@ Git worktrees share the same `.git` directory and thus share the same `.beads` d
 bd automatically detects when you're in a worktree and shows a prominent warning if daemon mode is active. The `--no-daemon` mode works correctly with worktrees since it operates directly on the database without shared state.
 
 **Why It Matters:**
-The daemon maintains its own view of the current working directory and git state. When multiple worktrees share the same `.beads` database, the daemon may commit changes intended for one branch to a different branch, leading to confusion and incorrect git history.
+The daemon maintains its own view of the current working directory and git state. When multiple worktrees share the same `.binds` database, the daemon may commit changes intended for one branch to a different branch, leading to confusion and incorrect git history.
 
 ## Database Redirects
 
@@ -207,31 +207,31 @@ Multiple git clones can share a single beads database using redirect files. This
 
 ### Setting Up a Redirect
 
-Create a `.beads/redirect` file pointing to the shared database location:
+Create a `.binds/redirect` file pointing to the shared database location:
 
 ```bash
 # In your secondary clone
-mkdir -p .beads
-echo "../main-clone/.beads" > .beads/redirect
+mkdir -p .binds
+echo "../main-clone/.binds" > .binds/redirect
 
 # Or use an absolute path
-echo "/path/to/shared/.beads" > .beads/redirect
+echo "/path/to/shared/.binds" > .binds/redirect
 ```
 
-The redirect file should contain a single path (relative or absolute) to the target `.beads` directory.
+The redirect file should contain a single path (relative or absolute) to the target `.binds` directory.
 
 **Example setup:**
 ```
 repo/
 ├── main-clone/
-│   └── .beads/
+│   └── .binds/
 │       └── beads.db      ← Actual database
 ├── agent-1/
-│   └── .beads/
-│       └── redirect      ← Points to ../main-clone/.beads
+│   └── .binds/
+│       └── redirect      ← Points to ../main-clone/.binds
 └── agent-2/
-    └── .beads/
-        └── redirect      ← Points to ../main-clone/.beads
+    └── .binds/
+        └── redirect      ← Points to ../main-clone/.binds
 ```
 
 ### Checking Active Location
@@ -240,10 +240,10 @@ Use `bd where` to see which database is actually being used:
 
 ```bash
 bd where
-# /path/to/main-clone/.beads
-#   (via redirect from /path/to/agent-1/.beads)
+# /path/to/main-clone/.binds
+#   (via redirect from /path/to/agent-1/.binds)
 #   prefix: bd
-#   database: /path/to/main-clone/.beads/beads.db
+#   database: /path/to/main-clone/.binds/beads.db
 
 bd where --json
 # {"path": "...", "redirected_from": "...", "prefix": "bd", "database_path": "..."}
@@ -282,7 +282,7 @@ When you encounter the same ID during import, it's an **update operation**, not 
 **Preview changes before importing:**
 ```bash
 # After git merge or pull
-bd import -i .beads/issues.jsonl --dry-run
+bd import -i .binds/issues.jsonl --dry-run
 
 # Output shows:
 # Exact matches (idempotent): 15
@@ -301,22 +301,22 @@ The conflicts you'll encounter are **git merge conflicts** in the JSONL file whe
 **Resolution:**
 ```bash
 # After git merge creates conflict
-git checkout --theirs .beads/issues.jsonl  # Accept remote version
+git checkout --theirs .binds/issues.jsonl  # Accept remote version
 # OR
-git checkout --ours .beads/issues.jsonl    # Keep local version
+git checkout --ours .binds/issues.jsonl    # Keep local version
 # OR manually resolve in editor (keep line with newer updated_at)
 
 # Import the resolved JSONL
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 
 # Commit the merge
-git add .beads/issues.jsonl
+git add .binds/issues.jsonl
 git commit
 ```
 
 ### Advanced: Intelligent Merge Tools
 
-For Git merge conflicts in `.beads/issues.jsonl`, consider using **[beads-merge](https://github.com/neongreen/mono/tree/main/beads-merge)** - a specialized merge tool by @neongreen that:
+For Git merge conflicts in `.binds/issues.jsonl`, consider using **[beads-merge](https://github.com/neongreen/mono/tree/main/beads-merge)** - a specialized merge tool by @neongreen that:
 
 - Matches issues across conflicted JSONL files
 - Merges fields intelligently (e.g., combines labels, picks newer timestamps)
@@ -342,20 +342,20 @@ cd examples/git-hooks
 Create `.git/hooks/pre-commit`:
 ```bash
 #!/bin/bash
-bd export -o .beads/issues.jsonl
-git add .beads/issues.jsonl
+bd export -o .binds/issues.jsonl
+git add .binds/issues.jsonl
 ```
 
 Create `.git/hooks/post-merge`:
 ```bash
 #!/bin/bash
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 ```
 
 Create `.git/hooks/post-checkout`:
 ```bash
 #!/bin/bash
-bd import -i .beads/issues.jsonl
+bd import -i .binds/issues.jsonl
 ```
 
 Make hooks executable:
@@ -410,7 +410,7 @@ Understanding the role of each component:
 - **CLI commands** - Direct database access via `bd` command
 
 ### Local Daemon (Per-Project)
-- **Lightweight RPC server** - Runs at `.beads/bd.sock` in each project
+- **Lightweight RPC server** - Runs at `.binds/bd.sock` in each project
 - **Auto-sync coordination** - Debounced export (5s), git integration, import detection
 - **Process isolation** - Each project gets its own daemon for database safety
 - **LSP model** - Similar to language servers, one daemon per workspace
@@ -419,7 +419,7 @@ Understanding the role of each component:
 
 ### MCP Server (Optional)
 - **Protocol adapter** - Translates MCP calls to daemon RPC or direct CLI
-- **Workspace routing** - Finds correct `.beads/bd.sock` based on working directory
+- **Workspace routing** - Finds correct `.binds/bd.sock` based on working directory
 - **Stateless** - Doesn't cache or store any issue data itself
 - **Editor integration** - Makes bd available to Claude, Cursor, and other MCP clients
 - **Single instance** - One MCP server can route to multiple project daemons

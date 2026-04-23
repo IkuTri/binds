@@ -13,11 +13,11 @@ import (
 // ensureForkProtection prevents contributors from accidentally committing
 // the upstream issue database when working in a fork.
 //
-// When we detect this is a fork (any remote points to steveyegge/beads),
-// we add .beads/issues.jsonl to .git/info/exclude so it won't be staged.
+// When we detect this is a fork (any remote points to IkuTri/binds),
+// we add .binds/issues.jsonl to .git/info/exclude so it won't be staged.
 // This is a per-clone setting that doesn't modify tracked files.
 //
-// Users can disable this with: git config beads.fork-protection false
+// Users can disable this with: git config binds.fork-protection false
 func ensureForkProtection() {
 	// Find git root first (needed for git config check)
 	gitRoot := git.GetRepoRoot()
@@ -26,7 +26,7 @@ func ensureForkProtection() {
 	}
 
 	// Check if fork protection is explicitly disabled via git config (GH#823)
-	// Use: git config beads.fork-protection false
+	// Use: git config binds.fork-protection false
 	if isForkProtectionDisabled(gitRoot) {
 		debug.Printf("fork protection: disabled via git config")
 		return
@@ -77,8 +77,8 @@ func isUpstreamRepo(gitRoot string) bool {
 
 	// Check for upstream repo patterns
 	upstreamPatterns := []string{
-		"steveyegge/beads",
-		"git@github.com:steveyegge/beads",
+		"IkuTri/binds",
+		"git@github.com:IkuTri/binds",
 		"https://github.com/IkuTri/binds",
 	}
 
@@ -91,7 +91,7 @@ func isUpstreamRepo(gitRoot string) bool {
 	return false
 }
 
-// isForkOfBeads checks if ANY remote points to steveyegge/beads.
+// isForkOfBeads checks if ANY remote points to IkuTri/binds.
 // This handles any remote naming convention (origin, upstream, github, etc.)
 // and correctly identifies actual beads forks vs user's own projects. (GH#823)
 func isForkOfBeads(gitRoot string) bool {
@@ -101,15 +101,15 @@ func isForkOfBeads(gitRoot string) bool {
 		return false // No remotes or git error - not a fork
 	}
 
-	// If any remote URL contains steveyegge/beads, this is a beads-related repo
-	return strings.Contains(string(out), "steveyegge/beads")
+	// If any remote URL contains IkuTri/binds, this is a beads-related repo
+	return strings.Contains(string(out), "IkuTri/binds")
 }
 
 // isForkProtectionDisabled checks if fork protection is disabled via git config.
-// Users can opt out with: git config beads.fork-protection false
+// Users can opt out with: git config binds.fork-protection false
 // Only exact "false" disables; any other value or unset means enabled.
 func isForkProtectionDisabled(gitRoot string) bool {
-	cmd := exec.Command("git", "-C", gitRoot, "config", "--get", "beads.fork-protection")
+	cmd := exec.Command("git", "-C", gitRoot, "config", "--get", "binds.fork-protection")
 	out, err := cmd.Output()
 	if err != nil {
 		return false // Not set or error - default to enabled
@@ -124,7 +124,7 @@ func isAlreadyExcluded(excludePath string) bool {
 		return false // File doesn't exist or can't read, not excluded
 	}
 
-	return strings.Contains(string(content), ".beads/issues.jsonl")
+	return strings.Contains(string(content), ".binds/issues.jsonl")
 }
 
 // addToExclude adds the issues.jsonl pattern to .git/info/exclude
@@ -143,6 +143,6 @@ func addToExclude(excludePath string) error {
 	defer f.Close()
 
 	// Add our exclusion with a comment
-	_, err = f.WriteString("\n# Beads: prevent fork from committing upstream issue database\n.beads/issues.jsonl\n")
+	_, err = f.WriteString("\n# Beads: prevent fork from committing upstream issue database\n.binds/issues.jsonl\n")
 	return err
 }

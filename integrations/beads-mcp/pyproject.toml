@@ -31,10 +31,10 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/steveyegge/beads"
-Repository = "https://github.com/steveyegge/beads"
-Documentation = "https://github.com/steveyegge/beads/blob/main/integrations/beads-mcp/README.md"
-Issues = "https://github.com/steveyegge/beads/issues"
+Homepage = "https://github.com/IkuTri/binds"
+Repository = "https://github.com/IkuTri/binds"
+Documentation = "https://github.com/IkuTri/binds/blob/main/integrations/beads-mcp/README.md"
+Issues = "https://github.com/IkuTri/binds/issues"
 
 [project.scripts]
 beads-mcp = "beads_mcp.server:main"

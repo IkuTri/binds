@@ -595,7 +595,7 @@ func (s *SyncState) GetBackoffDuration() time.Duration {
 ### Pattern 3: Global Registry for Multi-Daemon Discovery
 
 ```go
-// ~/.beads/registry.json
+// ~/.binds/registry.json
 type Registry struct {
     Daemons []DaemonEntry `json:"daemons"`
 }
@@ -664,7 +664,7 @@ Each improvement has been reviewed for actual value vs complexity.
 ### config.yaml
 
 ```yaml
-# .beads/config.yaml
+# .binds/config.yaml
 daemon:
   auto-sync: true           # Enable all auto-* settings (recommended)
   auto-commit: true         # Commit changes automatically

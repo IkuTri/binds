@@ -4,7 +4,7 @@
 
 ## Overview
 
-Beads now provides **enhanced Git worktree support** with a shared database architecture. All worktrees in a repository share the same `.beads` database located in the main repository, enabling seamless issue tracking across multiple working directories.
+Beads now provides **enhanced Git worktree support** with a shared database architecture. All worktrees in a repository share the same `.binds` database located in the main repository, enabling seamless issue tracking across multiple working directories.
 
 **Note:** While comprehensively implemented and tested internally, this feature may benefit from real-world usage feedback to identify any remaining edge cases.
 
@@ -19,7 +19,7 @@ Beads now provides **enhanced Git worktree support** with a shared database arch
 When you configure a **sync branch** (via `bd init --branch <name>` or `bd config set sync.branch <name>`), beads needs to commit issue updates to that branch without switching your working directory away from your current branch.
 
 **Solution:** Beads creates a lightweight worktree that:
-- Contains only the `.beads/` directory (sparse checkout)
+- Contains only the `.binds/` directory (sparse checkout)
 - Lives in `.git/beads-worktrees/<sync-branch>/`
 - Commits issue changes to the sync branch automatically
 - Leaves your main working directory untouched
@@ -31,10 +31,10 @@ your-project/
 ├── .git/
 │   ├── beads-worktrees/          # Beads-created worktrees live here
 │   │   └── beads-sync/           # Default sync branch worktree
-│   │       └── .beads/
+│   │       └── .binds/
 │   │           └── issues.jsonl  # Issue data committed here
 │   └── worktrees/                # Standard git worktrees directory
-├── .beads/                       # Your working copy
+├── .binds/                       # Your working copy
 │   ├── beads.db                  # Local SQLite database
 │   └── issues.jsonl              # Local JSONL (may differ from sync branch)
 └── src/                          # Your code (untouched by sync)
@@ -111,7 +111,7 @@ For complete sync-branch documentation, see [PROTECTED_BRANCHES.md](PROTECTED_BR
 ```
 Main Repository
 ├── .git/                    # Shared git directory
-├── .beads/                  # Shared database (main repo)
+├── .binds/                  # Shared database (main repo)
 │   ├── beads.db            # SQLite database
 │   ├── issues.jsonl        # Issue data (git-tracked)
 │   └── config.yaml         # Configuration
@@ -122,7 +122,7 @@ Main Repository
 ```
 
 **Key points:**
-- ✅ **One database** - All worktrees share the same `.beads` directory in main repo
+- ✅ **One database** - All worktrees share the same `.binds` directory in main repo
 - ✅ **Automatic discovery** - Database found regardless of which worktree you're in
 - ✅ **Concurrent access** - SQLite locking prevents corruption
 - ✅ **Git integration** - Issues sync via JSONL in main repo
@@ -181,10 +181,10 @@ bd --no-daemon ready
 
 bd intelligently finds the correct database:
 
-1. **Priority search**: Main repository `.beads` directory first
+1. **Priority search**: Main repository `.binds` directory first
 2. **Fallback logic**: Searches worktree if main repo doesn't have database
 3. **Path resolution**: Handles symlinks and relative paths correctly
-4. **Validation**: Ensures `.beads` contains actual project files
+4. **Validation**: Ensures `.binds` contains actual project files
 
 ### Git Hooks Integration
 
@@ -192,7 +192,7 @@ Pre-commit hooks adapt to worktree context:
 
 ```bash
 # In main repo: Stages JSONL normally
-git add .beads/issues.jsonl
+git add .binds/issues.jsonl
 
 # In worktree: Safely skips staging (files outside working tree)
 # Hook detects context and handles appropriately
@@ -309,9 +309,9 @@ bd --no-daemon sync
 
 **Solutions:**
 ```bash
-# Ensure main repo has .beads directory
+# Ensure main repo has .binds directory
 cd main-repo
-ls -la .beads/
+ls -la .binds/
 
 # Re-run bd init if needed
 bd init
@@ -323,13 +323,13 @@ bd info  # Should show database path in main repo
 
 ### Issue: Multiple databases detected
 
-**Symptoms:** Warning about multiple `.beads` directories
+**Symptoms:** Warning about multiple `.binds` directories
 
 **Solution:**
 ```bash
 # bd shows warning with database locations
 # Typically, the closest database (in main repo) is correct
-# Remove extra .beads directories if they're not needed
+# Remove extra .binds directories if they're not needed
 ```
 
 ### Issue: Git hooks fail in worktrees
@@ -350,7 +350,7 @@ export BEADS_NO_DAEMON=1
 export BEADS_AUTO_START_DAEMON=false
 
 # Force specific database location
-export BEADS_DB=/path/to/specific/.beads/beads.db
+export BEADS_DB=/path/to/specific/.binds/beads.db
 ```
 
 ### Configuration Options
@@ -451,10 +451,10 @@ For users who want complete separation between code history and issue tracking, 
 **Option A: Initialize with BEADS_DIR (simplest)**
 ```bash
 # 1. Create the directory structure
-mkdir -p ~/my-project-beads/.beads
+mkdir -p ~/my-project-beads/.binds
 
 # 2. Set BEADS_DIR and initialize from anywhere
-export BEADS_DIR=~/my-project-beads/.beads
+export BEADS_DIR=~/my-project-beads/.binds
 bd init --prefix myproj    # Creates database at $BEADS_DIR
 
 # 3. Initialize git in the beads repo (optional, for sync)
@@ -480,7 +480,7 @@ Set `BEADS_DIR` to point at your separate beads repository:
 
 ```bash
 cd ~/my-project
-export BEADS_DIR=~/my-project-beads/.beads
+export BEADS_DIR=~/my-project-beads/.binds
 
 # All bd commands now use the separate repo
 bd create "My task" -t task
@@ -493,20 +493,20 @@ bd sync  # commits to ~/my-project-beads, pushes there
 **Option 1: Shell profile**
 ```bash
 # Add to ~/.bashrc or ~/.zshrc
-export BEADS_DIR=~/my-project-beads/.beads
+export BEADS_DIR=~/my-project-beads/.binds
 ```
 
 **Option 2: direnv (per-project)**
 ```bash
 # In ~/my-project/.envrc
-export BEADS_DIR=~/my-project-beads/.beads
+export BEADS_DIR=~/my-project-beads/.binds
 ```
 
 **Option 3: Wrapper script**
 ```bash
 # ~/bin/bd-myproj
 #!/bin/bash
-BEADS_DIR=~/my-project-beads/.beads exec bd "$@"
+BEADS_DIR=~/my-project-beads/.binds exec bd "$@"
 ```
 
 ### How It Works
@@ -517,7 +517,7 @@ When `BEADS_DIR` points to a different git repository than your current director
 2. Git operations (add, commit, push, pull) target the beads repo
 3. Your code repository is never touched
 
-This was contributed by @dand-oss in [PR #533](https://github.com/steveyegge/beads/pull/533).
+This was contributed by @dand-oss in [PR #533](https://github.com/IkuTri/binds/pull/533).
 
 ### Combining with Worktrees
 
@@ -525,7 +525,7 @@ This approach elegantly solves the worktree isolation problem:
 
 ```bash
 # All worktrees share the same external beads repo
-export BEADS_DIR=~/project-beads/.beads
+export BEADS_DIR=~/project-beads/.binds
 
 cd ~/project/main       && bd list  # Same issues
 cd ~/project/feature-1  && bd list  # Same issues
