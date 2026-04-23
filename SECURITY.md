@@ -4,7 +4,7 @@
 
 If you discover a security vulnerability in binds, please report it responsibly:
 
-**Email**: iku.tri@gmail.com (or open a private security advisory on GitHub)
+**GitHub**: [Open a private security advisory](https://github.com/IkuTri/binds/security/advisories/new)
 
 Please include:
 - Description of the vulnerability
