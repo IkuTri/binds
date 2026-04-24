@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -16,7 +17,7 @@ var registryCmd = &cobra.Command{
 Requires a running binds server (binds serve).
 
 Commands:
-  binds registry register <name> --type <type>   Register a new agent
+  binds registry register <name> --type <type> [--model ...] [--machine ...] [--scope ...] [--capabilities a,b,c]
   binds registry list                             List registered agents
   binds registry revoke <name>                    Revoke an agent's token`,
 }
@@ -31,11 +32,37 @@ var registryRegisterCmd = &cobra.Command{
 		if agentType == "" {
 			agentType = "generic"
 		}
+		model, _ := cmd.Flags().GetString("model")
+		machine, _ := cmd.Flags().GetString("machine")
+		scope, _ := cmd.Flags().GetString("scope")
+		capsRaw, _ := cmd.Flags().GetString("capabilities")
 
-		resp, err := serverPost("/api/agents/register", map[string]interface{}{
+		payload := map[string]interface{}{
 			"name":       name,
 			"agent_type": agentType,
-		})
+		}
+		if model != "" {
+			payload["model"] = model
+		}
+		if machine != "" {
+			payload["machine"] = machine
+		}
+		if scope != "" {
+			payload["scope"] = scope
+		}
+		if capsRaw != "" {
+			var caps []string
+			for _, c := range strings.Split(capsRaw, ",") {
+				if c = strings.TrimSpace(c); c != "" {
+					caps = append(caps, c)
+				}
+			}
+			if len(caps) > 0 {
+				payload["capabilities"] = caps
+			}
+		}
+
+		resp, err := serverPost("/api/agents/register", payload)
 		if err != nil {
 			return err
 		}
@@ -127,6 +154,10 @@ var registryRevokeCmd = &cobra.Command{
 
 func init() {
 	registryRegisterCmd.Flags().StringP("type", "t", "generic", "Agent type (e.g., claude-code, codex, generic)")
+	registryRegisterCmd.Flags().String("model", "", "Model identifier (e.g., claude-opus-4-7, gpt-5.4)")
+	registryRegisterCmd.Flags().String("machine", "", "Machine/host name the agent runs on (e.g., Tricus-PK)")
+	registryRegisterCmd.Flags().String("scope", "", "Workspace or project scope (e.g., IkuSoft, Hideout)")
+	registryRegisterCmd.Flags().String("capabilities", "", "Comma-separated capability tags (e.g., mail,rooms,code-edit)")
 
 	registryCmd.AddCommand(registryRegisterCmd)
 	registryCmd.AddCommand(registryListCmd)
