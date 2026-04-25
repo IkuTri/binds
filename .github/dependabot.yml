@@ -30,3 +30,14 @@ updates:
       - "dependencies"
       - "python"
       - "mcp"
+
+  # npm (Docusaurus website — managed with pnpm, npm ecosystem reads pnpm-lock.yaml)
+  - package-ecosystem: "npm"
+    directory: "/website"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "npm"
+      - "website"
