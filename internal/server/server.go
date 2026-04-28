@@ -41,10 +41,10 @@ type Server struct {
 }
 
 type Config struct {
-	Port          int
-	Listen        string
-	ConfigDir     string
-	LocalIdentity string
+	Port           int
+	Listen         string
+	ConfigDir      string
+	LocalIdentity  string
 	LocalAgentType string
 }
 
@@ -596,12 +596,13 @@ func (s *Server) handlePresence(w http.ResponseWriter, r *http.Request) {
 func (s *Server) handleMailSend(w http.ResponseWriter, r *http.Request) {
 	sender := agentFromCtx(r.Context())
 	var req struct {
-		Recipient string `json:"recipient"`
-		Body      string `json:"body"`
-		Subject   string `json:"subject"`
-		MsgType   string `json:"msg_type"`
-		Priority  string `json:"priority"`
-		ReplyTo   *int64 `json:"reply_to"`
+		Recipient string          `json:"recipient"`
+		Body      string          `json:"body"`
+		Subject   string          `json:"subject"`
+		MsgType   string          `json:"msg_type"`
+		Priority  string          `json:"priority"`
+		Metadata  json.RawMessage `json:"metadata"`
+		ReplyTo   *int64          `json:"reply_to"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		jsonError(w, "invalid request body", http.StatusBadRequest)
@@ -611,8 +612,12 @@ func (s *Server) handleMailSend(w http.ResponseWriter, r *http.Request) {
 		jsonError(w, "recipient and body required", http.StatusBadRequest)
 		return
 	}
+	if len(req.Metadata) > 0 && !json.Valid(req.Metadata) {
+		jsonError(w, "metadata must be valid JSON", http.StatusBadRequest)
+		return
+	}
 
-	msg, err := s.store.SendMessage(r.Context(), sender, req.Recipient, req.Body, req.Subject, req.MsgType, req.Priority, req.ReplyTo)
+	msg, err := s.store.SendMessage(r.Context(), sender, req.Recipient, req.Body, req.Subject, req.MsgType, req.Priority, string(req.Metadata), req.ReplyTo)
 	if err != nil {
 		jsonError(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -1085,6 +1090,13 @@ func messageToJSON(m *Message) map[string]interface{} {
 	}
 	if m.Subject != "" {
 		result["subject"] = m.Subject
+	}
+	if m.Metadata != "" {
+		if json.Valid([]byte(m.Metadata)) {
+			result["metadata"] = json.RawMessage(m.Metadata)
+		} else {
+			result["metadata"] = m.Metadata
+		}
 	}
 	if m.RoomID != nil {
 		result["room_id"] = *m.RoomID

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -40,6 +41,12 @@ var mailSendCmd = &cobra.Command{
 		subject, _ := cmd.Flags().GetString("subject")
 		priority, _ := cmd.Flags().GetString("priority")
 		msgType, _ := cmd.Flags().GetString("type")
+		metadataValue, _ := cmd.Flags().GetString("metadata")
+		metadataFile, _ := cmd.Flags().GetString("metadata-file")
+		metadata, err := readMailMetadata(metadataValue, metadataFile)
+		if err != nil {
+			return err
+		}
 
 		payload := map[string]interface{}{
 			"recipient": recipient,
@@ -53,6 +60,9 @@ var mailSendCmd = &cobra.Command{
 		}
 		if msgType != "" {
 			payload["msg_type"] = msgType
+		}
+		if metadata != nil {
+			payload["metadata"] = metadata
 		}
 
 		resp, err := serverPost("/api/mail", payload)
@@ -72,6 +82,37 @@ var mailSendCmd = &cobra.Command{
 		fmt.Printf("Message #%d sent to %s\n", msg.ID, recipient)
 		return nil
 	},
+}
+
+func readMailMetadata(value, file string) (json.RawMessage, error) {
+	if value != "" && file != "" {
+		return nil, fmt.Errorf("cannot specify both --metadata and --metadata-file")
+	}
+	if value == "" && file == "" {
+		return nil, nil
+	}
+
+	path := file
+	data := []byte(value)
+	if strings.HasPrefix(value, "@") {
+		path = value[1:]
+		if path == "" {
+			return nil, fmt.Errorf("metadata file path required")
+		}
+	}
+	if path != "" {
+		var err error
+		// #nosec G304 -- user explicitly provides the metadata file path.
+		data, err = os.ReadFile(path)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read metadata file %s: %w", path, err)
+		}
+	}
+
+	if !json.Valid(data) {
+		return nil, fmt.Errorf("invalid JSON in metadata: must be valid JSON")
+	}
+	return json.RawMessage(data), nil
 }
 
 var mailInboxCmd = &cobra.Command{
@@ -329,6 +370,8 @@ func init() {
 	mailSendCmd.Flags().StringP("subject", "s", "", "Message subject")
 	mailSendCmd.Flags().StringP("priority", "p", "normal", "Priority (urgent|normal|low)")
 	mailSendCmd.Flags().StringP("type", "t", "text", "Message type")
+	mailSendCmd.Flags().String("metadata", "", "Attach metadata as JSON or @file.json")
+	mailSendCmd.Flags().String("metadata-file", "", "Attach metadata from a JSON file")
 	mailInboxCmd.Flags().Bool("unread", false, "Show only unread messages")
 	mailInboxCmd.Flags().Int("limit", 20, "Maximum messages to show")
 	mailHistoryCmd.Flags().String("with", "", "Agent to show history with")

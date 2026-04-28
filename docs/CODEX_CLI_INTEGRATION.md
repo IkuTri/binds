@@ -139,8 +139,14 @@ Once Codex is running with `BINDS_TOKEN`, normal commands use the dedicated iden
 binds heartbeat
 binds mail whoami
 binds mail send linux-obscura "Finished the task"
+binds mail send linux-obscura "Manual Claude Code session update" \
+  --metadata '{"kind":"manual_tool_session","tool":"claude-code","mode":"manual","repo":"/path/to/repo","state":"in_progress","next":"verify tests","boundary":"human_operated_external_tool"}'
 binds who
 ```
+
+Use mail metadata as worklog and handoff context only. The example above records
+work the user is manually driving in another tool; it does not script or control
+that tool.
 
 If you want machine and working directory data reflected explicitly, the heartbeat API also accepts them:
 

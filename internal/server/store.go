@@ -402,7 +402,7 @@ type Message struct {
 	ReadAt    *time.Time
 }
 
-func (s *Store) SendMessage(ctx context.Context, sender, recipient, body, subject, msgType, priority string, replyTo *int64) (*Message, error) {
+func (s *Store) SendMessage(ctx context.Context, sender, recipient, body, subject, msgType, priority, metadata string, replyTo *int64) (*Message, error) {
 	recipient = s.ResolveAlias(ctx, recipient)
 	now := time.Now().UTC().Format(time.RFC3339)
 	if msgType == "" {
@@ -422,15 +422,15 @@ func (s *Store) SendMessage(ctx context.Context, sender, recipient, body, subjec
 	}
 
 	res, err := s.db.ExecContext(ctx,
-		`INSERT INTO messages (sender, recipient, msg_type, subject, body, priority, reply_to, thread_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		sender, recipient, msgType, subject, body, priority, replyTo, threadID, now)
+		`INSERT INTO messages (sender, recipient, msg_type, subject, body, metadata, priority, reply_to, thread_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		sender, recipient, msgType, subject, body, nullIfEmpty(metadata), priority, replyTo, threadID, now)
 	if err != nil {
 		return nil, err
 	}
 
 	id, _ := res.LastInsertId()
 	createdAt, _ := time.Parse(time.RFC3339, now)
-	return &Message{ID: id, Sender: sender, Recipient: recipient, MsgType: msgType, Subject: subject, Body: body, Priority: priority, ReplyTo: replyTo, ThreadID: threadID, CreatedAt: createdAt}, nil
+	return &Message{ID: id, Sender: sender, Recipient: recipient, MsgType: msgType, Subject: subject, Body: body, Metadata: metadata, Priority: priority, ReplyTo: replyTo, ThreadID: threadID, CreatedAt: createdAt}, nil
 }
 
 func (s *Store) GetInbox(ctx context.Context, recipient string, unreadOnly bool, since string, limit int) ([]*Message, error) {

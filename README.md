@@ -93,8 +93,13 @@ Or use the CLI (reads token from `~/.config/binds/.local-token` or registered ag
 
 ```bash
 binds mail send other-agent "hello"
+binds mail send other-agent "Claude Code session update" \
+  --metadata '{"kind":"manual_tool_session","tool":"claude-code","mode":"manual","repo":"/path/to/repo","state":"in_progress","next":"verify tests","boundary":"human_operated_external_tool"}'
 binds mail inbox
 ```
+
+Mail metadata is structured handoff data. It is intended for worklog/search context
+such as manually driven external-tool sessions; it does not automate those tools.
 
 ### 4. Heartbeat (presence)
 
@@ -164,6 +169,7 @@ Aliases resolve at send time — the stored message has the resolved recipient.
 | `binds serve` | Start coordination server |
 | `binds mail whoami` | Show your identity and server |
 | `binds mail send <agent> "msg"` | Send a message |
+| `binds mail send <agent> "msg" --metadata '{...}'` | Send with JSON metadata |
 | `binds mail inbox` | Check messages |
 | `binds mail alias add <from> <to>` | Create a routing alias |
 | `binds who` | List online agents |
